@@ -2,8 +2,13 @@ import numpy as np
 import pandas as pd
 from scipy.signal import savgol_filter
 
+# --- CONFIGURACIÓN GLOBAL ---
+UMBRAL_CONFIANZA = 0.65  # Filtro de fiabilidad (0.0 a 1.0)
+VENTANA_SUAVIZADO = 11   # Debe ser un número impar (para el filtro Savitzky-Golay)
+
 def calculate_angle_3d(a, b, c):
     """Calcula el ángulo real en el espacio 3D usando vectores (x, y, z)."""
+    # Convertimos a vectores 3D ignorando la cuarta columna (visibilidad)
     a, b, c = np.array(a[:3]), np.array(b[:3]), np.array(c[:3])
     ba = a - b
     bc = c - b
@@ -19,7 +24,7 @@ def calculate_angle_3d(a, b, c):
 def calculate_torso_3d(shoulder_mid, hip_mid):
     """Calcula la inclinación del torso respecto a la vertical en el espacio 3D."""
     v_torso = shoulder_mid - hip_mid
-    # En MediaPipe, Y crece hacia abajo, por lo que la vertical hacia arriba es (0, -1, 0)
+    # Vertical de referencia (MediaPipe Y crece hacia abajo)
     v_vertical = np.array([0, -1, 0]) 
     
     norm = np.linalg.norm(v_torso) * np.linalg.norm(v_vertical)
@@ -28,32 +33,34 @@ def calculate_torso_3d(shoulder_mid, hip_mid):
         
     return np.degrees(np.arccos(np.clip(np.dot(v_torso, v_vertical) / norm, -1.0, 1.0)))
 
-def calcular_articulacion_segura(kp, indices, umbral=0.6):
+def calcular_articulacion_segura(kp, indices, umbral=UMBRAL_CONFIANZA):
     """
-    Devuelve el ángulo solo si la visibilidad del vértice es alta.
-    Si no es fiable, devuelve NaN para permitir interpolación posterior.
+    Solo calcula el ángulo si los TRES puntos involucrados son fiables.
+    Esto elimina los ángulos 'fantasma' cuando falta un extremo (ej. el tobillo).
     """
-    vertice_idx = indices[1]
-    if kp[vertice_idx][3] < umbral: # kp[idx][3] es la visibilidad/confianza
-        return np.nan
+    # Verificamos si los 3 puntos (A, B, C) superan el umbral de visibilidad
+    for idx in indices:
+        if kp[idx][3] < umbral:
+            return np.nan
+            
     return calculate_angle_3d(kp[indices[0]], kp[indices[1]], kp[indices[2]])
 
-def calcular_centro_sustentacion(kp):
-    """Calcula la proyección del centro de gravedad sobre la base de apoyo."""
-    # Puntos clave de los pies: Talones, Tobillos y Punteras
+def calcular_centro_sustentacion(kp, umbral=UMBRAL_CONFIANZA):
+    """Calcula el promedio de los puntos de apoyo que sean fiables."""
+    # Puntos de la base: Tobillos, Talones y Punteras
     foot_indices = [27, 28, 29, 30, 31, 32]
-    puntos_validos = [kp[i][:3] for i in foot_indices if kp[i][3] > 0.5]
+    puntos_validos = [kp[i][:3] for i in foot_indices if kp[i][3] >= umbral]
     
-    if not puntos_validos:
+    if len(puntos_validos) < 2: # Necesitamos al menos 2 puntos para una base mínima
         return np.nan, np.nan, np.nan
         
     return np.mean(puntos_validos, axis=0)
 
 def extract_features(kp):
-    """Extrae todos los ángulos y métricas de un único frame."""
+    """Mapea los puntos de MediaPipe y extrae las métricas del frame."""
     data = {}
     
-    # Mapeo de índices MediaPipe BlazePose
+    # Índices MediaPipe BlazePose
     L_SH, R_SH = 11, 12
     L_EL, R_EL = 13, 14
     L_WR, R_WR = 15, 16
@@ -62,7 +69,7 @@ def extract_features(kp):
     L_AN, R_AN = 27, 28
     L_FT, R_FT = 31, 32
 
-    # Cálculos independientes (Sin Mirroring para detectar asimetrías reales)
+    # --- CÁLCULOS ARTICULARES ---
     data['L_elbow'] = calcular_articulacion_segura(kp, (L_SH, L_EL, L_WR))
     data['R_elbow'] = calcular_articulacion_segura(kp, (R_SH, R_EL, R_WR))
     
@@ -78,47 +85,45 @@ def extract_features(kp):
     data['L_ankle'] = calcular_articulacion_segura(kp, (L_KN, L_AN, L_FT))
     data['R_ankle'] = calcular_articulacion_segura(kp, (R_KN, R_AN, R_FT))
 
-    # Torso 3D usando puntos medios
-    mid_shoulder = (kp[L_SH][:3] + kp[R_SH][:3]) / 2
-    mid_hip = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
-    data['torso'] = calculate_torso_3d(mid_shoulder, mid_hip)
+    # --- CÁLCULO DE TORSO ---
+    # Solo se calcula si los hombros y caderas son fiables
+    if all(kp[i][3] >= UMBRAL_CONFIANZA for i in [L_SH, R_SH, L_HP, R_HP]):
+        mid_shoulder = (kp[L_SH][:3] + kp[R_SH][:3]) / 2
+        mid_hip = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
+        data['torso'] = calculate_torso_3d(mid_shoulder, mid_hip)
+    else:
+        data['torso'] = np.nan
     
-    # Centro de sustentación
+    # --- CENTRO DE SUSTENTACIÓN ---
     data['sust_x'], data['sust_y'], data['sust_z'] = calcular_centro_sustentacion(kp)
     
     return data
 
 def process_historial(historial_landmarks):
     """
-    Procesa toda la serie temporal, aplica limpieza y filtros científicos.
+    Convierte el historial de puntos en un DataFrame limpio y filtrado.
     """
-    # 1. Extracción inicial
-    raw_data = []
-    for frame_kp_flat in historial_landmarks:
-        kp = frame_kp_flat.reshape(-1, 4)
-        raw_data.append(extract_features(kp))
+    # 1. Extracción de datos frame a frame
+    records = []
+    for f_kp in historial_landmarks:
+        kp_matrix = f_kp.reshape(-1, 4)
+        records.append(extract_features(kp_matrix))
     
-    df = pd.DataFrame(raw_data)
+    df = pd.DataFrame(records)
     
-    # 2. LIMPIEZA: Interpolación Lineal
-    # En lugar de copiar el otro lado (espejo), unimos los puntos válidos.
-    # Esto mantiene la asimetría real del cuerpo.
-    df = df.interpolate(method='linear', limit_direction='both')
+    # 2. Interpolación controlada
+    # Solo rellenamos huecos pequeños (máximo 10 frames). 
+    # Si la pierna no se ve durante medio video, se queda como NaN.
+    df = df.interpolate(method='linear', limit=10, limit_direction='both')
     
-    # 3. FILTRADO: Suavizado Savitzky-Golay (Elimina el jitter)
-    # window_length debe ser impar. Ajustar según los FPS (p.ej. 11 para 30fps)
-    window = 11
-    if len(df) > window:
+    # 3. Suavizado de señal (Savitzky-Golay)
+    # Solo aplicamos si hay suficientes datos y la columna no es todo NaN
+    if len(df) > VENTANA_SUAVIZADO:
         for col in df.columns:
-            try:
-                # El filtro suaviza los picos de ruido sin perder la forma del movimiento
-                df[col] = savgol_filter(df[col], window_length=window, polyorder=2)
-            except:
-                pass # Por si la columna tiene demasiados NaNs
+            if df[col].notna().sum() > VENTANA_SUAVIZADO:
+                try:
+                    df[col] = savgol_filter(df[col], window_length=VENTANA_SUAVIZADO, polyorder=2)
+                except:
+                    pass
                 
     return df
-
-# Ejemplo de uso:
-# historial_cargado = np.load('tus_keypoints.npy')
-# df_final = process_full_workout(historial_cargado)
-# df_final.to_csv('analisis_biomecanico_perfecto.csv', index=False)

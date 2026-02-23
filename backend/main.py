@@ -48,7 +48,7 @@ while cap.isOpened():
             mp_utils = pose_processor.mp_pose
     
         pose_processor.draw_landmarks(frame, results)
-        cv2.imshow("Pipeline TFG Modular", frame)
+        #cv2.imshow("Pipeline TFG Modular", frame)
  
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -58,7 +58,7 @@ print(f"Frames procesados: {len(historial_landmarks)}")
 cap.release()
 pose_processor.close()
 cv2.destroyAllWindows()
-#print(historial_landmarks)
+print(historial_landmarks)
 df_angles = process_historial(historial_landmarks)
 df_angles = df_angles.ffill()
 
