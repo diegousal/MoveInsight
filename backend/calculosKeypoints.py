@@ -1,167 +1,124 @@
 import numpy as np
 import pandas as pd
+from scipy.signal import savgol_filter
 
 def calculate_angle_3d(a, b, c):
-    """
-    Calcula el ángulo real en el espacio 3D usando vectores (x, y, z).
-    """
+    """Calcula el ángulo real en el espacio 3D usando vectores (x, y, z)."""
     a, b, c = np.array(a[:3]), np.array(b[:3]), np.array(c[:3])
     ba = a - b
     bc = c - b
     
-    # Cálculo del coseno y arco-coseno
     denominator = np.linalg.norm(ba) * np.linalg.norm(bc)
-    if denominator < 1e-6: # Evitar división por cero
-        return 0.0
+    if denominator < 1e-6:
+        return np.nan
         
     cosine_angle = np.dot(ba, bc) / denominator
     angle = np.arccos(np.clip(cosine_angle, -1.0, 1.0))
-    
     return np.degrees(angle)
 
-def calculate_torso(shoulder, hip):
-    """
-    Mide la inclinación del torso respecto a la vertical (gravedad).
-    """
-    v_torso = np.array([shoulder[0] - hip[0], shoulder[1] - hip[1]])
-    v_vertical = np.array([0, -1]) 
+def calculate_torso_3d(shoulder_mid, hip_mid):
+    """Calcula la inclinación del torso respecto a la vertical en el espacio 3D."""
+    v_torso = shoulder_mid - hip_mid
+    # En MediaPipe, Y crece hacia abajo, por lo que la vertical hacia arriba es (0, -1, 0)
+    v_vertical = np.array([0, -1, 0]) 
     
-    norm_product = np.linalg.norm(v_torso) * np.linalg.norm(v_vertical)
-    if norm_product < 1e-6:
-        return 0.0
+    norm = np.linalg.norm(v_torso) * np.linalg.norm(v_vertical)
+    if norm < 1e-6:
+        return np.nan
         
-    return np.degrees(np.arccos(np.clip(np.dot(v_torso, v_vertical) / norm_product, -1.0, 1.0)))
+    return np.degrees(np.arccos(np.clip(np.dot(v_torso, v_vertical) / norm, -1.0, 1.0)))
 
-def calcular_par_corregido(kp, indices_L, indices_R, umbral=0.6):
+def calcular_articulacion_segura(kp, indices, umbral=0.6):
     """
-    Función generalizada para calcular ángulos de un par de articulaciones (Izq/Der)
-    aplicando corrección por visibilidad (Si una no se ve, copia la otra).
-    
-    Args:
-        kp: Array de keypoints
-        indices_L: Tupla de 3 índices para el lado IZQUIERDO (A, B, C)
-        indices_R: Tupla de 3 índices para el lado DERECHO (A, B, C)
-        umbral: Confianza mínima para considerar el ángulo válido
+    Devuelve el ángulo solo si la visibilidad del vértice es alta.
+    Si no es fiable, devuelve NaN para permitir interpolación posterior.
     """
-    # 1. Extraer visibilidad del punto central (Vértice de la articulación)
-    vis_L = kp[indices_L[1]][3] 
-    vis_R = kp[indices_R[1]][3]
-    
-    # 2. Calcular ángulos 3D puros
-    ang_L = calculate_angle_3d(kp[indices_L[0]], kp[indices_L[1]], kp[indices_L[2]])
-    ang_R = calculate_angle_3d(kp[indices_R[0]], kp[indices_R[1]], kp[indices_R[2]])
-    
-    # 3. Lógica de Corrección (Espejo)
-    if vis_L < umbral and vis_R > umbral:
-        # Si la Izquierda no se ve -> Copiamos la Derecha
-        return ang_R, ang_R
-    elif vis_R < umbral and vis_L > umbral:
-        # Si la Derecha no se ve -> Copiamos la Izquierda
-        return ang_L, ang_L
-    elif vis_L < umbral and vis_R < umbral:
-        # Si ninguna se ve -> Devolvemos NaN o un valor neutro
-        return None, None
-    # Si la IA no ve ni el brazo izquierdo ni el derecho, cualquier dato que te dé será "alucinación" o ruido. Lo más honesto científicamente es marcar ese frame como NaN (Not a Number) o None para no ensuciar tus gráficas. Al llegar al main None, en el csv automaticamente rellenara esos valores con el último valor válido. Es la solución estándar en ciencia de datos para series temporales con pérdida de señal.
-    
-    # Si ambas se ven, devolvemos los valores originales
-    return ang_L, ang_R
+    vertice_idx = indices[1]
+    if kp[vertice_idx][3] < umbral: # kp[idx][3] es la visibilidad/confianza
+        return np.nan
+    return calculate_angle_3d(kp[indices[0]], kp[indices[1]], kp[indices[2]])
+
 def calcular_centro_sustentacion(kp):
-    """
-    Calcula el centroide (X, Y, Z) de la base de sustentación 
-    usando los talones y las punteras de los pies.
-    """
-    # Índices de MediaPipe para los extremos de los pies
-    L_HEEL, R_HEEL = 29, 30
-    L_FOOT_INDEX, R_FOOT_INDEX = 31, 32
+    """Calcula la proyección del centro de gravedad sobre la base de apoyo."""
+    # Puntos clave de los pies: Talones, Tobillos y Punteras
+    foot_indices = [27, 28, 29, 30, 31, 32]
+    puntos_validos = [kp[i][:3] for i in foot_indices if kp[i][3] > 0.5]
     
-    foot_indices = [L_HEEL, R_HEEL, L_FOOT_INDEX, R_FOOT_INDEX]
-    
-    puntos_apoyo = []
-    
-    # Recorremos los puntos y guardamos los que tienen buena visibilidad (> 0.5)
-    for idx in foot_indices:
-        if kp[idx][3] > 0.5:  # kp[idx][3] es la visibilidad
-            puntos_apoyo.append(kp[idx][:3])  # Guardamos (X, Y, Z)
-            
-    # Si la cámara no ve las punteras/talones, intentamos usar los tobillos (27 y 28)
-    if len(puntos_apoyo) == 0:
-        for idx in [27, 28]:
-            if kp[idx][3] > 0.5:
-                puntos_apoyo.append(kp[idx][:3])
-                
-    # Si definitivamente no se ve ningún pie en la imagen
-    if len(puntos_apoyo) == 0:
-        return np.nan, np.nan, np.nan # Devolvemos NaN para no romper el DataFrame
+    if not puntos_validos:
+        return np.nan, np.nan, np.nan
         
-    # El centro de sustentación es la media de todos los puntos de apoyo válidos
-    centro_x, centro_y, centro_z = np.mean(puntos_apoyo, axis=0)
+    return np.mean(puntos_validos, axis=0)
+
+def extract_features(kp):
+    """Extrae todos los ángulos y métricas de un único frame."""
+    data = {}
     
-    return centro_x, centro_y, centro_z
+    # Mapeo de índices MediaPipe BlazePose
+    L_SH, R_SH = 11, 12
+    L_EL, R_EL = 13, 14
+    L_WR, R_WR = 15, 16
+    L_HP, R_HP = 23, 24
+    L_KN, R_KN = 25, 26
+    L_AN, R_AN = 27, 28
+    L_FT, R_FT = 31, 32
 
-
-def extract_angles(kp):
-    angles = {}
+    # Cálculos independientes (Sin Mirroring para detectar asimetrías reales)
+    data['L_elbow'] = calcular_articulacion_segura(kp, (L_SH, L_EL, L_WR))
+    data['R_elbow'] = calcular_articulacion_segura(kp, (R_SH, R_EL, R_WR))
     
-    # --- DICCIONARIO DE ÍNDICES BLAZEPOSE ---
-    # Brazos
-    L_SHOULDER, R_SHOULDER = 11, 12
-    L_ELBOW, R_ELBOW = 13, 14
-    L_WRIST, R_WRIST = 15, 16
-    # Tronco y Piernas
-    L_HIP, R_HIP = 23, 24
-    L_KNEE, R_KNEE = 25, 26
-    L_ANKLE, R_ANKLE = 27, 28
-    L_FOOT_INDEX, R_FOOT_INDEX = 31, 32 # Puntera del pie
-
-    # --- CÁLCULO DE ARTICULACIONES CON CORRECCIÓN ---
+    data['L_shoulder'] = calcular_articulacion_segura(kp, (L_EL, L_SH, L_HP))
+    data['R_shoulder'] = calcular_articulacion_segura(kp, (R_EL, R_SH, R_HP))
     
-    # 1. CODOS (Hombro - Codo - Muñeca)
-    angles['L_elbow'], angles['R_elbow'] = calcular_par_corregido(
-        kp, (L_SHOULDER, L_ELBOW, L_WRIST), (R_SHOULDER, R_ELBOW, R_WRIST)
-    )
-
-    # 2. HOMBROS (Codo - Hombro - Cadera) -> Flexión relativa al tronco
-    angles['L_shoulder'], angles['R_shoulder'] = calcular_par_corregido(
-        kp, (L_ELBOW, L_SHOULDER, L_HIP), (R_ELBOW, R_SHOULDER, R_HIP)
-    )
-
-    # 3. RODILLAS (Cadera - Rodilla - Tobillo)
-    angles['L_knee'], angles['R_knee'] = calcular_par_corregido(
-        kp, (L_HIP, L_KNEE, L_ANKLE), (R_HIP, R_KNEE, R_ANKLE)
-    )
-
-    # 4. CADERAS (Hombro - Cadera - Rodilla) -> Flexión de tronco sobre pierna
-    angles['L_hip'], angles['R_hip'] = calcular_par_corregido(
-        kp, (L_SHOULDER, L_HIP, L_KNEE), (R_SHOULDER, R_HIP, R_KNEE)
-    )
-
-    # 5. TOBILLOS (Rodilla - Tobillo - Puntera) -> Dorsiflexión
-    angles['L_ankle'], angles['R_ankle'] = calcular_par_corregido(
-        kp, (L_KNEE, L_ANKLE, L_FOOT_INDEX), (R_KNEE, R_ANKLE, R_FOOT_INDEX)
-    )
-
-    # --- CÁLCULO DE TORSO (Sin par, es único) ---
-    mid_shoulder = (kp[L_SHOULDER] + kp[R_SHOULDER]) / 2
-    mid_hip = (kp[L_HIP] + kp[R_HIP]) / 2
-    angles['torso'] = calculate_torso(mid_shoulder, mid_hip)
+    data['L_knee'] = calcular_articulacion_segura(kp, (L_HP, L_KN, L_AN))
+    data['R_knee'] = calcular_articulacion_segura(kp, (R_HP, R_KN, R_AN))
     
-    # # --- CÁLCULO DEL CENTRO DE SUSTENTACIÓN ---
-    # cx, cy, cz = calcular_centro_sustentacion(kp)
+    data['L_hip'] = calcular_articulacion_segura(kp, (L_SH, L_HP, L_KN))
+    data['R_hip'] = calcular_articulacion_segura(kp, (R_SH, R_HP, R_KN))
     
-    # # Guardamos las coordenadas en el diccionario
-    # angles['sustentacion_x'] = cx
-    # angles['sustentacion_y'] = cy # Y es la altura (suele estar cerca del suelo)
-    # angles['sustentacion_z'] = cz # Z es la profundidad
+    data['L_ankle'] = calcular_articulacion_segura(kp, (L_KN, L_AN, L_FT))
+    data['R_ankle'] = calcular_articulacion_segura(kp, (R_KN, R_AN, R_FT))
 
-    return angles
+    # Torso 3D usando puntos medios
+    mid_shoulder = (kp[L_SH][:3] + kp[R_SH][:3]) / 2
+    mid_hip = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
+    data['torso'] = calculate_torso_3d(mid_shoulder, mid_hip)
+    
+    # Centro de sustentación
+    data['sust_x'], data['sust_y'], data['sust_z'] = calcular_centro_sustentacion(kp)
+    
+    return data
 
 def process_historial(historial_landmarks):
-    features_list = []
-    for keypoints_flat in historial_landmarks:
-        # Convertimos vector plano a matriz (33, 4)
-        kp = keypoints_flat.reshape(-1, 4)
-        
-        angles = extract_angles(kp)
-        features_list.append(angles)
+    """
+    Procesa toda la serie temporal, aplica limpieza y filtros científicos.
+    """
+    # 1. Extracción inicial
+    raw_data = []
+    for frame_kp_flat in historial_landmarks:
+        kp = frame_kp_flat.reshape(-1, 4)
+        raw_data.append(extract_features(kp))
+    
+    df = pd.DataFrame(raw_data)
+    
+    # 2. LIMPIEZA: Interpolación Lineal
+    # En lugar de copiar el otro lado (espejo), unimos los puntos válidos.
+    # Esto mantiene la asimetría real del cuerpo.
+    df = df.interpolate(method='linear', limit_direction='both')
+    
+    # 3. FILTRADO: Suavizado Savitzky-Golay (Elimina el jitter)
+    # window_length debe ser impar. Ajustar según los FPS (p.ej. 11 para 30fps)
+    window = 11
+    if len(df) > window:
+        for col in df.columns:
+            try:
+                # El filtro suaviza los picos de ruido sin perder la forma del movimiento
+                df[col] = savgol_filter(df[col], window_length=window, polyorder=2)
+            except:
+                pass # Por si la columna tiene demasiados NaNs
+                
+    return df
 
-    return pd.DataFrame(features_list)
+# Ejemplo de uso:
+# historial_cargado = np.load('tus_keypoints.npy')
+# df_final = process_full_workout(historial_cargado)
+# df_final.to_csv('analisis_biomecanico_perfecto.csv', index=False)

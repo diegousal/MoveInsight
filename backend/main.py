@@ -15,7 +15,8 @@ except ValueError:
     fuente = args.fuente
 
 cap = cv2.VideoCapture(fuente)
-
+num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+print(f"Número total de frames en el vídeo: {num_frames}")
 
 pose_processor = PoseProcessor()
 
@@ -57,7 +58,7 @@ print(f"Frames procesados: {len(historial_landmarks)}")
 cap.release()
 pose_processor.close()
 cv2.destroyAllWindows()
-print(historial_landmarks)
+#print(historial_landmarks)
 df_angles = process_historial(historial_landmarks)
 df_angles = df_angles.ffill()
 
