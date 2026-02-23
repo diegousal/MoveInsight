@@ -1,0 +1,171 @@
+# -------------------------
+# .gitignore unificado para TFG
+# -------------------------
+# NOTA: contiene las reglas de Android (mantiene !gradle.properties),
+# así como patrones para Python, venv, Node, IDEs, datos grandes y modelos.
+
+# -------------------------
+# Sistema / SO
+# -------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -------------------------
+# IDEs / Editores
+# -------------------------
+.vscode/
+.vscode/*            # si quieres excluir settings locales
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# -------------------------
+# Python
+# -------------------------
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+backend/venv/          # detectado en tu zip
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+# Distribution / build
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+# PyInstaller
+*.manifest
+*.spec
+# Environments / secrets
+.env
+.env.*
+# Jupyter
+.ipynb_checkpoints/
+# Coverage / test outputs
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# -------------------------
+# Node / frontend
+# -------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.pnpm-debug.log*
+/dist
+/build
+public/build
+
+# -------------------------
+# Java / Android / Gradle
+# -------------------------
+# Local config (CRÍTICO: NO SUBIR)
+local.properties
+*.properties
+# Excepción (mantener si tienes keys en gradle.properties, según tu android/.gitignore original)
+!gradle.properties
+
+# Build outputs
+/build/
+**/build/
+*/build/
+*.apk
+*.aab
+/captures/
+.externalNativeBuild/
+.cxx/
+# Android Studio
+.gradle/
+.gradle-cache/
+.idea/
+# Android specific
+*.keystore
+*.jks
+
+# Keep Android Studio shelf/workspace ignores (from frontend/android/.idea/.gitignore)
+# (shelf, workspace.xml are IDE-local)
+.shelf/
+workspace.xml
+
+# app-level ignores (from frontend/android/app/.gitignore)
+# you can keep app/build ignored as well
+/frontend/android/app/build/
+frontend/android/app/build/
+
+# -------------------------
+# Mobile / React Native / expo (if applies)
+# -------------------------
+android/.gradle/
+android/.idea/
+ios/Pods/
+build/
+
+# -------------------------
+# Data, media, models, outputs (pesados)
+# -------------------------
+# Vídeos / imágenes de ejemplo / datasets grandes
+**/Ejemplos/*.mp4
+**/Ejemplos/*.mov
+**/Ejemplos/*.avi
+**/Ejemplos/*.mkv
+**/datasets/
+**/data/
+**/dataset/
+**/raw_data/
+# Model checkpoints / weights
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.tflite
+# TensorBoard logs, training outputs
+logs/
+tensorboard/
+runs/
+
+# -------------------------
+# Generic binaries / archives
+# -------------------------
+*.exe
+*.dll
+*.so
+*.dylib
+*.class
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.rar
+
+# -------------------------
+# Misc / Logs
+# -------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+*.csv                   # Si quieres mantener CSVs en repo, quita esta línea o especifica ruta
+# Si quieres mantener archivos csv específicos, añade excepción:
+# !backend/angles_per_frame.csv
+
+# -------------------------
+# Other
+# -------------------------
+# macOS
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# End of file

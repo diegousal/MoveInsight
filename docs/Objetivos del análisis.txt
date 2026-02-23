@@ -1,0 +1,8 @@
+Objetivos del análisis:
+
+--> Conteo de repeticiones:
+
+--> Análisis de cada repetición en el que destacaremos los siguientes aspectos:
+	+ Tempos correctos de fase excéntrica y concéntrica, Control y estabilidad (¿Hay temblores, balanceos o compensaciones? ¿Se mantiene la estabilidad en el core y las articulaciones principales? ¿El movimiento es fluido o hay “tirones”?), Ritmo similar y consistencia (degradación con la fatiga).
+	+ ROM correcto o incorrecto. ( hiperextensión o no llegar a ángulos mínimos para poder contar una repetición.
+	+ Correcta postura a la hora de realización del ejercicio. (alineación articular, activación muscular esperada, simetría, postura de inicio correcta.
