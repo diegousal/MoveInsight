@@ -115,10 +115,7 @@ build/
 # Data, media, models, outputs (pesados)
 # -------------------------
 # Vídeos / imágenes de ejemplo / datasets grandes
-**/Ejemplos/*.mp4
-**/Ejemplos/*.mov
-**/Ejemplos/*.avi
-**/Ejemplos/*.mkv
+**/Ejemplos/
 **/datasets/
 **/data/
 **/dataset/
@@ -154,7 +151,9 @@ runs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-*.csv                   # Si quieres mantener CSVs en repo, quita esta línea o especifica ruta
+*.csv               
+landmarcks.txt
+
 # Si quieres mantener archivos csv específicos, añade excepción:
 # !backend/angles_per_frame.csv
 
