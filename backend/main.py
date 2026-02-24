@@ -2,6 +2,7 @@ import cv2
 import argparse
 from poseProcessor import PoseProcessor
 from calculosKeypoints import process_historial
+from redBILSTM import segmentar_repeticiones, crear_bilstm_analizador
 
 historial_landmarks = []
 
@@ -15,53 +16,62 @@ except ValueError:
     fuente = args.fuente
 
 cap = cv2.VideoCapture(fuente)
-num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-print(f"Número total de frames en el vídeo: {num_frames}")
+if not cap.isOpened():
+    raise RuntimeError(f"No se pudo abrir la fuente: {fuente}")
 
-pose_processor = PoseProcessor()
+# Obtener FPS del vídeo; si no está disponible, usar valor por defecto 30.0
+fps = cap.get(cv2.CAP_PROP_FPS)
+if not fps or fps != fps:  # check for 0 or NaN
+    fps = 30.0
 
-frame_count = 0
-SKIP_FRAMES = 1
+pose_processor = PoseProcessor(fps=fps)
 
-while cap.isOpened():
+frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) if cap.get(cv2.CAP_PROP_FRAME_COUNT) else None
+
+while True:
     ret, frame = cap.read()
-
     if not ret:
-        print("Fin del vídeo. Pulsa cualquier tecla.")
-        cv2.waitKey(0)
         break
 
-    frame_count += 1
+    # process_frame espera frame BGR
+    results, pose_vector = pose_processor.process_frame(frame)
 
-    if frame_count % SKIP_FRAMES == 0:
-  
-        # frame_ia = cv2.resize(frame, (256, 256))
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results, pose_vector = pose_processor.process_frame(frame_rgb)
+    if pose_vector is not None:
+        historial_landmarks.append(pose_vector)
 
-        if pose_vector is not None:
-            historial_landmarks.append(pose_vector)
-
-    # Dibujado
-        if 'results' in locals() and results.pose_landmarks:
-            mp_drawing = pose_processor.mp_drawing
-            mp_utils = pose_processor.mp_pose
-    
-        pose_processor.draw_landmarks(frame, results)
-        #cv2.imshow("Pipeline TFG Modular", frame)
- 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-print(f"Frames procesados: {len(historial_landmarks)}")
-
+# liberamos recursos de vídeo y detector
 cap.release()
 pose_processor.close()
-cv2.destroyAllWindows()
-print(historial_landmarks)
-df_angles = process_historial(historial_landmarks)
-df_angles = df_angles.ffill()
 
-df_angles.to_csv("angles_per_frame.csv", index=False)
-# df_reps.to_csv("features_per_repetition.csv", index=False)
-print("CSV generados: angles_per_frame.csv")
+# --- Aquí estaba el problema: primero convertir lista -> DataFrame usando process_historial ---
+if len(historial_landmarks) == 0:
+    print("No se detectaron landmarks en ningún frame. No hay nada que segmentar.")
+else:
+    # process_historial debe devolver un pandas.DataFrame con columnas (p. ej. 'R_knee', etc.)
+    df_angles = process_historial(historial_landmarks)
+
+    # debug rápido (opcional): ver columnas para confirmar que segmentar_repeticiones recibirá lo que espera
+    try:
+        print("Columns produced by process_historial:", list(df_angles.columns))
+    except Exception:
+        pass
+
+    # Intentamos pasar el DataFrame a segmentar_repeticiones; si la función espera la lista,
+    # lo manejamos con try/except y lo llamamos con historial_landmarks como fallback.
+    try:
+        repeticiones = segmentar_repeticiones(df_angles)
+    except Exception as e:
+        print("segmentar_repeticiones falló con DataFrame (intentando lista). Error:", e)
+        print("Llamando segmentar_repeticiones con la lista raw 'historial_landmarks' por compatibilidad...")
+    
+    reps = segmentar_repeticiones(df_angles, smooth_window=11, min_distance=int(0.4*fps))
+    print(f"Repeticiones segmentadas: {len(reps)}")
+
+    # guardar CSV
+    df_angles.to_csv("angles_per_frame.csv", index=False)
+    print(
+        f"CSV generado:\n"
+        f"{frame_count or 'N/A'} frames procesados.\n"
+        f"{len(df_angles)} filas en el CSV.\n"
+        f"FPS: {fps}"
+    )
