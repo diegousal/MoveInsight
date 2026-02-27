@@ -3,6 +3,7 @@ import argparse
 from poseProcessor import PoseProcessor
 from calculosKeypoints import process_historial
 from redBILSTM import segmentar_repeticiones, crear_bilstm_analizador
+import numpy as np
 
 historial_landmarks = []
 
@@ -45,33 +46,45 @@ pose_processor.close()
 
 # --- Aquí estaba el problema: primero convertir lista -> DataFrame usando process_historial ---
 if len(historial_landmarks) == 0:
-    print("No se detectaron landmarks en ningún frame. No hay nada que segmentar.")
+    print("No se detectaron landmarks.")
 else:
-    # process_historial debe devolver un pandas.DataFrame con columnas (p. ej. 'R_knee', etc.)
+    # 1. Obtenemos el DataFrame con todos los ángulos (L y R)
     df_angles = process_historial(historial_landmarks)
 
-    # debug rápido (opcional): ver columnas para confirmar que segmentar_repeticiones recibirá lo que espera
-    try:
-        print("Columns produced by process_historial:", list(df_angles.columns))
-    except Exception:
-        pass
+    # 2. Añadimos la columna de tiempo real (delta_time)
+    # Esto permite que la red entienda la velocidad real independientemente de los FPS
+    df_angles['delta_time'] = 1.0 / fps
 
-    # Intentamos pasar el DataFrame a segmentar_repeticiones; si la función espera la lista,
-    # lo manejamos con try/except y lo llamamos con historial_landmarks como fallback.
-    try:
-        repeticiones = segmentar_repeticiones(df_angles)
-    except Exception as e:
-        print("segmentar_repeticiones falló con DataFrame (intentando lista). Error:", e)
-        print("Llamando segmentar_repeticiones con la lista raw 'historial_landmarks' por compatibilidad...")
+    # 3. Tratamiento de datos faltantes (Muy importante para .npy)
+    # Los archivos .npy no gestionan bien los NaNs en el entrenamiento.
+    # Llenamos con 0.0 los puntos no visibles. La red aprenderá que 0 = "punto oculto".
+    df_raw = df_angles.fillna(0.0)
+
+    # 4. Convertimos TODO el set de datos a un array de NumPy
+    # Esto incluye: L_elbow, R_elbow, L_shoulder, R_shoulder, L_knee, R_knee, 
+    # L_hip, R_hip, L_ankle, R_ankle, torso, sust_x, sust_y, sust_z Y delta_time.
+    datos = df_raw.values 
+
+# 5. Guardar en formato .npy
+if 'Sentadilla' in args.fuente:
+    nombre_base = args.fuente.rsplit('.', 1)[0]
+    nombre_archivo = nombre_base.replace("Sentadilla", "Entrenamiento") + ".npy"
+else:
+    nombre_archivo = args.fuente.rsplit('.', 1)[0] + ".npy"
     
-    reps = segmentar_repeticiones(df_angles, smooth_window=11, min_distance=int(0.4*fps))
-    print(f"Repeticiones segmentadas: {len(reps)}")
+np.save(nombre_archivo, datos)
 
-    # guardar CSV
-    df_angles.to_csv("angles_per_frame.csv", index=False)
-    print(
-        f"CSV generado:\n"
-        f"{frame_count or 'N/A'} frames procesados.\n"
-        f"{len(df_angles)} filas en el CSV.\n"
-        f"FPS: {fps}"
+# Añades la dimensión batch al principio
+# Ahora es (1, 955, 15)
+datosRed= np.expand_dims(datos, axis=0)
+
+# Ahora la red ya puede procesarlo
+#prediccion = modelo.predict(datosRed)
+    
+print(
+    f"\n--- EXPORTACIÓN COMPLETADA ---"
+    f"\nArchivo: {nombre_archivo}"
+    f"\nColumnas incluidas: {list(df_angles.columns)}"
+    f"\nDimensiones (Frames, Características): {datos_para_red.shape}"
+    f"\nFPS del video: {fps}"
     )
