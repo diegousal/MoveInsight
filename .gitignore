@@ -120,6 +120,7 @@ build/
 **/data/
 **/dataset/
 **/raw_data/
+*.mp4
 # Model checkpoints / weights
 *.h5
 *.pt
