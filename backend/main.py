@@ -1,10 +1,13 @@
 import cv2
 import argparse
+import numpy as np
+import tensorflow as tf
+import conclusiones
 from poseProcessor import PoseProcessor
 from calculosKeypoints import process_historial
-from redBILSTM import segmentar_repeticiones, crear_bilstm_analizador
-import numpy as np
 
+
+MODEL_PATH = './modelos/juez_sentadillas.h5'
 historial_landmarks = []
 
 parser = argparse.ArgumentParser()
@@ -44,47 +47,32 @@ while True:
 cap.release()
 pose_processor.close()
 
-# --- Aquí estaba el problema: primero convertir lista -> DataFrame usando process_historial ---
-if len(historial_landmarks) == 0:
-    print("No se detectaron landmarks.")
-else:
-    # 1. Obtenemos el DataFrame con todos los ángulos (L y R)
+if len(historial_landmarks) > 0:
+    # 1. Transformación de datos
     df_angles = process_historial(historial_landmarks)
-
-    # 2. Añadimos la columna de tiempo real (delta_time)
-    # Esto permite que la red entienda la velocidad real independientemente de los FPS
     df_angles['delta_time'] = 1.0 / fps
+    datos = df_angles.fillna(0.0).values
 
-    # 3. Tratamiento de datos faltantes (Muy importante para .npy)
-    # Los archivos .npy no gestionan bien los NaNs en el entrenamiento.
-    # Llenamos con 0.0 los puntos no visibles. La red aprenderá que 0 = "punto oculto".
-    df_raw = df_angles.fillna(0.0)
+    # 5. Guardar en formato .npy
+    if 'sentadilla' in args.fuente:
+        nombre_base = args.fuente.rsplit('.', 1)[0]
+        nombre_archivo = nombre_base.replace("sentadilla", "entrenamiento") + ".npy"
+    else:
+        nombre_archivo = args.fuente.rsplit('.', 1)[0] + ".npy"
+   
 
-    # 4. Convertimos TODO el set de datos a un array de NumPy
-    # Esto incluye: L_elbow, R_elbow, L_shoulder, R_shoulder, L_knee, R_knee, 
-    # L_hip, R_hip, L_ankle, R_ankle, torso, sust_x, sust_y, sust_z Y delta_time.
-    datos = df_raw.values 
-
-# 5. Guardar en formato .npy
-if 'Sentadilla' in args.fuente:
-    nombre_base = args.fuente.rsplit('.', 1)[0]
-    nombre_archivo = nombre_base.replace("Sentadilla", "Entrenamiento") + ".npy"
+    np.save(nombre_archivo, datos)
+    
+    # 2. Cargar Juez Virtual e Inferencia
+    try:
+        model = tf.keras.models.load_model(MODEL_PATH)
+        input_tensor = np.expand_dims(datos, axis=0)
+        predicciones = model.predict(input_tensor)
+        
+        # 3. Generar y mostrar informe
+        informe = conclusiones.obtener_informe_reps(predicciones)
+        conclusiones.mostrar_informe(informe)    
+    except Exception as e:
+        print(f"Error en la fase de análisis: {e}")
 else:
-    nombre_archivo = args.fuente.rsplit('.', 1)[0] + ".npy"
-    
-np.save(nombre_archivo, datos)
-
-# Añades la dimensión batch al principio
-# Ahora es (1, 955, 15)
-datosRed= np.expand_dims(datos, axis=0)
-
-# Ahora la red ya puede procesarlo
-#prediccion = modelo.predict(datosRed)
-    
-print(
-    f"\n--- EXPORTACIÓN COMPLETADA ---"
-    f"\nArchivo: {nombre_archivo}"
-    f"\nColumnas incluidas: {list(df_angles.columns)}"
-    f"\nDimensiones (Frames, Características): {datos_para_red.shape}"
-    f"\nFPS del video: {fps}"
-    )
+    print("Error: No se detectó movimiento.")
