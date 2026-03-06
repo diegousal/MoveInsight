@@ -136,6 +136,8 @@ runs/
 # Generic binaries / archives
 # -------------------------
 *.exe
+*.bat
+*.npy
 *.dll
 *.so
 *.dylib
@@ -145,6 +147,7 @@ runs/
 *.zip
 *.tar.gz
 *.rar
+*.png
 
 # -------------------------
 # Misc / Logs
