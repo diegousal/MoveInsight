@@ -2,9 +2,9 @@ import cv2
 import argparse
 import numpy as np
 import tensorflow as tf
-import conclusiones
-from poseProcessor import PoseProcessor
-from calculosKeypoints import process_historial
+import rep_report
+from pose_processor import PoseProcessor
+from pose_features import process_historial
 
 
 MODEL_PATH = './modelos/juez_sentadillas.h5'

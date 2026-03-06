@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences # <--- IMPORTANTE
 import matplotlib.pyplot as plt
-import conclusiones
+import rep_report  
 
 # CONFIGURACIÓN (debe ser igual a la del entrenamiento)
 MAX_FRAMES = 1200 
