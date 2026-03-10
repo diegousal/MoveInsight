@@ -1,100 +1,129 @@
 import numpy as np
+import os
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from redBILSTM import crear_bilstm_analizador #
-import os
+from red_BILSTM import crear_bilstm_analizador
 
-# --- 1. DICCIONARIO DE ETIQUETADO MANUAL ---
-# RELLENA AQUÍ LOS FRAMES: (inicio_bajada, inicio_fondo, fin_fondo, fin_subida)
+# --- 1. DICCIONARIO DE ETIQUETADO DETALLADO ---
+# Aquí es donde ocurre la "magia". Para cada repetición, defines técnica real.
 etiquetas_videos = {
     "1.npy": {
-        "reps": [(10, 75, 105, 155), (165, 225, 275, 325), (330, 385, 435, 475), (495, 545, 585, 620)]
+        "reps": [
+            {
+                "frames": (10, 75, 105, 155), 
+                "kpis": {"depth": 1.0, "torso": 0.9, "stability": 0.8, "knees": 1.0, "ritmo": 1.0}
+            },
+            {
+                "frames": (165, 225, 275, 325), 
+                "kpis": {"depth": 0.5, "torso": 0.4, "stability": 0.5, "knees": 0.7, "ritmo": 0.6} # Rep mala
+            },
+        ]
     },
     "2.npy": {
-        "reps": [(5, 30, 65, 75), (125, 145, 185, 195), (240, 265, 295, 304)]
+        "reps": [
+            {
+                "frames": (5, 30, 65, 75), 
+                "kpis": {"depth": 0.9, "torso": 1.0, "stability": 1.0, "knees": 0.9, "ritmo": 0.9}
+            },
+        ]
     },
-    "3.npy": {
-        "reps": [(10, 40, 60, 120), (135, 175, 200, 240), (250, 300, 335, 380), (410, 450, 470, 520), (530, 575, 595, 639)]
-    },
-    "4.npy": {
-        "reps": [(5, 15, 40, 65), (85, 105, 125, 145), (160, 195, 245, 265), (280, 315, 345, 365), (385, 415, 445, 470), (490, 520, 555, 580), (595, 620, 645, 658)]
-    },
-    "5.npy": {
-        "reps": [(10, 18, 38, 45), (78, 88, 118, 130), (155, 165, 175, 183)]
-    },
-    "7.npy": {
-        "reps": [(76, 118, 143, 171), (210, 250, 273, 301), (337, 377, 405, 433), (466, 504, 533, 561), (596, 633, 660, 687), (720, 760, 782, 815), (847, 888, 910, 940)]
-    },
- 
-    "9.npy": {
-        "reps": [(55, 75, 95, 122), (180, 205, 235, 260), (305, 335, 355, 385), (415, 445, 480, 512), (545, 570, 600, 630), (680, 705, 735, 760)]
-    },
+    # Añade aquí el resto de tus archivos siguiendo este formato...
 }
 
+# --- CONFIGURACIÓN ---
+MAX_FRAMES = 1200
+N_FEATURES = 15
+MODEL_PATH = "./modelos/juez_sentadillas_v2_profesional.h5"
 
-# --- CONFIGURACIÓN TÉCNICA ---
-MAX_FRAMES = 1200  # Longitud máxima para unificar todos los vídeos
-N_FEATURES = 15    # Las 15 columnas de tus datos
+def generar_labels_calidad(num_frames, reps_info):
+    """
+    Crea arrays de etiquetas para un vídeo específico basándose en sus repeticiones.
+    """
+    # Inicializamos a 0.0 o a un valor "neutro". 
+    # Nota: Si el frame no es parte de una repetición, el modelo no debería ser penalizado 
+    # fuertemente, pero aquí pondremos el valor de la rep para esos frames.
+    fases = np.zeros(num_frames)
+    kpi_d = np.zeros(num_frames)
+    kpi_t = np.zeros(num_frames)
+    kpi_s = np.zeros(num_frames)
+    kpi_k = np.zeros(num_frames)
+    kpi_r = np.zeros(num_frames)
 
-def cargar_y_etiquetar():
-    x_train_list = []
-    y_fases_list = []
+    for rep in reps_info:
+        ini, b_ini, b_fin, fin = rep["frames"]
+        k = rep["kpis"]
+        
+        # Etiquetado de Fases
+        fases[ini:b_ini] = 1   # Bajando
+        fases[b_ini:b_fin] = 2 # Fondo
+        fases[b_fin:fin] = 3   # Subiendo
+        
+        # Etiquetado de KPIs (aplicado a toda la duración de la repetición)
+        kpi_d[ini:fin] = k["depth"]
+        kpi_t[ini:fin] = k["torso"]
+        kpi_s[ini:fin] = k["stability"]
+        kpi_k[ini:fin] = k["knees"]
+        kpi_r[ini:fin] = k["ritmo"]
+        
+    return fases, kpi_d, kpi_t, kpi_s, kpi_k, kpi_r
+
+def preparar_dataset():
+    x_train, y_fases = [], []
+    y_kpis = { "depth": [], "torso": [], "stability": [], "knees": [], "ritmo": [] }
     
     for nombre, info in etiquetas_videos.items():
-        if not os.path.exists("entrenamiento/" + nombre):
-            print(f"Saltando {nombre}: Archivo no encontrado.")
+        ruta = os.path.join("entrenamiento", nombre)
+        if not os.path.exists(ruta):
+            print(f"⚠️ Archivo {nombre} no encontrado. Saltando...")
             continue
             
-        print(f"Procesando {nombre}...")
-        datos = np.load("entrenamiento/" + nombre) # Carga (Frames, 15)
+        datos = np.load(ruta)
         num_f = datos.shape[0]
-        x_train_list.append(datos)
+        x_train.append(datos)
         
-        # Crear etiquetas de fases (0, 1, 2, 3)
-        fase_array = np.zeros(num_f)
-        for (ini, b_ini, b_fin, fin) in info["reps"]:
-            fase_array[ini:b_ini] = 1   # Bajando
-            fase_array[b_ini:b_fin] = 2    # Fondo
-            fase_array[b_fin:fin] = 3      # Subiendo
-        y_fases_list.append(fase_array)
+        # Generar etiquetas específicas para este vídeo
+        f, d, t, s, k, r = generar_labels_calidad(num_f, info["reps"])
+        
+        y_fases.append(f)
+        y_kpis["depth"].append(d)
+        y_kpis["torso"].append(t)
+        y_kpis["stability"].append(s)
+        y_kpis["knees"].append(k)
+        y_kpis["ritmo"].append(r)
 
-    # 1. Padding: Forzamos que todos los vídeos midan lo mismo (MAX_FRAMES)
-    X = pad_sequences(x_train_list, maxlen=MAX_FRAMES, dtype='float32', padding='post', value=0.0)
-    Y_fases = pad_sequences(y_fases_list, maxlen=MAX_FRAMES, padding='post', value=0)
+    # Padding para unificar longitudes
+    X = pad_sequences(x_train, maxlen=MAX_FRAMES, dtype='float32', padding='post')
+    Y_fases = pad_sequences(y_fases, maxlen=MAX_FRAMES, padding='post')
     
-    # 2. Etiquetas de Calidad: Todas a 1.0 (Excelencia) para todo el vídeo
-    # Forma: (Num_Videos, MAX_FRAMES, 1)
-    Y_calidad = np.ones((len(x_train_list), MAX_FRAMES, 1))
+    # Padding para cada KPI y expandir dimensiones para que coincida con la salida (Batch, Frames, 1)
+    Y_outputs = {
+        "fase_frame": Y_fases,
+        "kpi_profundidad": pad_sequences(y_kpis["depth"], maxlen=MAX_FRAMES, padding='post', dtype='float32')[:, :, np.newaxis],
+        "kpi_torso": pad_sequences(y_kpis["torso"], maxlen=MAX_FRAMES, padding='post', dtype='float32')[:, :, np.newaxis],
+        "kpi_estabilidad": pad_sequences(y_kpis["stability"], maxlen=MAX_FRAMES, padding='post', dtype='float32')[:, :, np.newaxis],
+        "kpi_rodillas": pad_sequences(y_kpis["knees"], maxlen=MAX_FRAMES, padding='post', dtype='float32')[:, :, np.newaxis],
+        "kpi_ritmo": pad_sequences(y_kpis["ritmo"], maxlen=MAX_FRAMES, padding='post', dtype='float32')[:, :, np.newaxis]
+    }
     
-    return X, Y_fases, Y_calidad
+    return X, Y_outputs
 
-# --- EJECUCIÓN DEL ENTRENAMIENTO ---
+# --- FLUJO PRINCIPAL ---
 
-X_train, Y_fases, Y_calidad = cargar_y_etiquetar()
+print("--- Cargando y Estructurando Datos ---")
+X_train, Y_dict = preparar_dataset()
 
-# Crear el modelo usando tu arquitectura
 model = crear_bilstm_analizador(max_frames=MAX_FRAMES, n_features=N_FEATURES)
 
-# Preparamos las 7 salidas de la red
-y_dict = {
-    "fase_frame": Y_fases,
-    "kpi_profundidad": Y_calidad,
-    "kpi_torso": Y_calidad,
-    "kpi_estabilidad": Y_calidad,
-    "kpi_simetria": Y_calidad,
-    "kpi_rodillas": Y_calidad,
-    "kpi_ritmo": Y_calidad
-}
-
-print(f"\nIniciando entrenamiento con {len(X_train)} vídeos...")
-model.fit(
+print(f"\nEntrenando con {len(X_train)} ejemplos...")
+# Ajustamos pesos de pérdida si queremos que la fase sea más importante que los KPIs
+history = model.fit(
     X_train, 
-    y_dict, 
+    Y_dict, 
     epochs=100, 
-    batch_size=2, 
+    batch_size=4, # Aumentado un poco para estabilidad
+    validation_split=0.1, # Para ver si generaliza bien
     verbose=1
 )
 
-# Guardar el modelo
-model.save("juez_sentadillas_v2_reps.h5")
-print("\nModelo guardado correctamente como 'juez_sentadillas_v2_manual.h5'")
+model.save(MODEL_PATH)
+print(f"\n✅ Modelo profesional guardado en: {MODEL_PATH}")

@@ -24,13 +24,12 @@ def crear_bilstm_analizador(max_frames=None, n_features=15):
     output_depth = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_profundidad")(x)
     output_torso = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_torso")(x)
     output_stability = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_estabilidad")(x)
-    output_symmetry = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_simetria")(x)
     output_knees = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_rodillas")(x)
     output_ritmo = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_ritmo")(x)
 
     model = Model(
         inputs=input_layer, 
-        outputs=[output_fase, output_depth, output_torso, output_stability, output_symmetry, output_knees, output_ritmo]
+        outputs=[output_fase, output_depth, output_torso, output_stability, output_knees, output_ritmo]
     )
 
     # Compilamos con binary_crossentropy para todos los KPIs de 0 a 1
@@ -41,7 +40,6 @@ def crear_bilstm_analizador(max_frames=None, n_features=15):
             "kpi_profundidad": "binary_crossentropy",
             "kpi_torso": "binary_crossentropy",
             "kpi_estabilidad": "binary_crossentropy",
-            "kpi_simetria": "binary_crossentropy",
             "kpi_rodillas": "binary_crossentropy",
             "kpi_ritmo": "binary_crossentropy"
         }
