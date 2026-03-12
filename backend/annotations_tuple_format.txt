@@ -433,3 +433,35 @@
   ]
 }
 
+
+"2.npy": {
+  "reps": [
+    {
+      "frames": (0, 2, 26, 29, 51), 
+      "kpis": {"depth": 0.3, "torso": 0.9, "stability": 0.8, "knees": 1.0, "ritmo": 0.6}
+    },
+  ]
+}
+
+"49.npy": {
+  "reps": [
+    {
+      "frames": (0, 30, 60, 64, 91), 
+      "kpis": {"depth": 0.4, "torso": 0.9, "stability": 1.0, "knees": 1.0, "ritmo": 0.9}
+    },
+  ]
+}
+
+"62.npy": {
+  "reps": [
+    {
+      "frames": (19, 34, 59, 68, 89), 
+      "kpis": {"depth": 0.6, "torso": 1.0, "stability": 0.6, "knees": 0.6, "ritmo": 0.7}
+    },
+    {
+      "frames": (89, 103, 134, 138, 164), 
+      "kpis": {"depth": 0.7, "torso": 1.0, "stability": 0.6, "knees": 0.7, "ritmo": 0.7}
+    },
+  ]
+}
+

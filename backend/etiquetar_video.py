@@ -3,8 +3,6 @@ import cv2
 import argparse
 import json
 import os
-import tempfile
-from collections import deque
 
 LABEL_KEYS = {
     ord('1'): 'stand',
@@ -14,9 +12,9 @@ LABEL_KEYS = {
 }
 
 INSTRUCTION_LINES = [
-    "ESPACIO: Play/Pause | d: next frame | a: prev frame | [: -speed | ]: +speed | v: speed=0.5",
+    "ESPACIO: Play/Pause | d: next frame | a: prev frame | [: -speed | ]: +speed",
     "1: stand | 2: bajando | 3: abajo | 4: subiendo | z: undo | q: quit & save",
-    "NOTA: Para cerrar la ultima repeticion, marca 'stand' (1) al final del movimiento."
+    "NOTA: Al marcar el 'stand' de cierre, introduce los KPIs en la consola."
 ]
 
 def draw_overlay(img, text_lines, pos=(10,30), line_height=24):
@@ -24,25 +22,34 @@ def draw_overlay(img, text_lines, pos=(10,30), line_height=24):
         cv2.putText(img, line, (pos[0], pos[1] + i*line_height),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,255,0), 1, cv2.LINE_AA)
 
+def get_kpi_inputs():
+    """Pide los KPIs por consola y los normaliza de 0-10 a 0-1."""
+    print("\n" + "="*30)
+    print(" REPETICIÓN COMPLETADA - KPIs")
+    print(" (Introduce valores de 0 a 10)")
+    kpis = ["depth", "torso", "stability", "knees", "ritmo"]
+    results = {}
+    for k in kpis:
+        while True:
+            try:
+                val = float(input(f"  > {k.capitalize()}: "))
+                if 0 <= val <= 10:
+                    results[k] = round(val / 10.0, 2)
+                    break
+                else:
+                    print("    [!] El valor debe estar entre 0 y 10.")
+            except ValueError:
+                print("    [!] Introduce un número válido.")
+    print("="*30 + "\n")
+    return results
+
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument('--video', required=True, help='Ruta al archivo de vídeo')
-    p.add_argument('--out', default='annotations.json', help='Archivo JSON de salida (mergeable)')
-    p.add_argument('--pretty', default='annotations_tuple_format.txt', help='Archivo append con formato tuplas (visual)')
-    p.add_argument('--speed', type=float, default=0.5, help='Velocidad de reproducción inicial (ej: 0.5)')
+    p.add_argument('--out', default='annotations.json', help='Archivo JSON de salida')
+    p.add_argument('--pretty', default='annotations_tuple_format.txt', help='Archivo de salida formato tuplas')
+    p.add_argument('--speed', type=float, default=0.5, help='Velocidad inicial')
     return p.parse_args()
-
-def safe_load_json(path):
-    if not os.path.exists(path) or os.path.getsize(path) == 0:
-        return {}
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        bak = path + '.bak'
-        print(f"[WARN] No se pudo leer {path} ({e}). Backup en {bak}")
-        os.replace(path, bak)
-        return {}
 
 def main():
     args = parse_args()
@@ -58,7 +65,9 @@ def main():
 
     playing = False
     current_frame = 0
-    labels = []  # [{'label':..., 'frame': int}, ...]
+    labels = []  # Lista de marcas temporales
+    reps_final = [] # Lista de reps con sus KPIs
+    
     window_name = "Labeler - press q to quit"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 
@@ -68,28 +77,69 @@ def main():
         if not ret: break
 
         info = [
-            f"File: {os.path.basename(args.video)}  Frame: {current_frame}/{total_frames-1}  speed:{speed:.2f}x",
-            f"Labels: {len(labels)} | Secuencia: stand(1)->baja(2)->abajo(3)->sube(4)->stand(1)"
+            f"File: {os.path.basename(args.video)} | Frame: {current_frame}/{total_frames-1} | speed:{speed:.2f}x",
+            f"Reps completadas: {len(reps_final)} | Marcas actuales: {len(labels)}"
         ]
         info.extend(INSTRUCTION_LINES)
+        
         display = frame.copy()
         draw_overlay(display, info, pos=(10,26))
-        recent = ["Ultimas marcas:"] + [f"{i+1}. {lab['label']} @ {lab['frame']}" for i, lab in enumerate(labels[-5:])]
-        draw_overlay(display, recent, pos=(10, 160))
+        recent = ["Ultimas marcas:"] + [f"- {lab['label']} @ {lab['frame']}" for lab in labels[-4:]]
+        draw_overlay(display, recent, pos=(10, 180))
 
         cv2.imshow(window_name, display)
         key = cv2.waitKey(wait_ms(speed)) & 0xFF
 
-        if key == ord(' '): playing = not playing
-        elif key == ord('d'): current_frame = min(total_frames - 1, current_frame + 1); playing = False
-        elif key == ord('a'): current_frame = max(0, current_frame - 1); playing = False
+        if key == ord(' '): 
+            playing = not playing
+        elif key == ord('d'): 
+            current_frame = min(total_frames - 1, current_frame + 1); playing = False
+        elif key == ord('a'): 
+            current_frame = max(0, current_frame - 1); playing = False
+        elif key == ord('['):
+            speed = max(0.1, speed - 0.1)
+        elif key == ord(']'):
+            speed = min(3.0, speed + 0.1)
+            
         elif key in LABEL_KEYS:
-            labels.append({'label': LABEL_KEYS[key], 'frame': int(current_frame)})
-            print(f"[MARK] {LABEL_KEYS[key]} @ {current_frame}")
+            label_name = LABEL_KEYS[key]
+            labels.append({'label': label_name, 'frame': int(current_frame)})
+            print(f"[MARK] {label_name} @ {current_frame}")
+
+            # Lógica de detección de repetición completada
+            # Buscamos si las últimas 5 etiquetas forman: stand -> bajando -> abajo -> subiendo -> stand
+            if len(labels) >= 5:
+                window = labels[-5:]
+                l_names = [lab['label'] for lab in window]
+                if l_names == ['stand', 'bajando', 'abajo', 'subiendo', 'stand']:
+                    # Pausamos el vídeo
+                    playing = False
+                    # Mostramos aviso en pantalla
+                    overlay_copy = display.copy()
+                    draw_overlay(overlay_copy, ["!!! INTRODUCE KPIs EN CONSOLA !!!"], pos=(10, 400))
+                    cv2.imshow(window_name, overlay_copy)
+                    cv2.waitKey(1)
+                    
+                    # Pedimos los KPIs
+                    kpis = get_kpi_inputs()
+                    frames_tuple = tuple(lab['frame'] for lab in window)
+                    
+                    reps_final.append({
+                        'frames': frames_tuple,
+                        'kpis': kpis
+                    })
+                    
+                    # NOTA: El último 'stand' es el primero de la siguiente repetición.
+                    # Para no perder el hilo, mantenemos solo ese último 'stand' en la lista de labels
+                    # para que la siguiente rep empiece desde ahí.
+                    last_stand = labels[-1]
+                    labels = [last_stand] 
+
         elif key == ord('z') and labels:
             removed = labels.pop()
             print(f"[UNDO] Removed {removed['label']}")
-        elif key == ord('q'): break
+        elif key == ord('q'): 
+            break
 
         if playing:
             current_frame += 1
@@ -100,37 +150,17 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-    # --- NUEVA LÓGICA DE PROCESAMIENTO ---
-    # Buscamos la secuencia: stand -> bajando -> abajo -> subiendo -> stand
-    reps = []
-    i = 0
-    while i + 4 < len(labels):
-        # Tomamos 5 etiquetas consecutivas
-        window = labels[i:i+5]
-        l_names = [lab['label'] for lab in window]
-        
-        if l_names == ['stand', 'bajando', 'abajo', 'subiendo', 'stand']:
-            frames_tuple = tuple(lab['frame'] for lab in window)
-            kpis_zero = {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
-            reps.append({'frames': frames_tuple, 'kpis': kpis_zero})
-            # Avanzamos 4 posiciones: el último 'stand' de esta rep es el primero de la siguiente
-            i += 4
-        else:
-            # Si no encaja, avanzamos de uno en uno buscando el siguiente 'stand'
-            i += 1
-
     # --- GUARDADO ---
-    if reps:
+    if reps_final:
         base_key = os.path.splitext(os.path.basename(args.video))[0] + '.npy'
         with open(args.pretty, 'a', encoding='utf-8') as f:
             f.write(f'"{base_key}": {{\n  "reps": [\n')
-            for r in reps:
-                # Ahora r['frames'] tiene 5 valores: (inicio, bajada, fondo, subida, fin)
+            for r in reps_final:
                 f.write(f"    {{\n      \"frames\": {r['frames']}, \n      \"kpis\": {json.dumps(r['kpis'])}\n    }},\n")
             f.write('  ]\n}\n\n')
-        print(f"\nSe han guardado {len(reps)} repeticiones en {args.pretty}")
+        print(f"\nProceso finalizado. Se han guardado {len(reps_final)} repeticiones en {args.pretty}")
     else:
-        print("\nNo se detectaron secuencias completas (1-2-3-4-1).")
+        print("\nNo se guardaron repeticiones completas.")
 
 if __name__ == '__main__':
     main()
