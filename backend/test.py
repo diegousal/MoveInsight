@@ -9,7 +9,7 @@ MAX_FRAMES = 1200
 
 # 1. CARGAR DATOS Y MODELO
 try:
-    data = np.load('./entrenamiento/10.npy') # Carga (639, 15)
+    data = np.load('./entrenamiento/archivos_entrenamiento/10.npy') # Carga (639, 15)
     model = tf.keras.models.load_model('./modelos/juez_sentadillas_v2_reps.h5')
     print("Modelo y datos cargados correctamente.")
 except Exception as e:

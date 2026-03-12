@@ -62,7 +62,7 @@ if len(historial_landmarks) > 0:
     # 5. Guardar en formato .npy
     if 'sentadilla' in args.fuente:
         nombre_base = args.fuente.rsplit('.', 1)[0]
-        nombre_archivo = nombre_base.replace("sentadilla", "entrenamiento") + ".npy"
+        nombre_archivo = nombre_base.replace("ejemplos\\sentadilla", "entrenamiento\\archivos_entrenamiento") + ".npy"
     else:
         nombre_archivo = args.fuente.rsplit('.', 1)[0] + ".npy"
    
