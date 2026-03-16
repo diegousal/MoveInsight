@@ -8,7 +8,7 @@ from pose_processor import PoseProcessor
 from pose_features import process_historial
 
 
-MODEL_PATH = './modelos/juez_sentadillas.h5'
+MODEL_PATH = './modelos/juez_sentadillas_nuevo.h5'
 historial_landmarks = []
 
 parser = argparse.ArgumentParser()
@@ -45,7 +45,7 @@ while True:
         historial_landmarks.append(pose_vector)
     
     # --- 2. LLAMADA PARA DEBUG (Comentar/Descomentar aquí) ---
-    #visualization.mostrar_frame(frame, results)
+    visualization.mostrar_frame(frame, results)
     # ---------------------------------------------------------    
 
 # liberamos recursos de vídeo y detector
@@ -69,16 +69,29 @@ if len(historial_landmarks) > 0:
 
     np.save(nombre_archivo, datos)
     
-#     # 2. Cargar Juez Virtual e Inferencia
-#     try:
-#         model = tf.keras.models.load_model(MODEL_PATH)
-#         input_tensor = np.expand_dims(datos, axis=0)
-#         predicciones = model.predict(input_tensor)
+    # 2. Cargar Juez Virtual e Inferencia
+    try:
+        model = tf.keras.models.load_model(MODEL_PATH)
+
+        # Adaptar la longitud del input a lo que espera el modelo
+        model_max_frames = model.input_shape[1]  # e.g. 1508
+        num_frames_video = datos.shape[0]
+
+        if num_frames_video < model_max_frames:
+            # Rellenar con ceros por detrás (mismo valor que el Masking de la red)
+            padding = np.zeros((model_max_frames - num_frames_video, datos.shape[1]), dtype=np.float32)
+            datos_padded = np.vstack([datos, padding])
+        else:
+            # Si el vídeo es más largo, truncar
+            datos_padded = datos[:model_max_frames]
+
+        input_tensor = np.expand_dims(datos_padded, axis=0)
+        predicciones = model.predict(input_tensor)
         
-#         # 3. Generar y mostrar informe
-#         informe = rep_report.obtener_informe_reps(predicciones)
-#         rep_report.mostrar_informe(informe)    
-#     except Exception as e:
-#         print(f"Error en la fase de análisis: {e}")
-# else:
-#     print("Error: No se detectó movimiento.")
+        # 3. Generar y mostrar informe
+        informe = rep_report.obtener_informe_reps(predicciones)
+        rep_report.mostrar_informe(informe)    
+    except Exception as e:
+        print(f"Error en la fase de análisis: {e}")
+else:
+    print("Error: No se detectó movimiento.")

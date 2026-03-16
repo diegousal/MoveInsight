@@ -28,8 +28,13 @@ def cargar_anotaciones(ruta_txt: str) -> dict:
     with open(ruta_txt, "r", encoding="utf-8") as f:
         contenido = f.read()
 
-    # Eliminamos comas finales antes de } o ] que harían fallar literal_eval
+    # 1. Eliminamos comas finales antes de } o ] (trailing commas no son válidas en literal_eval)
     contenido = re.sub(r",\s*([}\]])", r"\1", contenido)
+
+    # 2. Añadimos coma entre entradas del diccionario raíz donde falta.
+    #    El patrón es: } seguido de espacios/saltos y luego una nueva clave "xxx.npy":
+    #    Ejemplo:  }\n\n"105.npy":  →  },\n\n"105.npy":
+    contenido = re.sub(r"}\s*\n(\s*\"[^\"]+\.npy\")", r"},\n\1", contenido)
 
     # Envolvemos el contenido en un dict literal válido
     contenido_dict = "{" + contenido + "}"
@@ -191,9 +196,9 @@ def preparar_dataset(etiquetas_videos: dict, carpeta_npy: str, max_frames: int):
 # MAX_FRAMES se calcula automáticamente desde las anotaciones para no perder frames,
 # pero puedes fijar un valor fijo si prefieres.
 RUTA_ANOTACIONES = "annotations_tuple_format.txt"  # <-- cambia si está en otra ruta
-CARPETA_NPY      = "entrenamiento"
+CARPETA_NPY = r"C:\Users\Usuario\Desktop\TFG\backend\entrenamiento\archivos_entrenamiento"
 N_FEATURES       = 15
-MODEL_PATH = r"C:\Users\Usuario\Desktop\TFG\backend\modelos\juez_sentadillas_v2_profesional.h5"
+MODEL_PATH = r"C:\Users\Usuario\Desktop\TFG\backend\modelos\juez_sentadillas_nuevo.h5"
 
 # --- Calcular MAX_FRAMES dinámicamente ---
 # Tomamos el frame máximo de todas las anotaciones + margen de seguridad

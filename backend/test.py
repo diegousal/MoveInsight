@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 import rep_report  
 
 # CONFIGURACIÓN (debe ser igual a la del entrenamiento)
-MAX_FRAMES = 1200 
+MAX_FRAMES = 1508 
 
 # 1. CARGAR DATOS Y MODELO
 try:
-    data = np.load('./entrenamiento/archivos_entrenamiento/10.npy') # Carga (639, 15)
-    model = tf.keras.models.load_model('./modelos/juez_sentadillas_v2_reps.h5')
+    data = np.load('./entrenamiento/archivos_entrenamiento.npy') # Carga (639, 15)
+    model = tf.keras.models.load_model('./modelos/juez_sentadillas_nuevo.h5')
     print("Modelo y datos cargados correctamente.")
 except Exception as e:
     print(f"Error al cargar: {e}")
@@ -26,8 +26,8 @@ data_padded = pad_sequences([data], maxlen=MAX_FRAMES, dtype='float32', padding=
 predicciones = model.predict(data_padded)
 
 # --- El resto de tu código igual ---
-informe = conclusiones.obtener_informe_reps(predicciones)
-conclusiones.mostrar_informe(informe) 
+informe = rep_report.obtener_informe_reps(predicciones)
+rep_report.mostrar_informe(informe) 
 
 # ... (Visualización)
 
@@ -35,7 +35,7 @@ conclusiones.mostrar_informe(informe)
 # predicciones[0] -> Fases, [1] -> Profundidad, [2] -> Torso, [6] -> Ritmo
 fases_predichas = np.argmax(predicciones[0][0], axis=-1)
 nota_profundidad = predicciones[1][0]
-nota_ritmo = predicciones[6][0]
+nota_ritmo = predicciones[5][0]
 
 # 4. VISUALIZACIÓN
 plt.figure(figsize=(12, 8))
