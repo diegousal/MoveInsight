@@ -78,9 +78,3 @@ def build_bilstm_model(input_dim: int,
                   metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"})
 
     return model
-
-
-if __name__ == "__main__":
-    # prueba rápida de construcción
-    m = build_bilstm_model(input_dim=15, lstm_units=128, num_layers=2)
-    m.summary()

@@ -8,7 +8,7 @@ import visualization
 from pose_processor import PoseProcessor
 from pose_features import process_historial
 
-MODEL_PATH = './modelos/best_model.h5'
+MODEL_PATH = './modelos/v2/best_model.h5'
 historial_landmarks = []
 
 parser = argparse.ArgumentParser()
@@ -60,57 +60,43 @@ if len(historial_landmarks) > 0:
 
     np.save(nombre_archivo, datos)
     
-    # --- FASE DE INFERENCIA Y RECONSTRUCCIÓN ---
+# --- FASE DE INFERENCIA Y RECONSTRUCCIÓN OPTIMIZADA ---
     try:
+        # 1. Cargar modelo y parámetros de normalización
         model = tf.keras.models.load_model(MODEL_PATH)
-        mean = np.load("./modelos/norm_mean.npy")
-        std = np.load("./modelos/norm_std.npy")
+        mean = np.load("./modelos/v2/norm_mean.npy")
+        std = np.load("./modelos/v2/norm_std.npy")
         
+        # 2. Normalización de los datos completos
         datos_norm = (datos - mean) / std
 
-        window_size = 1300 
-        stride = 150      
-        num_frames = datos_norm.shape[0]
-        num_features = datos_norm.shape[1]
+        # 3. Preparar el tensor de entrada (Batch, Time, Features)
+        # Ya no necesitamos ventanas ni loops. Pasamos el vídeo completo.
+        input_tensor = np.expand_dims(datos_norm, axis=0) # (1, num_frames, 15)
 
-        accum_phases = np.zeros((num_frames, 5)) 
-        accum_kpis = np.zeros((num_frames, 5))
-        counts = np.zeros((num_frames, 1)) 
+        # 4. Predicción en un solo paso
+        # El modelo usará la capa Masking internamente si fuera necesario, 
+        # pero aquí T es la longitud real del vídeo.
+        pred_phases, pred_kpis = model.predict(input_tensor, verbose=1)
 
-        for start in range(0, max(1, num_frames - window_size + 1), stride):
-            end = start + window_size
-            ventana = datos_norm[start:end]
-            actual_len = ventana.shape[0]
-            
-            if actual_len < window_size:
-                pad = np.zeros((window_size - actual_len, num_features))
-                ventana = np.vstack([ventana, pad])
-            
-            input_tensor = np.expand_dims(ventana, axis=0)
-            pred_phases, pred_kpis = model.predict(input_tensor, verbose=0)
+        # 5. Extraer resultados (quitando la dimensión de batch)
+        # Obtenemos directamente las secuencias para todo el vídeo
+        final_phases = pred_phases[0]
+        final_kpis = pred_kpis[0]
 
-            accum_phases[start:start+actual_len] += pred_phases[0][:actual_len]
-            accum_kpis[start:start+actual_len] += pred_kpis[0][:actual_len]
-            counts[start:start+actual_len] += 1
-
-        counts[counts == 0] = 1
-        final_phases = accum_phases / counts
-        final_kpis = accum_kpis / counts
-
-        # 2. CAMBIO: Llamada a la nueva función de reporte visual
-        # Esto generará el archivo PNG con las dos gráficas solicitadas
+        # 6. Llamada a la función de reporte visual
         ruta_reporte = save_visual_report(
             predicciones=[final_phases, final_kpis], 
             video_source=args.fuente, 
-            seq_len=num_frames, 
+            seq_len= datos_norm.shape[0], 
             output_dir="./reportes", 
             min_run_length=3
         )
         
-        print(f"Proceso finalizado. Gráfico guardado en: {ruta_reporte}")
+        print(f"Análisis completado con éxito. Reporte en: {ruta_reporte}")
 
     except Exception as e:
-        print(f"Error en la fase de análisis: {e}")
+        print(f"Error crítico en la fase de análisis: {e}")
 
 else:
     print("Error: No se detectó movimiento.")

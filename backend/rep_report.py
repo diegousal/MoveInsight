@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-# Colores para la terminal
 class Colors:
     GREEN = "\033[92m"
     YELLOW = "\033[93m"
@@ -36,20 +35,49 @@ def _smooth_sequence(seq, min_run_length=3):
             elif idx1 < len(seq): seq[idx0:idx1] = seq[idx1]
     return seq
 
-def _detect_reps_from_phase(phase_seq):
+def _detect_reps_from_phase(phase_seq, min_rep_frames=20):
+    """
+    Lógica equilibrada:
+    1. Detecta repeticiones que duren al menos 'min_rep_frames'.
+    2. Una repetición es válida si:
+       - Toca la Fase 2 (Bottom)
+       - O es lo suficientemente larga (ej. más de 30 frames) indicando una rep real.
+    """
     reps = []
-    in_rep, start = False, None
-    for i in range(1, len(phase_seq)):
-        cur, prev = int(phase_seq[i]), int(phase_seq[i-1])
-        if not in_rep and cur == 1:
-            in_rep, start = True, i
-        elif in_rep and cur == 1 and prev in (2, 3):
-            reps.append((start, i - 1))
-            start = i
-        elif in_rep and cur == 4 and prev == 3:
-            reps.append((start, i))
-            in_rep = False
-    if in_rep: reps.append((start, len(phase_seq)-1))
+    in_rep = False
+    start = None
+    has_reached_bottom = False
+    
+    seq = np.array(phase_seq, dtype=int)
+    
+    for i in range(len(seq)):
+        cur = seq[i]
+        prev = seq[i-1] if i > 0 else 0
+        
+        if not in_rep:
+            # Iniciamos al entrar en fases de movimiento (1, 2, 3)
+            if cur in [1, 2, 3] and prev in [0, 4]:
+                in_rep = True
+                start = i
+                has_reached_bottom = (cur == 2)
+        else:
+            if cur == 2:
+                has_reached_bottom = True
+            
+            # Cerramos al volver a reposo (0, 4)
+            if cur in [0, 4] and prev in [1, 2, 3]:
+                end = i
+                duration = end - start
+                
+                # CRITERIO DE VALIDACIÓN:
+                # Es válida si llegó al fondo O si es una repetición larga (ruido suele ser corto)
+                if duration >= min_rep_frames:
+                    if has_reached_bottom or duration > 35: 
+                        reps.append((start, end))
+                
+                in_rep = False
+                has_reached_bottom = False
+                
     return reps
 
 def _aggregate_kpis(pred_kpis, rep_ranges):
@@ -65,7 +93,7 @@ def _aggregate_kpis(pred_kpis, rep_ranges):
 
 # ---------------- FUNCIÓN PRINCIPAL ----------------
 def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./reportes", min_run_length=3, fps=30.0):
-    # 1. Procesamiento de datos
+    # 1. Procesamiento
     phase_pred = np.asarray(predicciones[0])[0] if np.asarray(predicciones[0]).ndim == 3 else np.asarray(predicciones[0])
     kpi_pred = np.asarray(predicciones[1])[0] if np.asarray(predicciones[1]).ndim == 3 else np.asarray(predicciones[1])
     
@@ -78,7 +106,7 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     rep_ranges = _detect_reps_from_phase(phase_seq)
     reps_data = _aggregate_kpis(kpi_seq, rep_ranges)
 
-    # 2. IMPRESIÓN POR TERMINAL (ESTILO ANTIGUO)
+    # 2. Terminal
     video_name = os.path.basename(video_source)
     n_reps = len(reps_data)
     sum_kpis = np.zeros(5)
@@ -105,22 +133,21 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     print(f"Puntuación global: {color_by_score(overall_score)}{overall_score:.3f}{Colors.RESET}")
     print(line + "\n")
 
-    # 3. GENERACIÓN DE GRÁFICO PNG
+    # 3. Gráfico
     os.makedirs(output_dir, exist_ok=True)
-    # Nombre simplificado según tu solicitud: nombre_reporte.png
     base_name = os.path.splitext(video_name)[0]
     output_path = os.path.join(output_dir, f"{base_name}_reporte.png")
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 9), gridspec_kw={'height_ratios': [1, 2]})
     
-    # Gráfica de Fases
+    # Fases: 1:Down, 2:Bottom, 3:Up, 4:Stand
     ax1.step(range(len(phase_seq)), phase_seq, where='post', color='#2c3e50', linewidth=1.5)
     ax1.set_yticks([0, 1, 2, 3, 4])
-    ax1.set_yticklabels(['0:None', '1:Bottom', '2:Down', '3:Up', '4:Stand'])
+    ax1.set_yticklabels(['0:None', '1:Down', '2:Bottom', '3:Up', '4:Stand'])
     ax1.set_title(f"Análisis de Movimiento: {video_name}")
     ax1.grid(True, alpha=0.3)
 
-    # Gráfica de KPIs
+    # KPIs
     labels = ["Profundidad", "Torso", "Estabilidad", "Rodillas", "Ritmo"]
     colors = ['#27ae60', '#e67e22', '#2980b9', '#8e44ad', '#c0392b']
     for i in range(5):
