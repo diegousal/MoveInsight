@@ -1,90 +1,86 @@
+# model_bilstm.py
+"""
+Definición del modelo BiLSTM para:
+ - salida 1: clasificación por frame (phase) -> softmax (num_phases clases)
+ - salida 2: regresión por frame de los 5 KPIs (sigmoid -> 0..1)
+
+Entrada: secuencias de forma (batch, timesteps, n_features)
+"""
+
+from typing import Tuple
 import tensorflow as tf
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import (
-    Input, LSTM, Bidirectional, Dense,
-    Dropout, TimeDistributed, Masking
-)
+from tensorflow.keras import layers, Model
 
-def crear_bilstm_analizador(max_frames=None, n_features=15):
+def build_bilstm_model(input_dim: int,
+                       lstm_units: int = 128,
+                       num_layers: int = 2,
+                       num_phases: int = 5,
+                       dropout: float = 0.2) -> Model:
     """
-    Red BiLSTM para análisis de sentadillas frame a frame.
+    Construye y devuelve un modelo Keras.
 
-    Entradas:
-        max_frames  : longitud de la secuencia (None = dinámica, int = fija con padding)
-        n_features  : número de características por frame (landmarks, ángulos, etc.)
+    Args:
+        input_dim: número de features por frame (p. ej. 15 según tu descripción).
+        lstm_units: unidades LSTM por dirección.
+        num_layers: número de capas LSTM (apiladas).
+        num_phases: número de clases de fase por frame (incluye 'no-rep' como clase 0).
+        dropout: drop entre capas.
 
-    Salidas por frame:
-        fase_frame       : clase 0-3 (idle / bajando / fondo / subiendo)
-        kpi_profundidad  : 0.0 (error) → 1.0 (perfecto)
-        kpi_torso        : 0.0 → 1.0
-        kpi_estabilidad  : 0.0 → 1.0
-        kpi_rodillas     : 0.0 → 1.0
-        kpi_ritmo        : 0.0 → 1.0
+    Returns:
+        modelo compilado (sin entrenar).
     """
+    seq_in = layers.Input(shape=(None, input_dim), name="sequence_input")
 
-    # --- Entrada ---
-    input_layer = Input(shape=(max_frames, n_features), name="input_secuencia")
+    # Enmascarado para secuencias padded (asume padding con ceros)
+    x = layers.Masking(mask_value=0.0)(seq_in)
 
-    # Masking: los frames de padding (valor 0.0) no influyen en la pérdida
-    x = Masking(mask_value=0.0)(input_layer)
+    # Apilado de Bidirectional LSTM
+    for i in range(num_layers):
+        return_sequences = True
+        x = layers.Bidirectional(
+                layers.LSTM(lstm_units, return_sequences=return_sequences,
+                            dropout=dropout, recurrent_dropout=0.0),
+                name=f"bilstm_{i}"
+            )(x)
 
-    # --- Tronco BiLSTM ---
-    # Primera capa: captura contexto a largo plazo
-    x = Bidirectional(LSTM(128, return_sequences=True), name="bilstm_1")(x)
-    x = Dropout(0.3)(x)
+    # Cabeza para clasificación por frame (fases)
+    phase_logits = layers.TimeDistributed(
+                    layers.Dense(64, activation="relu"),
+                    name="phase_dense1"
+                  )(x)
+    phase_out = layers.TimeDistributed(
+                    layers.Dense(num_phases, activation="softmax"),
+                    name="phase_out"
+                )(phase_logits)
 
-    # Segunda capa: refina las representaciones frame a frame
-    # return_sequences=True es OBLIGATORIO para salidas TimeDistributed
-    x = Bidirectional(LSTM(64, return_sequences=True), name="bilstm_2")(x)
-    x = Dropout(0.2)(x)
+    # Cabeza para KPIs (regresión por frame: 5 KPIs entre 0 y 1)
+    kpi_head = layers.TimeDistributed(
+                    layers.Dense(64, activation="relu"),
+                    name="kpi_dense1"
+                )(x)
+    kpi_out = layers.TimeDistributed(
+                    layers.Dense(5, activation="sigmoid"),
+                    name="kpi_out"
+              )(kpi_head)
 
-    # --- Cabezas de salida ---
+    model = Model(inputs=seq_in, outputs=[phase_out, kpi_out], name="bilstm_kpi_model")
 
-    # Fase: clasificación multiclase (0=idle, 1=bajando, 2=fondo, 3=subiendo)
-    output_fase = TimeDistributed(
-        Dense(4, activation='softmax'), name="fase_frame"
-    )(x)
+    # Compilación: pérdidas combinadas. Para KPIs usamos mse; para fases categorical_crossentropy.
+    losses = {
+        "phase_out": "sparse_categorical_crossentropy",
+        "kpi_out": "mse"
+    }
+    loss_weights = {"phase_out": 1.0, "kpi_out": 1.0}
 
-    # KPIs de calidad técnica (regresión 0→1 por frame)
-    output_depth    = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_profundidad")(x)
-    output_torso    = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_torso")(x)
-    output_stability = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_estabilidad")(x)
-    output_knees    = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_rodillas")(x)
-    output_ritmo    = TimeDistributed(Dense(1, activation='sigmoid'), name="kpi_ritmo")(x)
-
-    model = Model(
-        inputs=input_layer,
-        outputs=[output_fase, output_depth, output_torso, output_stability, output_knees, output_ritmo]
-    )
-
-    # --- Compilación ---
-    # loss_weights: la fase es más importante que cada KPI individual
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
-        loss={
-            "fase_frame":      "sparse_categorical_crossentropy",
-            "kpi_profundidad": "binary_crossentropy",
-            "kpi_torso":       "binary_crossentropy",
-            "kpi_estabilidad": "binary_crossentropy",
-            "kpi_rodillas":    "binary_crossentropy",
-            "kpi_ritmo":       "binary_crossentropy",
-        },
-        loss_weights={
-            "fase_frame":      2.0,   # La fase tiene el doble de peso
-            "kpi_profundidad": 1.0,
-            "kpi_torso":       1.0,
-            "kpi_estabilidad": 1.0,
-            "kpi_rodillas":    1.0,
-            "kpi_ritmo":       1.0,
-        },
-        metrics={
-            "fase_frame":      "accuracy",
-            "kpi_profundidad": tf.keras.metrics.MeanAbsoluteError(name="mae"),
-            "kpi_torso":       tf.keras.metrics.MeanAbsoluteError(name="mae"),
-            "kpi_estabilidad": tf.keras.metrics.MeanAbsoluteError(name="mae"),
-            "kpi_rodillas":    tf.keras.metrics.MeanAbsoluteError(name="mae"),
-            "kpi_ritmo":       tf.keras.metrics.MeanAbsoluteError(name="mae"),
-        }
-    )
+    model.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
+                  loss=losses,
+                  loss_weights=loss_weights,
+                  metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"})
 
     return model
+
+
+if __name__ == "__main__":
+    # prueba rápida de construcción
+    m = build_bilstm_model(input_dim=15, lstm_units=128, num_layers=2)
+    m.summary()

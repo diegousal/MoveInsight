@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import rep_report  
 
 # CONFIGURACIÓN (debe ser igual a la del entrenamiento)
-MAX_FRAMES = 1508 
+MAX_FRAMES = 1500 
 
 # 1. CARGAR DATOS Y MODELO
 try:
