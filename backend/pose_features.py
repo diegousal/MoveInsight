@@ -123,7 +123,7 @@ def process_historial(historial_landmarks):
             if df[col].notna().sum() > VENTANA_SUAVIZADO:
                 try:
                     df[col] = savgol_filter(df[col], window_length=VENTANA_SUAVIZADO, polyorder=2)
-                except:
+                except ValueError:
                     pass
                 
     return df

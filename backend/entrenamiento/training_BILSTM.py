@@ -118,7 +118,8 @@ def main(args):
     # Split manual (85/15)
     n = len(Xs_norm)
     indices = np.arange(n)
-    np.random.shuffle(indices)
+    np.random.seed(42)
+    np.random.shuffle(indices)    
     split = int(n * 0.85)
     
     train_idx, val_idx = indices[:split], indices[split:]

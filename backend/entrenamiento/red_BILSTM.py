@@ -1,4 +1,3 @@
-# model_bilstm.py
 """
 Definición del modelo BiLSTM para:
  - salida 1: clasificación por frame (phase) -> softmax (num_phases clases)
@@ -6,8 +5,6 @@ Definición del modelo BiLSTM para:
 
 Entrada: secuencias de forma (batch, timesteps, n_features)
 """
-
-from typing import Tuple
 import tensorflow as tf
 from tensorflow.keras import layers, Model
 
@@ -36,7 +33,6 @@ def build_bilstm_model(input_dim: int,
 
     # Apilado de Bidirectional LSTM
     for i in range(num_layers):
-        return_sequences = True
         x = layers.Bidirectional(
                 layers.LSTM(lstm_units, return_sequences=return_sequences,
                             dropout=dropout, recurrent_dropout=0.0),
