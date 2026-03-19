@@ -59,7 +59,7 @@ def calcular_centro_sustentacion(kp, umbral=UMBRAL_CONFIANZA):
 def extract_features(kp):
     """Mapea los puntos de MediaPipe y extrae las métricas del frame."""
     data = {}
-    
+
     # Índices MediaPipe BlazePose
     L_SH, R_SH = 11, 12
     L_EL, R_EL = 13, 14
@@ -70,33 +70,52 @@ def extract_features(kp):
     L_FT, R_FT = 31, 32
 
     # --- CÁLCULOS ARTICULARES ---
-    data['L_elbow'] = calcular_articulacion_segura(kp, (L_SH, L_EL, L_WR))
-    data['R_elbow'] = calcular_articulacion_segura(kp, (R_SH, R_EL, R_WR))
-    
-    data['L_shoulder'] = calcular_articulacion_segura(kp, (L_EL, L_SH, L_HP))
-    data['R_shoulder'] = calcular_articulacion_segura(kp, (R_EL, R_SH, R_HP))
-    
-    data['L_knee'] = calcular_articulacion_segura(kp, (L_HP, L_KN, L_AN))
-    data['R_knee'] = calcular_articulacion_segura(kp, (R_HP, R_KN, R_AN))
-    
-    data['L_hip'] = calcular_articulacion_segura(kp, (L_SH, L_HP, L_KN))
-    data['R_hip'] = calcular_articulacion_segura(kp, (R_SH, R_HP, R_KN))
-    
-    data['L_ankle'] = calcular_articulacion_segura(kp, (L_KN, L_AN, L_FT))
-    data['R_ankle'] = calcular_articulacion_segura(kp, (R_KN, R_AN, R_FT))
+    # data['L_elbow']    = calcular_articulacion_segura(kp, (L_SH, L_EL, L_WR))
+    # data['R_elbow']    = calcular_articulacion_segura(kp, (R_SH, R_EL, R_WR))
+    # data['L_shoulder'] = calcular_articulacion_segura(kp, (L_EL, L_SH, L_HP))
+    # data['R_shoulder'] = calcular_articulacion_segura(kp, (R_EL, R_SH, R_HP))
+    data['L_knee']     = calcular_articulacion_segura(kp, (L_HP, L_KN, L_AN))
+    data['R_knee']     = calcular_articulacion_segura(kp, (R_HP, R_KN, R_AN))
+    data['L_hip']      = calcular_articulacion_segura(kp, (L_SH, L_HP, L_KN))
+    data['R_hip']      = calcular_articulacion_segura(kp, (R_SH, R_HP, R_KN))
+    data['L_ankle']    = calcular_articulacion_segura(kp, (L_KN, L_AN, L_FT))
+    data['R_ankle']    = calcular_articulacion_segura(kp, (R_KN, R_AN, R_FT))
 
-    # --- CÁLCULO DE TORSO ---
-    # Solo se calcula si los hombros y caderas son fiables
-    if all(kp[i][3] >= UMBRAL_CONFIANZA for i in [L_SH, R_SH, L_HP, R_HP]):
+    # --- TORSO ---
+    hombros_visibles = all(kp[i][3] >= UMBRAL_CONFIANZA for i in [L_SH, R_SH, L_HP, R_HP])
+    if hombros_visibles:
         mid_shoulder = (kp[L_SH][:3] + kp[R_SH][:3]) / 2
-        mid_hip = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
+        mid_hip      = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
         data['torso'] = calculate_torso_3d(mid_shoulder, mid_hip)
     else:
         data['torso'] = np.nan
-    
-    # --- CENTRO DE SUSTENTACIÓN ---
-    data['sust_x'], data['sust_y'], data['sust_z'] = calcular_centro_sustentacion(kp)
-    
+        mid_shoulder = mid_hip = None
+
+    # --- CENTRO DE SUSTENTACIÓN (relativo a la cadera) ---
+    # Se guarda el desplazamiento CdS - cadera_media en lugar de coordenadas
+    # absolutas, que dependen del encuadre y la distancia a la cámara.
+    caderas_visibles = all(kp[i][3] >= UMBRAL_CONFIANZA for i in [L_HP, R_HP])
+    sust = calcular_centro_sustentacion(kp)
+    sust_valido = not np.any(np.isnan(sust))
+
+    if caderas_visibles and sust_valido:
+        if mid_hip is None:
+            mid_hip = (kp[L_HP][:3] + kp[R_HP][:3]) / 2
+        delta = sust - mid_hip
+
+        # Normalización por longitud del torso: elimina diferencias entre
+        # personas de distinta estatura y variaciones de distancia a la cámara.
+        if mid_shoulder is not None:
+            longitud_torso = np.linalg.norm(mid_shoulder - mid_hip)
+            if longitud_torso > 1e-6:
+                delta = delta / longitud_torso
+
+        data['sust_dx'] = delta[0]  # desplazamiento lateral
+        data['sust_dy'] = delta[1]  # desplazamiento vertical
+        data['sust_dz'] = delta[2]  # desplazamiento en profundidad
+    else:
+        data['sust_dx'] = data['sust_dy'] = data['sust_dz'] = np.nan
+
     return data
 
 def process_historial(historial_landmarks):
