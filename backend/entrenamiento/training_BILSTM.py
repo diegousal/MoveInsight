@@ -16,6 +16,7 @@ DEFAULT_LABELS = "etiquetas_videos.json"
 BATCH_SIZE = 4  # Reducido un poco porque ahora cargamos vídeos completos
 EPOCHS = 60
 NUM_PHASES = 5
+MASK_VALUE = -99.0  # Valor de máscara para sustituir datos faltantes
 
 # ---------- Utilidades de carga ----------
 def load_labels(labels_path: str):
@@ -67,10 +68,16 @@ def load_variable_sequences(data_dir: str, labels: dict):
     return Xs, phases, kpis
 
 def compute_normalization_variable(Xs):
-    """Calcula media y std recorriendo la lista de arrays."""
+    """Calcula media y std ignorando los valores de máscara (-99.0)."""
     all_data = np.concatenate(Xs, axis=0)
-    mean = np.mean(all_data, axis=0)
-    std = np.std(all_data, axis=0)
+    # Creamos una máscara para filtrar los valores válidos
+    valid_mask = (all_data != MASK_VALUE)
+    
+    # Calculamos estadísticas solo sobre datos válidos
+    # (Usamos un promedio por columna, ignorando los -99.0)
+    mean = np.array([all_data[valid_mask[:, i], i].mean() for i in range(all_data.shape[1])])
+    std = np.array([all_data[valid_mask[:, i], i].std() for i in range(all_data.shape[1])])
+    
     std[std == 0] = 1.0
     return mean, std
 
@@ -96,13 +103,18 @@ def create_variable_tf_dataset(Xs, phases, kpis, batch_size=BATCH_SIZE, shuffle=
     dataset = dataset.padded_batch(
         batch_size,
         padded_shapes=([None, Xs[0].shape[-1]], [None], [None, 5]),
-        padding_values=(0.0, 0, 0.0)
+        padding_values=(MASK_VALUE, 0, 0.0)
     )
 
     def map_fn(x, p, k):
-        # Máscara para KPIs: solo calculamos error donde hay una repetición (fase != 0)
-        kpi_mask = tf.cast(tf.not_equal(p, 0), tf.float32)
-        return x, {"phase_out": p, "kpi_out": k}, {"phase_out": tf.ones_like(p, dtype=tf.float32), "kpi_out": kpi_mask}
+        # CORRECCIÓN: x[:, :, 0] selecciona todos los frames de la primera característica
+        # x tiene forma (batch, timesteps, features)
+        padding_mask = tf.cast(tf.not_equal(x[:, :, 0], MASK_VALUE), tf.float32)
+
+        # Máscara para KPIs: solo donde hay repetición (p != 0) Y NO es padding
+        kpi_mask = tf.cast(tf.not_equal(p, 0), tf.float32) * padding_mask
+
+        return x, {"phase_out": p, "kpi_out": k}, {"phase_out": padding_mask, "kpi_out": kpi_mask}
 
     return dataset.map(map_fn).prefetch(tf.data.AUTOTUNE)
 
@@ -113,7 +125,18 @@ def main(args):
 
     # Normalización
     mean, std = compute_normalization_variable(Xs_raw)
-    Xs_norm = [(x - mean) / std for x in Xs_raw]
+
+    Xs_norm = []
+    for x in Xs_raw:
+        # Crear una máscara booleana de dónde estaban los huecos originales
+        mask = (x == MASK_VALUE)
+        
+        # Normalizar
+        x_n = (x - mean) / std
+        
+        # Restaurar el valor exacto de la máscara donde había huecos
+        x_n[mask] = MASK_VALUE
+        Xs_norm.append(x_n)
 
     # Split manual (85/15)
     n = len(Xs_norm)
