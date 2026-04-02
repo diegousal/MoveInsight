@@ -8,8 +8,6 @@ Entrada: secuencias de forma (batch, timesteps, n_features)
 import tensorflow as tf
 from tensorflow.keras import layers, Model
 
-MASK_VALUE = -99.0  # Valor de máscara para sustituir datos faltantes
-
 def build_bilstm_model(input_dim: int,
                        lstm_units: int = 128,
                        num_layers: int = 2,
@@ -31,7 +29,7 @@ def build_bilstm_model(input_dim: int,
     seq_in = layers.Input(shape=(None, input_dim), name="sequence_input")
 
     # Enmascarado para secuencias padded (asume padding con ceros)
-    x = layers.Masking(mask_value=MASK_VALUE)(seq_in)
+    x = layers.Masking(mask_value=0.0)(seq_in)
 
     # Apilado de Bidirectional LSTM
     for i in range(num_layers):
@@ -70,12 +68,9 @@ def build_bilstm_model(input_dim: int,
     }
     loss_weights = {"phase_out": 1.0, "kpi_out": 1.0}
 
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(1e-3),
-        loss=losses,
-        loss_weights=loss_weights,
-        metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"},
-        weighted_metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"}
-    )
+    model.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
+                  loss=losses,
+                  loss_weights=loss_weights,
+                  metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"})
 
     return model
