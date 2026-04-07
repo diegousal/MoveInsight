@@ -1,0 +1,839 @@
+"3.npy": {
+  "reps": [
+    {
+      "frames": (0, 24, 77, 87, 136), 
+      "kpis": {"depth": 9, "torso": 10, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"4.npy": {
+  "reps": [
+    {
+      "frames": (0, 4, 86, 93, 138), 
+      "kpis": {"depth": 8, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (138, 161, 255, 259, 304), 
+      "kpis": {"depth": 9, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (304, 321, 400, 413, 454), 
+      "kpis": {"depth": 9, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (454, 478, 552, 561, 603), 
+      "kpis": {"depth": 9, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+
+"7.npy": {
+  "reps": [
+    {
+      "frames": (0, 7, 58, 66, 109), 
+      "kpis": {"depth": 9, "torso": 10, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (109, 151, 199, 207, 240), 
+      "kpis": {"depth": 8, "torso": 10, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (240, 284, 332, 338, 373), 
+      "kpis": {"depth": 8, "torso": 10, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (373, 426, 471, 487, 529), 
+      "kpis": {"depth": 8, "torso": 10, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (529, 580, 627, 643, 687), 
+      "kpis": {"depth": 8, "torso": 10, "stability": 9, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"8.npy": {
+  "reps": [
+    {
+      "frames": (0, 22, 68, 72, 111), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (111, 142, 184, 195, 236), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (236, 268, 307, 314, 357), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (357, 383, 422, 431, 468), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (468, 503, 547, 552, 591), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (591, 622, 660, 668, 714), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"12.npy": {
+  "reps": [
+    {
+      "frames": (0, 1, 64, 70, 134), 
+      "kpis": {"depth": 9, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (134, 185, 261, 268, 311), 
+      "kpis": {"depth": 9, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"13.npy": {
+  "reps": [
+    {
+      "frames": (0, 5, 26, 29, 51), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 7, "knees": 8, "ritmo": 6}
+    },
+    {
+      "frames": (51, 66, 85, 91, 114), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 7, "knees": 8, "ritmo": 6}
+    },
+    {
+      "frames": (114, 128, 151, 154, 176), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 7, "knees": 8, "ritmo": 6}
+    },
+    {
+      "frames": (176, 191, 213, 217, 240), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 7, "knees": 8, "ritmo": 6}
+    },
+  ]
+}
+
+"14.npy": {
+  "reps": [
+    {
+      "frames": (0, 2, 28, 32, 48), 
+      "kpis": {"depth": 1, "torso": 7, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (48, 62, 80, 86, 101), 
+      "kpis": {"depth": 1, "torso": 7, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (101, 111, 134, 140, 157), 
+      "kpis": {"depth": 1, "torso": 7, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (157, 170, 192, 195, 210), 
+      "kpis": {"depth": 1, "torso": 7, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (210, 224, 243, 247, 269), 
+      "kpis": {"depth": 8, "torso": 8, "stability": 10, "knees": 8, "ritmo": 2}
+    },
+  ]
+}
+
+"15.npy": {
+  "reps": [
+    {
+      "frames": (2, 9, 47, 55, 84), 
+      "kpis": {"depth": 3, "torso": 7, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (84, 121, 154, 168, 203), 
+      "kpis": {"depth": 4, "torso": 7, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"16.npy": {
+  "reps": [
+    {
+      "frames": (0, 9, 32, 35, 47), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+    {
+      "frames": (47, 66, 82, 89, 108), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+    {
+      "frames": (108, 126, 146, 148, 166), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+    {
+      "frames": (166, 183, 202, 205, 226), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+    {
+      "frames": (226, 241, 260, 263, 279), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+    {
+      "frames": (279, 298, 319, 322, 345), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 7}
+    },
+  ]
+}
+
+"17.npy": {
+  "reps": [
+    {
+      "frames": (3, 7, 23, 25, 39), 
+      "kpis": {"depth": 7, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (39, 52, 69, 71, 86), 
+      "kpis": {"depth": 6, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (86, 98, 117, 121, 138), 
+      "kpis": {"depth": 6, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (138, 155, 171, 173, 190), 
+      "kpis": {"depth": 6, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (190, 205, 222, 225, 244), 
+      "kpis": {"depth": 6, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+    {
+      "frames": (244, 261, 279, 282, 302), 
+      "kpis": {"depth": 6, "torso": 8, "stability": 10, "knees": 8, "ritmo": 3}
+    },
+  ]
+}
+
+"18.npy": {
+  "reps": [
+    {
+      "frames": (0, 21, 62, 65, 97), 
+      "kpis": {"depth": 5, "torso": 9, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"19.npy": {
+  "reps": [
+    {
+      "frames": (31, 49, 105, 111, 158), 
+      "kpis": {"depth": 6, "torso": 7, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"20.npy": {
+  "reps": [
+    {
+      "frames": (0, 21, 40, 42, 63), 
+      "kpis": {"depth": 6, "torso": 7, "stability": 4, "knees": 9, "ritmo": 5}
+    },
+    {
+      "frames": (63, 94, 120, 122, 146), 
+      "kpis": {"depth": 6, "torso": 7, "stability": 4, "knees": 9, "ritmo": 5}
+    },
+    {
+      "frames": (146, 185, 205, 211, 232), 
+      "kpis": {"depth": 7, "torso": 7, "stability": 7, "knees": 9, "ritmo": 5}
+    },
+    {
+      "frames": (232, 279, 301, 305, 326), 
+      "kpis": {"depth": 6, "torso": 7, "stability": 7, "knees": 9, "ritmo": 5}
+    },
+    {
+      "frames": (326, 375, 399, 402, 425), 
+      "kpis": {"depth": 6, "torso": 7, "stability": 7, "knees": 9, "ritmo": 5}
+    },
+  ]
+}
+
+"21.npy": {
+  "reps": [
+    {
+      "frames": (0, 3, 18, 25, 40), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 7, "knees": 9, "ritmo": 6}
+    },
+    {
+      "frames": (40, 58, 79, 82, 100), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 7, "knees": 9, "ritmo": 6}
+    },
+    {
+      "frames": (100, 116, 137, 141, 159), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 5, "knees": 9, "ritmo": 6}
+    },
+    {
+      "frames": (159, 180, 199, 203, 221), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 7, "knees": 9, "ritmo": 6}
+    },
+    {
+      "frames": (221, 238, 259, 262, 278), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 7, "knees": 9, "ritmo": 6}
+    },
+    {
+      "frames": (278, 300, 314, 318, 334), 
+      "kpis": {"depth": 10, "torso": 7, "stability": 7, "knees": 9, "ritmo": 4}
+    },
+  ]
+}
+
+"23.npy": {
+  "reps": [
+    {
+      "frames": (7, 18, 49, 77, 95), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (95, 112, 148, 158, 174), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"24.npy": {
+  "reps": [
+    {
+      "frames": (24, 27, 51, 54, 94), 
+      "kpis": {"depth": 8, "torso": 3, "stability": 8, "knees": 3, "ritmo": 6}
+    },
+    {
+      "frames": (94, 102, 130, 136, 181), 
+      "kpis": {"depth": 8, "torso": 4, "stability": 8, "knees": 3, "ritmo": 6}
+    },
+    {
+      "frames": (181, 212, 244, 247, 294), 
+      "kpis": {"depth": 7, "torso": 4, "stability": 8, "knees": 3, "ritmo": 6}
+    },
+  ]
+}
+
+"25.npy": {
+  "reps": [
+    {
+      "frames": (0, 8, 51, 57, 95), 
+      "kpis": {"depth": 6, "torso": 5, "stability": 9, "knees": 9, "ritmo": 10}
+    },
+    {
+      "frames": (95, 120, 166, 171, 209), 
+      "kpis": {"depth": 6, "torso": 5, "stability": 9, "knees": 9, "ritmo": 10}
+    },
+    {
+      "frames": (209, 240, 285, 294, 328), 
+      "kpis": {"depth": 7, "torso": 5, "stability": 9, "knees": 9, "ritmo": 10}
+    },
+  ]
+}
+
+"26.npy": {
+  "reps": [
+    {
+      "frames": (0, 18, 56, 65, 101), 
+      "kpis": {"depth": 10, "torso": 8, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (101, 119, 166, 169, 208), 
+      "kpis": {"depth": 10, "torso": 8, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (208, 222, 269, 272, 299), 
+      "kpis": {"depth": 10, "torso": 8, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"29.npy": {
+  "reps": [
+    {
+      "frames": (0, 12, 51, 56, 100), 
+      "kpis": {"depth": 5, "torso": 6, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (100, 124, 171, 175, 221), 
+      "kpis": {"depth": 6, "torso": 6, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (221, 253, 300, 309, 349), 
+      "kpis": {"depth": 6, "torso": 6, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (349, 396, 437, 440, 489), 
+      "kpis": {"depth": 5, "torso": 6, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (489, 524, 570, 583, 630), 
+      "kpis": {"depth": 6, "torso": 6, "stability": 9, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"30.npy": {
+  "reps": [
+    {
+      "frames": (0, 19, 34, 36, 51), 
+      "kpis": {"depth": 5, "torso": 7, "stability": 9, "knees": 10, "ritmo": 2}
+    },
+    {
+      "frames": (51, 68, 85, 88, 102), 
+      "kpis": {"depth": 4, "torso": 7, "stability": 9, "knees": 10, "ritmo": 2}
+    },
+    {
+      "frames": (102, 119, 132, 135, 150), 
+      "kpis": {"depth": 4, "torso": 7, "stability": 9, "knees": 10, "ritmo": 2}
+    },
+    {
+      "frames": (150, 167, 179, 185, 198), 
+      "kpis": {"depth": 4, "torso": 7, "stability": 9, "knees": 10, "ritmo": 2}
+    },
+  ]
+}
+
+"32.npy": {
+  "reps": [
+    {
+      "frames": (0, 24, 43, 46, 72), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (72, 109, 124, 130, 157), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (157, 203, 219, 222, 248), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 0, "ritmo": 0}
+    },
+  ]
+}
+
+"33.npy": {
+  "reps": [
+    {
+      "frames": (0, 13, 33, 36, 53), 
+      "kpis": {"depth": 5, "torso": 7, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (53, 62, 88, 92, 108), 
+      "kpis": {"depth": 5, "torso": 7, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+  ]
+}
+
+
+"36.npy": {
+  "reps": [
+    {
+      "frames": (9, 31, 55, 60, 80), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+  ]
+}
+
+"37.npy": {
+  "reps": [
+    {
+      "frames": (0, 17, 48, 56, 93), 
+      "kpis": {"depth": 10, "torso": 9, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"40.npy": {
+  "reps": [
+    {
+      "frames": (17, 30, 50, 53, 73), 
+      "kpis": {"depth": 5, "torso": 4, "stability": 9, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (73, 85, 103, 108, 125), 
+      "kpis": {"depth": 6, "torso": 4, "stability": 9, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (125, 136, 153, 157, 173), 
+      "kpis": {"depth": 5, "torso": 4, "stability": 9, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (173, 185, 203, 206, 225), 
+      "kpis": {"depth": 5, "torso": 4, "stability": 9, "knees": 10, "ritmo": 6}
+    },
+  ]
+}
+
+"43.npy": {
+  "reps": [
+    {
+      "frames": (7, 10, 36, 40, 64), 
+      "kpis": {"depth": 7, "torso": 9, "stability": 7, "knees": 6, "ritmo": 7}
+    },
+    {
+      "frames": (64, 78, 104, 107, 132), 
+      "kpis": {"depth": 7, "torso": 9, "stability": 7, "knees": 6, "ritmo": 7}
+    },
+    {
+      "frames": (132, 146, 173, 175, 202), 
+      "kpis": {"depth": 7, "torso": 9, "stability": 7, "knees": 6, "ritmo": 7}
+    },
+    {
+      "frames": (202, 219, 245, 248, 274), 
+      "kpis": {"depth": 7, "torso": 9, "stability": 7, "knees": 6, "ritmo": 7}
+    },
+  ]
+}
+
+"45.npy": {
+  "reps": [
+    {
+      "frames": (0, 14, 60, 68, 109), 
+      "kpis": {"depth": 9, "torso": 7, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"47.npy": {
+  "reps": [
+    {
+      "frames": (0, 3, 34, 37, 58), 
+      "kpis": {"depth": 5, "torso": 9, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (58, 74, 100, 109, 129), 
+      "kpis": {"depth": 5, "torso": 9, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"52.npy": {
+  "reps": [
+    {
+      "frames": (0, 12, 39, 42, 63), 
+      "kpis": {"depth": 3, "torso": 7, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (63, 88, 112, 114, 134), 
+      "kpis": {"depth": 3, "torso": 7, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+  ]
+}
+
+"53.npy": {
+  "reps": [
+    {
+      "frames": (0, 3, 33, 35, 62), 
+      "kpis": {"depth": 7, "torso": 10, "stability": 10, "knees": 8, "ritmo": 7}
+    },
+    {
+      "frames": (62, 75, 102, 105, 136), 
+      "kpis": {"depth": 7, "torso": 10, "stability": 10, "knees": 8, "ritmo": 7}
+    },
+    {
+      "frames": (136, 170, 203, 206, 237), 
+      "kpis": {"depth": 7, "torso": 10, "stability": 10, "knees": 8, "ritmo": 7}
+    },
+  ]
+}
+
+"55.npy": {
+  "reps": [
+    {
+      "frames": (0, 80, 127, 137, 180), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (180, 213, 255, 273, 309), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (309, 342, 387, 401, 439), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (439, 469, 509, 530, 567), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (567, 601, 640, 657, 695), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (695, 724, 766, 781, 822), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (822, 851, 896, 909, 954), 
+      "kpis": {"depth": 8, "torso": 7, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"59.npy": {
+  "reps": [
+    {
+      "frames": (0, 7, 30, 33, 51), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (51, 72, 88, 96, 114), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (114, 131, 155, 158, 181), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (181, 198, 218, 224, 247), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (247, 264, 290, 294, 315), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (315, 333, 355, 359, 381), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (381, 399, 424, 427, 445), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (445, 466, 486, 490, 511), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (511, 532, 552, 554, 573), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+    {
+      "frames": (573, 596, 617, 621, 639), 
+      "kpis": {"depth": 9, "torso": 9, "stability": 10, "knees": 10, "ritmo": 6}
+    },
+  ]
+}
+
+"66.npy": {
+  "reps": [
+    {
+      "frames": (0, 35, 78, 96, 133), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (133, 162, 206, 217, 257), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (257, 285, 325, 339, 378), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (378, 410, 453, 463, 505), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (505, 532, 573, 586, 623), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (623, 651, 696, 705, 748), 
+      "kpis": {"depth": 7, "torso": 6, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+  ]
+}
+"76.npy": {
+  "reps": [
+    {
+      "frames": (0, 2, 21, 25, 45), 
+      "kpis": {"depth": 8, "torso": 9, "stability": 8, "knees": 3, "ritmo": 7}
+    },
+  ]
+}
+
+"82.npy": {
+  "reps": [
+    {
+      "frames": (3, 17, 68, 80, 101), 
+      "kpis": {"depth": 10, "torso": 9, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (101, 146, 203, 211, 234), 
+      "kpis": {"depth": 10, "torso": 9, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (234, 278, 328, 337, 361), 
+      "kpis": {"depth": 10, "torso": 9, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"84.npy": {
+  "reps": [
+    {
+      "frames": (15, 65, 83, 88, 109), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+  ]
+}
+
+"88.npy": {
+  "reps": [
+    {
+      "frames": (44, 90, 172, 174, 198), 
+      "kpis": {"depth": 8, "torso": 6, "stability": 7, "knees": 3, "ritmo": 4}
+    },
+  ]
+}
+
+"93.npy": {
+  "reps": [
+    {
+      "frames": (8, 24, 106, 131, 211), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+    {
+      "frames": (211, 241, 334, 364, 428), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"94.npy": {
+  "reps": [
+    {
+      "frames": (4, 8, 55, 72, 117), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 0, "ritmo": 9}
+    },
+  ]
+}
+
+"95.npy": {
+  "reps": [
+    {
+      "frames": (0, 61, 83, 85, 109), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (109, 148, 165, 170, 193), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (193, 234, 254, 256, 284), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (284, 318, 339, 342, 362), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (362, 411, 430, 432, 456), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (456, 507, 526, 529, 552), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (552, 603, 615, 620, 645), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+    {
+      "frames": (645, 695, 712, 715, 743), 
+      "kpis": {"depth": 7, "torso": 2, "stability": 8, "knees": 3, "ritmo": 0}
+    },
+  ]
+}"101.npy": {
+  "reps": [
+    {
+      "frames": (0, 4, 39, 44, 104), 
+      "kpis": {"depth": 9, "torso": 2, "stability": 2, "knees": 7, "ritmo": 7}
+    },
+    {
+      "frames": (104, 186, 225, 229, 295), 
+      "kpis": {"depth": 9, "torso": 1, "stability": 2, "knees": 7, "ritmo": 7}
+    },
+    {
+      "frames": (295, 374, 412, 419, 486), 
+      "kpis": {"depth": 9, "torso": 1, "stability": 1, "knees": 7, "ritmo": 7}
+    },
+    {
+      "frames": (486, 568, 605, 610, 680), 
+      "kpis": {"depth": 9, "torso": 1, "stability": 1, "knees": 7, "ritmo": 7}
+    },
+    {
+      "frames": (680, 823, 862, 870, 949), 
+      "kpis": {"depth": 9, "torso": 0, "stability": 1, "knees": 7, "ritmo": 7}
+    },
+  ]
+}
+
+"119.npy": {
+  "reps": [
+    {
+      "frames": (4, 13, 50, 57, 84), 
+      "kpis": {"depth": 10, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+    {
+      "frames": (84, 123, 158, 165, 193), 
+      "kpis": {"depth": 10, "torso": 8, "stability": 10, "knees": 10, "ritmo": 9}
+    },
+  ]
+}
+
+"121.npy": {
+  "reps": [
+    {
+      "frames": (0, 7, 60, 66, 111), 
+      "kpis": {"depth": 4, "torso": 7, "stability": 6, "knees": 7, "ritmo": 7}
+    },
+  ]
+}
+
+"122.npy": {
+  "reps": [
+    {
+      "frames": (0, 18, 171, 178, 224), 
+      "kpis": {"depth": 10, "torso": 10, "stability": 10, "knees": 10, "ritmo": 10}
+    },
+  ]
+}
+
+"123.npy": {
+  "reps": [
+    {
+      "frames": (0, 31, 128, 140, 231), 
+      "kpis": {"depth": 4, "torso": 5, "stability": 9, "knees": 10, "ritmo": 6}
+    },
+  ]
+}
+
+
+"126.npy": {
+  "reps": [
+    {
+      "frames": (0, 4, 40, 43, 78), 
+      "kpis": {"depth": 7, "torso": 8, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+    {
+      "frames": (78, 132, 173, 177, 206), 
+      "kpis": {"depth": 7, "torso": 8, "stability": 10, "knees": 10, "ritmo": 8}
+    },
+  ]
+}
+
+"127.npy": {
+  "reps": [
+    {
+      "frames": (0, 8, 58, 65, 119), 
+      "kpis": {"depth": 5, "torso": 1, "stability": 9, "knees": 9, "ritmo": 9}
+    },
+    {
+      "frames": (119, 170, 217, 223, 271), 
+      "kpis": {"depth": 5, "torso": 1, "stability": 9, "knees": 9, "ritmo": 9}
+    },
+  ]
+}
+

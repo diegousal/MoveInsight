@@ -34,7 +34,7 @@ def build_bilstm_model(input_dim: int,
     # Apilado de Bidirectional LSTM
     for i in range(num_layers):
         x = layers.Bidirectional(
-                layers.LSTM(lstm_units, return_sequences=return_sequences,
+                layers.LSTM(lstm_units, return_sequences=True,
                             dropout=dropout, recurrent_dropout=0.0),
                 name=f"bilstm_{i}"
             )(x)
