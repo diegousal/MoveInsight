@@ -11,7 +11,7 @@ from pose_processor import PoseProcessor
 from rep_report import save_visual_report
 
 # Rutas de modelos y entrenamiento
-MODEL_PATH = Path("./modelos/v10")
+MODEL_PATH = Path("./modelos/v11")
 TRAINING_DIR = Path("entrenamiento/archivos_entrenamiento")
 
 # Función para determinar la ruta de salida del archivo .npy basado en la fuente de video
@@ -73,13 +73,15 @@ def main() -> None:
     npy_path.parent.mkdir(parents=True, exist_ok=True)
     np.save(npy_path, datos)
 
-    #-- Cargar modelo y realizar predicciones --
+    # -- Cargar modelo y realizar predicciones --
     try:
         model = tf.keras.models.load_model(MODEL_PATH / "best_model.h5")
         mean = np.load(MODEL_PATH / "norm_mean.npy")
         std = np.load(MODEL_PATH / "norm_std.npy")
 
+        mask = (datos != 0).astype(np.float32)
         datos_norm = (datos - mean) / std
+        datos_norm = datos_norm * mask
         input_tensor = np.expand_dims(datos_norm, axis=0)  # (1, T, Features)
 
         pred_phases, pred_kpis = model.predict(input_tensor, verbose=1)

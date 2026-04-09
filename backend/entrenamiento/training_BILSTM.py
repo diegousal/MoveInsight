@@ -121,9 +121,24 @@ def main(args):
     labels = load_labels(args.labels)
     Xs_raw, phases_raw, kpis_raw = load_variable_sequences(args.data_dir, labels)
 
-    # Normalización
+    # 1. Cálculo de media y std global
     mean, std = compute_normalization_variable(Xs_raw)
-    Xs_norm = [(x - mean) / std for x in Xs_raw]
+
+    # 2. Normalización Inteligente (Respetando la Capa Masking)
+    Xs_norm = []
+    print("Normalizando secuencias y aplicando máscaras de integridad...")
+    for x in Xs_raw:
+        # Identificamos dónde hay datos reales (no ceros)
+        mask = (x != 0).astype(np.float32)
+        
+        # Aplicamos la normalización estándar
+        x_n = (x - mean) / std
+        
+        # FORZAMOS EL CERO: Lo que originalmente era 0.0 vuelve a ser 0.0
+        # Esto es vital para que layers.Masking(mask_value=0.0) ignore el padding y huecos
+        x_n = x_n * mask
+        
+        Xs_norm.append(x_n)
 
     # Split manual (85/15)
     n = len(Xs_norm)

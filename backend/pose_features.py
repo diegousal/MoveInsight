@@ -118,9 +118,9 @@ def extract_features(kp):
 
     return data
 
-def process_historial(historial_landmarks,fps):
+def process_historial(historial_landmarks, fps):
     """
-    Convierte el historial de puntos en un DataFrame limpio y filtrado.
+    Convierte el historial de puntos en un DataFrame limpio, filtrado y con cinemática.
     """
     # 1. Extracción de datos frame a frame
     records = []
@@ -130,26 +130,30 @@ def process_historial(historial_landmarks,fps):
     
     df = pd.DataFrame(records)
     dt = 1.0 / fps
-
     
-    # 2. Interpolación controlada
-    # Solo rellenamos huecos pequeños (máximo 10 frames). 
-    # Si la pierna no se ve durante medio video, se queda como NaN.
+    # 2. Interpolación base (rellena huecos pequeños de hasta 10 frames)
     df = df.interpolate(method='linear', limit=10, limit_direction='both')
     
-    # 3. Suavizado de señal (Savitzky-Golay)
-    # Solo aplicamos si hay suficientes datos y la columna no es todo NaN
+    # 3. Suavizado SEGURO (Protección contra propagación de NaNs)
     if len(df) > VENTANA_SUAVIZADO:
         for col in df.columns:
             if df[col].notna().sum() > VENTANA_SUAVIZADO:
+                # Rellenamos temporalmente con 0 para que el filtro no falle si hay NaNs
+                temp_col = df[col].interpolate(method='linear', limit_direction='both').fillna(0)
                 try:
-                    df[col] = savgol_filter(df[col], window_length=VENTANA_SUAVIZADO, polyorder=2)
+                    df[col] = savgol_filter(temp_col, window_length=VENTANA_SUAVIZADO, polyorder=2)
                 except ValueError:
                     pass
-    # 1. Velocidad Vertical (Clave para RITMO)
-    # 3. Derivadas (Velocidades y Aceleración) - USANDO NOMBRES CORRECTOS
+
+    # 4. Cálculo de Velocidades y Aceleración (Después del suavizado)
+    # Se usan los nombres exactos definidos en extract_features
     df['vel_y_hip'] = df['sust_dy'].diff().fillna(0) / dt
     df['acc_y_hip'] = df['vel_y_hip'].diff().fillna(0) / dt
-    # Aquí cambiamos 'knee_angle_l' por 'L_knee' para evitar el KeyError
-    df['vel_knee'] = df['L_knee'].diff().fillna(0) / dt
+    
+    # Corregido: Usamos 'L_knee' para evitar el KeyError
+    if 'L_knee' in df.columns:
+        df['vel_knee'] = df['L_knee'].diff().fillna(0) / dt
+    else:
+        df['vel_knee'] = 0.0
+
     return df
