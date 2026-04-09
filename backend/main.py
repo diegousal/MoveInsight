@@ -11,7 +11,7 @@ from pose_processor import PoseProcessor
 from rep_report import save_visual_report
 
 # Rutas de modelos y entrenamiento
-MODEL_PATH = Path("./modelos/v9")
+MODEL_PATH = Path("./modelos/v10")
 TRAINING_DIR = Path("entrenamiento/archivos_entrenamiento")
 
 # Función para determinar la ruta de salida del archivo .npy basado en la fuente de video
@@ -53,7 +53,7 @@ def main() -> None:
             historial_landmarks.append(pose_vector)
 
         #Opcional: Mostrar el video con las detecciones de pose, comentar si no se desea visualizar
-        mostrar_frame(frame, results)
+        #mostrar_frame(frame, results)
     
     #-- Liberar recursos --
     cap.release()
@@ -65,8 +65,7 @@ def main() -> None:
         print("Error: No se detectó movimiento.")
         return
 
-    df_angles = process_historial(historial_landmarks)
-    df_angles["delta_time"] = 1.0 / fps
+    df_angles = process_historial(historial_landmarks, fps)
     datos = df_angles.fillna(0.0).values
 
     # Guardar los datos procesados en un archivo .npy para entrenamiento o análisis posterior

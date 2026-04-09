@@ -66,7 +66,7 @@ def build_bilstm_model(input_dim: int,
         "phase_out": "sparse_categorical_crossentropy",
         "kpi_out": "mse"
     }
-    loss_weights = {"phase_out": 1.0, "kpi_out": 1.0}
+    loss_weights = {"phase_out": 0.1, "kpi_out": 5.0}
 
     model.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
                   loss=losses,

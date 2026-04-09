@@ -118,7 +118,7 @@ def extract_features(kp):
 
     return data
 
-def process_historial(historial_landmarks):
+def process_historial(historial_landmarks,fps):
     """
     Convierte el historial de puntos en un DataFrame limpio y filtrado.
     """
@@ -129,6 +129,8 @@ def process_historial(historial_landmarks):
         records.append(extract_features(kp_matrix))
     
     df = pd.DataFrame(records)
+    dt = 1.0 / fps
+
     
     # 2. Interpolación controlada
     # Solo rellenamos huecos pequeños (máximo 10 frames). 
@@ -144,5 +146,10 @@ def process_historial(historial_landmarks):
                     df[col] = savgol_filter(df[col], window_length=VENTANA_SUAVIZADO, polyorder=2)
                 except ValueError:
                     pass
-                
+    # 1. Velocidad Vertical (Clave para RITMO)
+    # 3. Derivadas (Velocidades y Aceleración) - USANDO NOMBRES CORRECTOS
+    df['vel_y_hip'] = df['sust_dy'].diff().fillna(0) / dt
+    df['acc_y_hip'] = df['vel_y_hip'].diff().fillna(0) / dt
+    # Aquí cambiamos 'knee_angle_l' por 'L_knee' para evitar el KeyError
+    df['vel_knee'] = df['L_knee'].diff().fillna(0) / dt
     return df

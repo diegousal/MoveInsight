@@ -14,7 +14,7 @@ from red_BILSTM import build_bilstm_model
 DEFAULT_DATA_DIR = "/archivos_entrenamiento"
 DEFAULT_LABELS = "etiquetas_videos.json"
 BATCH_SIZE = 4  # Reducido un poco porque ahora cargamos vídeos completos
-EPOCHS = 60
+EPOCHS = 150
 NUM_PHASES = 5
 
 # ---------- Utilidades de carga ----------
@@ -27,21 +27,31 @@ def build_frame_targets(video_len: int, reps: list):
     kpis = np.zeros((video_len, 5), dtype=np.float32)
 
     for rep in reps:
-        frs = tuple(rep["frames"])
-        kp = rep["kpis"]
-        kpi_vec = np.array([kp["depth"], kp["torso"], kp["stability"], kp["knees"], kp["ritmo"]], dtype=np.float32)
+        f_pts = rep["frames"]
+        inicio, fin = f_pts[0], f_pts[-1]
+        centro = f_pts[2] # El punto de máxima profundidad según tu JSON
         
-        # Clamp de seguridad
-        s, d, b, u, e = [min(max(0, int(x)), video_len-1) for x in frs]
+        # 1. Asignación de Fases Reales (Usando los 5 puntos del JSON)
+        phase[f_pts[0]:f_pts[1]] = 1 # Preparación
+        phase[f_pts[1]:f_pts[2]] = 2 # Descenso
+        phase[f_pts[2]:f_pts[3]] = 3 # Fondo (Apex)
+        phase[f_pts[3]:f_pts[4]] = 4 # Ascenso
 
-        phase[s:d] = 1
-        phase[d:b] = 2
-        phase[b:u] = 3
-        phase[u:e+1] = 4
-        kpis[s:e+1, :] = kpi_vec 
+        # 2. Bucle para KPIs (Rampa de profundidad)
+        for f in range(inicio, fin):
+            distancia_al_centro = abs(f - centro)
+            # Normalizamos la rampa según la duración total
+            duracion_total = fin - inicio
+            factor_profundidad = max(0, 1 - (distancia_al_centro / (duracion_total / 2)))
+            
+            # NOTA: No dividas por 10 si tu JSON ya tiene 0.9 o 1.0
+            kpis[f, 0] = rep["kpis"]["depth"] * factor_profundidad 
+            kpis[f, 1] = rep["kpis"]["torso"]
+            kpis[f, 2] = rep["kpis"]["stability"]
+            kpis[f, 3] = rep["kpis"]["knees"]
+            kpis[f, 4] = rep["kpis"]["ritmo"]
 
     return phase, kpis
-
 # ---------- Preparación de datos (Sin ventanas fijas) ----------
 def load_variable_sequences(data_dir: str, labels: dict):
     """

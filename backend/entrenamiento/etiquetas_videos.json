@@ -1,12 +1,4 @@
 {
-  "1.npy": {
-    "reps": [
-      {
-        "frames": [86, 166, 199, 208, 274],
-        "kpis": {"depth": 1, "torso": 0.1, "stability": 0.3, "knees": 0.4, "ritmo": 0.3}
-      }
-    ]
-  },
   "2.npy": {
     "reps": [
       {
@@ -518,7 +510,7 @@
         "kpis": {"depth": 0.4, "torso": 0.7, "stability": 0.9, "knees": 1.0, "ritmo": 0.2}
       },
       {
-        "frames": [150, 167, 179, 185, 198],
+        "frames": [150, 167, 179, 185, 197],
         "kpis": {"depth": 0.4, "torso": 0.7, "stability": 0.9, "knees": 1.0, "ritmo": 0.2}
       }
     ]
@@ -831,18 +823,6 @@
       }
     ]
   },
-  "65.npy": {
-    "reps": [
-      {
-        "frames": [0, 5, 35, 47, 103],
-        "kpis": {"depth": 1, "torso": 0, "stability": 0.3, "knees": 0.2, "ritmo": 0.9}
-      },
-      {
-        "frames": [103, 184, 220, 231, 297],
-        "kpis": {"depth": 1, "torso": 0, "stability": 0.3, "knees": 0.2, "ritmo": 0.9}
-      }
-    ]
-  },
   "66.npy": {
     "reps": [
       {
@@ -876,26 +856,6 @@
       {
         "frames": [0, 2, 21, 25, 45],
         "kpis": {"depth": 0.8, "torso": 0.9, "stability": 0.8, "knees": 0.3, "ritmo": 0.7}
-      }
-    ]
-  },
-  "77.npy": {
-    "reps": [
-      {
-        "frames": [0, 44, 63, 65, 81],
-        "kpis": {"depth": 1, "torso": 1, "stability": 1, "knees": 1, "ritmo": 0.5}
-      },
-      {
-        "frames": [81, 92, 106, 113, 129],
-        "kpis": {"depth": 1, "torso": 1, "stability": 1, "knees": 1, "ritmo": 0.5}
-      },
-      {
-        "frames": [129, 204, 219, 222, 236],
-        "kpis": {"depth": 1, "torso": 1, "stability": 1, "knees": 1, "ritmo": 0.5}
-      },
-      {
-        "frames": [236, 247, 263, 267, 283],
-        "kpis": {"depth": 1, "torso": 1, "stability": 1, "knees": 1, "ritmo": 0.5}
       }
     ]
   },
@@ -1152,22 +1112,6 @@
       {
         "frames": [680, 823, 862, 870, 949],
         "kpis": {"depth": 0.9, "torso": 0.0, "stability": 0.1, "knees": 0.7, "ritmo": 0.7}
-      }
-    ]
-  },
-  "103.npy": {
-    "reps": [
-      {
-        "frames": [57, 62, 95, 115, 145],
-        "kpis": {"depth": 1, "torso": 0.8, "stability": 1, "knees": 1, "ritmo": 1}
-      },
-      {
-        "frames": [145, 180, 226, 238, 266],
-        "kpis": {"depth": 1, "torso": 0.8, "stability": 1, "knees": 1, "ritmo": 1}
-      },
-      {
-        "frames": [266, 322, 349, 367, 399],
-        "kpis": {"depth": 1, "torso": 0.8, "stability": 1, "knees": 1, "ritmo": 1}
       }
     ]
   },

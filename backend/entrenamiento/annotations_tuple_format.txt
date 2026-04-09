@@ -837,3 +837,41 @@
   ]
 }
 
+"30.npy": {
+  "reps": [
+    {
+      "frames": (0, 19, 33, 35, 56), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (56, 69, 84, 87, 104), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (104, 120, 134, 137, 151), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (151, 168, 178, 184, 197), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+  ]
+}
+
+"103.npy": {
+  "reps": [
+    {
+      "frames": (55, 63, 104, 115, 144), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (144, 185, 233, 239, 265), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (265, 309, 362, 366, 396), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+  ]
+}
+

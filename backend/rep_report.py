@@ -1,4 +1,5 @@
 import os
+import csv # Añadida la librería para manejar el archivo separado
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -11,8 +12,9 @@ class Colors:
     BOLD = "\033[1m"
 
 def color_by_score(score):
-    if score >= 0.75: return Colors.GREEN
-    elif score >= 0.5: return Colors.YELLOW
+    # Ajustado para la escala sobre 10
+    if score >= 7.5: return Colors.GREEN
+    elif score >= 5.0: return Colors.YELLOW
     else: return Colors.RED
 
 # ---------------- UTILIDADES LÓGICAS ----------------
@@ -35,13 +37,6 @@ def _smooth_sequence(seq, min_run_length=3):
     return seq
 
 def _detect_reps_from_phase(phase_seq, min_rep_frames=20):
-    """
-    Lógica equilibrada:
-    1. Detecta repeticiones que duren al menos 'min_rep_frames'.
-    2. Una repetición es válida si:
-       - Toca la Fase 2 (Bottom)
-       - O es lo suficientemente larga (ej. más de 30 frames) indicando una rep real.
-    """
     reps = []
     in_rep = False
     start = None
@@ -54,7 +49,6 @@ def _detect_reps_from_phase(phase_seq, min_rep_frames=20):
         prev = seq[i-1] if i > 0 else 0
         
         if not in_rep:
-            # Iniciamos al entrar en fases de movimiento (1, 2, 3)
             if cur in [1, 2, 3] and prev in [0, 4]:
                 in_rep = True
                 start = i
@@ -63,13 +57,10 @@ def _detect_reps_from_phase(phase_seq, min_rep_frames=20):
             if cur == 2:
                 has_reached_bottom = True
             
-            # Cerramos al volver a reposo (0, 4)
             if cur in [0, 4] and prev in [1, 2, 3]:
                 end = i
                 duration = end - start
                 
-                # CRITERIO DE VALIDACIÓN:
-                # Es válida si llegó al fondo O si es una repetición larga (ruido suele ser corto)
                 if duration >= min_rep_frames:
                     if has_reached_bottom or duration > 35: 
                         reps.append((start, end))
@@ -100,7 +91,9 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     slen = min(seq_len, T) if seq_len else T
     
     phase_seq = _smooth_sequence(np.argmax(phase_pred, axis=-1)[:slen], min_run_length)
-    kpi_seq = kpi_pred[:slen, :]
+    
+    # ¡AQUÍ ESTÁ LA MAGIA!: Multiplicamos por 10 para cambiar la escala a 1-10
+    kpi_seq = kpi_pred[:slen, :] * 10.0
     
     rep_ranges = _detect_reps_from_phase(phase_seq)
     reps_data = _aggregate_kpis(kpi_seq, rep_ranges)
@@ -129,7 +122,7 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     
     print("-" * len(header))
     print(f"Promedio KPI: Depth {avg_kpis[0]:.2f} Torso {avg_kpis[1]:.2f} Stability {avg_kpis[2]:.2f} Knees {avg_kpis[3]:.2f} Ritmo {avg_kpis[4]:.2f}")
-    print(f"Puntuación global: {color_by_score(overall_score)}{overall_score:.3f}{Colors.RESET}")
+    print(f"Puntuación global: {color_by_score(overall_score)}{overall_score:.2f}{Colors.RESET}")
     print(line + "\n")
 
     # 3. Gráfico
@@ -152,9 +145,10 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     for i in range(5):
         ax2.plot(kpi_seq[:, i], label=labels[i], color=colors[i], alpha=0.8)
     
-    ax2.axhline(y=0.5, color='r', linestyle='--', alpha=0.5)
-    ax2.set_ylim(-0.05, 1.05)
-    ax2.set_ylabel("Calidad (0-1)")
+    # Ajustado a la escala 1-10
+    ax2.axhline(y=5.0, color='r', linestyle='--', alpha=0.5)
+    ax2.set_ylim(-0.5, 10.5)
+    ax2.set_ylabel("Calidad (1-10)")
     ax2.legend(loc='upper right', fontsize='small')
     ax2.grid(True, alpha=0.3)
 
@@ -162,4 +156,30 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
     plt.savefig(output_path, dpi=150)
     plt.close()
     
+    # 4. Guardar histórico en CSV de forma persistente
+    csv_filename = os.path.join(output_dir, "historial_predicciones.csv")
+    file_exists = os.path.isfile(csv_filename)
+    
+    # Abrimos en modo 'a' (append) para no sobreescribir
+    with open(csv_filename, mode='a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        
+        # Si el archivo no existía, le ponemos la cabecera
+        if not file_exists:
+            writer.writerow(["Fecha", "Video", "Repeticion", "Start_Frame", "End_Frame", 
+                             "Profundidad", "Torso", "Estabilidad", "Rodillas", "Ritmo"])
+            
+        # Añadimos una fila por cada repetición detectada
+        fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for i, r in enumerate(reps_data, 1):
+            k = r["kpis"]
+            writer.writerow([
+                fecha_actual,
+                video_name,
+                i,
+                r['start'],
+                r['end'],
+                f"{k[0]:.2f}", f"{k[1]:.2f}", f"{k[2]:.2f}", f"{k[3]:.2f}", f"{k[4]:.2f}"
+            ])
+            
     return output_path
