@@ -68,7 +68,7 @@ def build_bilstm_model(input_dim: int,
     }
     loss_weights = {"phase_out": 0.1, "kpi_out": 5.0}
 
-    model.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
+    model.compile(optimizer=tf.keras.optimizers.Adam(5e-4),
                   loss=losses,
                   loss_weights=loss_weights,
                   metrics={"phase_out": "sparse_categorical_accuracy", "kpi_out": "mse"})

@@ -23,33 +23,37 @@ def load_labels(labels_path: str):
         return json.load(f)
 
 def build_frame_targets(video_len: int, reps: list):
+    # Inicializamos con ceros (fase 0 = reposo, KPIs 0 = sin penalización)
     phase = np.zeros((video_len,), dtype=np.int32)
     kpis = np.zeros((video_len, 5), dtype=np.float32)
 
     for rep in reps:
-        f_pts = rep["frames"]
-        inicio, fin = f_pts[0], f_pts[-1]
-        centro = f_pts[2] # El punto de máxima profundidad según tu JSON
+        frs = rep["frames"]
+        # CLIP DE SEGURIDAD: Garantiza que ningún índice rompa el entrenamiento
+        # s=inicio, d=descenso, b=fondo, u=ascenso, e=fin
+        s, d, b, u, e = [min(max(0, int(x)), video_len - 1) for x in frs]
         
-        # 1. Asignación de Fases Reales (Usando los 5 puntos del JSON)
-        phase[f_pts[0]:f_pts[1]] = 1 # Preparación
-        phase[f_pts[1]:f_pts[2]] = 2 # Descenso
-        phase[f_pts[2]:f_pts[3]] = 3 # Fondo (Apex)
-        phase[f_pts[3]:f_pts[4]] = 4 # Ascenso
+        # 1. SEGMENTACIÓN DE FASES (Supervisión detallada)
+        # Esto ayuda a la red a entender la estructura temporal del ejercicio
+        phase[s:d] = 1 # Preparación
+        phase[d:b] = 2 # Descenso
+        phase[b:u] = 3 # Punto crítico (Apex)
+        phase[u:e+1] = 4 # Ascenso
 
-        # 2. Bucle para KPIs (Rampa de profundidad)
-        for f in range(inicio, fin):
-            distancia_al_centro = abs(f - centro)
-            # Normalizamos la rampa según la duración total
-            duracion_total = fin - inicio
-            factor_profundidad = max(0, 1 - (distancia_al_centro / (duracion_total / 2)))
-            
-            # NOTA: No dividas por 10 si tu JSON ya tiene 0.9 o 1.0
-            kpis[f, 0] = rep["kpis"]["depth"] * factor_profundidad 
-            kpis[f, 1] = rep["kpis"]["torso"]
-            kpis[f, 2] = rep["kpis"]["stability"]
-            kpis[f, 3] = rep["kpis"]["knees"]
-            kpis[f, 4] = rep["kpis"]["ritmo"]
+        # 2. VALORES CONSTANTES (Eficacia probada en V9)
+        # Creamos el vector de notas una sola vez
+        kp = rep["kpis"]
+        kpi_vec = np.array([
+            kp["depth"], 
+            kp["torso"], 
+            kp["stability"], 
+            kp["knees"], 
+            kp["ritmo"]
+        ], dtype=np.float32)
+        
+        # Llenamos toda la duración de la repetición con la nota objetivo
+        # Esto reduce la oscilación del gradiente y acelera la convergencia
+        kpis[s:e+1, :] = kpi_vec 
 
     return phase, kpis
 # ---------- Preparación de datos (Sin ventanas fijas) ----------
@@ -166,8 +170,8 @@ def main(args):
     # Callbacks
     callbacks = [
         ModelCheckpoint(args.checkpoint, save_best_only=True, monitor="val_phase_out_sparse_categorical_accuracy"),
-        EarlyStopping(monitor="val_phase_out_sparse_categorical_accuracy", patience=10, restore_best_weights=True),
-        ReduceLROnPlateau(patience=5)
+        EarlyStopping(monitor="val_phase_out_sparse_categorical_accuracy", patience=20, restore_best_weights=True),
+        ReduceLROnPlateau(patience=10, factor=0.5)
     ]
 
     model.fit(train_ds, validation_data=val_ds, epochs=args.epochs, callbacks=callbacks)
