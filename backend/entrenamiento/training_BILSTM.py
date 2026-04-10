@@ -59,25 +59,55 @@ def build_frame_targets(video_len: int, reps: list):
 # ---------- Preparación de datos (Sin ventanas fijas) ----------
 def load_variable_sequences(data_dir: str, labels: dict):
     """
-    Carga los vídeos como una lista de arrays de longitud variable.
+    Carga los vídeos y aplica OVERSAMPLING a los vídeos con notas bajas 
+    para eliminar el sesgo optimista de la red.
     """
     all_files = sorted(glob.glob(os.path.join(data_dir, "*.npy")))
     file_list = [fp for fp in all_files if os.path.basename(fp) in labels]
     
     Xs, phases, kpis = [], [], []
     
-    print(f"Cargando {len(file_list)} vídeos de longitud variable...")
+    print(f"Cargando y balanceando {len(file_list)} vídeos...")
+    
     for fp in tqdm(file_list):
         fname = os.path.basename(fp)
-        arr = np.load(fp).astype(np.float32)
-        T = arr.shape[0]
+        arr_orig = np.load(fp).astype(np.float32)
+        T = arr_orig.shape[0]
         
+        # Generamos los targets
         p_target, k_target = build_frame_targets(T, labels[fname]["reps"])
         
-        Xs.append(arr)
-        phases.append(p_target)
-        kpis.append(k_target)
+        # --- LÓGICA DE BALANCEO (V14) ---
+        # Calculamos la nota mínima de profundidad en este vídeo
+        min_kpi = min(
+        min(rep["kpis"][k] for k in rep["kpis"])
+        for rep in labels[fname]["reps"]
+        )
         
+        # Definimos el multiplicador:
+        # Si la nota es baja (<= 6.0), repetimos el vídeo 10 veces.
+        # Si es muy baja (<= 4.0), podemos incluso darle 15 veces.
+        if min_kpi <= 0.4:
+            multiplier = 15
+        elif min_kpi <= 0.55:
+            multiplier = 8
+        else:
+            multiplier = 1
+            
+        for i in range(multiplier):
+            if i == 0:
+                # La primera copia es el dato original
+                Xs.append(arr_orig)
+            else:
+                # Las copias extra llevan un PELÍN de ruido aleatorio (0.1%)
+                # Esto ayuda a que la red no memorice el ruido, sino la forma.
+                noise = np.random.normal(0, 0.01, arr_orig.shape)
+                Xs.append(arr_orig + noise)
+                
+            phases.append(p_target)
+            kpis.append(k_target)
+            
+    print(f"Dataset expandido: De {len(file_list)} a {len(Xs)} secuencias.")
     return Xs, phases, kpis
 
 def compute_normalization_variable(Xs):
@@ -122,25 +152,27 @@ def create_variable_tf_dataset(Xs, phases, kpis, batch_size=BATCH_SIZE, shuffle=
 
 # ---------- Main Training ----------
 def main(args):
+    os.makedirs(args.output_dir, exist_ok=True)
     labels = load_labels(args.labels)
     Xs_raw, phases_raw, kpis_raw = load_variable_sequences(args.data_dir, labels)
 
     # 1. Cálculo de media y std global
     mean, std = compute_normalization_variable(Xs_raw)
+    np.save(os.path.join(args.output_dir, "norm_mean.npy"), mean)
+    np.save(os.path.join(args.output_dir, "norm_std.npy"), std)
 
     # 2. Normalización Inteligente (Respetando la Capa Masking)
     Xs_norm = []
     print("Normalizando secuencias y aplicando máscaras de integridad...")
     for x in Xs_raw:
         # Identificamos dónde hay datos reales (no ceros)
-        mask = (x != 0).astype(np.float32)
         
         # Aplicamos la normalización estándar
         x_n = (x - mean) / std
         
+        x_n = np.where(x == 0, 0.0, x_n)
         # FORZAMOS EL CERO: Lo que originalmente era 0.0 vuelve a ser 0.0
         # Esto es vital para que layers.Masking(mask_value=0.0) ignore el padding y huecos
-        x_n = x_n * mask
         
         Xs_norm.append(x_n)
 
@@ -169,17 +201,13 @@ def main(args):
     
     # Callbacks
     callbacks = [
-        ModelCheckpoint(args.checkpoint, save_best_only=True, monitor="val_phase_out_sparse_categorical_accuracy"),
-        EarlyStopping(monitor="val_phase_out_sparse_categorical_accuracy", patience=20, restore_best_weights=True),
+        EarlyStopping(monitor="val_loss", patience=25, restore_best_weights=True),ModelCheckpoint(args.checkpoint, save_best_only=True, monitor="val_loss", mode="min"),
         ReduceLROnPlateau(patience=10, factor=0.5)
     ]
 
     model.fit(train_ds, validation_data=val_ds, epochs=args.epochs, callbacks=callbacks)
 
     # Guardar todo
-    os.makedirs(args.output_dir, exist_ok=True)
-    np.save(os.path.join(args.output_dir, "norm_mean.npy"), mean)
-    np.save(os.path.join(args.output_dir, "norm_std.npy"), std)
     model.save(os.path.join(args.output_dir, "final_bilstm_model"))
     print(f"Éxito. Modelo guardado en {args.output_dir}")
 

@@ -62,11 +62,12 @@ def build_bilstm_model(input_dim: int,
     model = Model(inputs=seq_in, outputs=[phase_out, kpi_out], name="bilstm_kpi_model")
 
     # Compilación: pérdidas combinadas. Para KPIs usamos mse; para fases categorical_crossentropy.
+    # ✅ Corrección — equilibrar y usar Huber para más robustez
+    loss_weights = {"phase_out": 1.0, "kpi_out": 2.0}
     losses = {
-        "phase_out": "sparse_categorical_crossentropy",
-        "kpi_out": "mse"
+    "phase_out": "sparse_categorical_crossentropy",
+    "kpi_out": tf.keras.losses.Huber(delta=0.2)  # menos sensible a outliers
     }
-    loss_weights = {"phase_out": 0.1, "kpi_out": 5.0}
 
     model.compile(optimizer=tf.keras.optimizers.Adam(5e-4),
                   loss=losses,
