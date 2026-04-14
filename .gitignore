@@ -90,7 +90,8 @@ ios/Pods/
 # -------------------------
 # Datos, Modelos y Outputs (Pesados)
 # -------------------------
-backend/modelos/      # <--- Añade esta línea para ignorar esa carpeta específica
+backend/modelos/ 
+backend/reportes/
 **/Ejemplos/
 **/datasets/
 **/data/
@@ -137,6 +138,9 @@ landmarcks.txt
 # -------------------------
 **/.claude/
 .claude/
+api.py
+rescate.py
+revisar.py
 # Si quieres mantener archivos específicos que caen en las reglas anteriores, 
 # añádelos aquí abajo con un "!" al principio. Ejemplo:
 # !backend/angles_per_frame.csv
