@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema base de la app (MD3 sin ActionBar) -->
+    <style name="Theme.NeuroSquat" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <!-- Tema del Splash Screen (Android 12+) -->
+    <style name="Theme.NeuroSquat.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/splash_icon_bg</item>
+        <item name="postSplashScreenTheme">@style/Theme.NeuroSquat</item>
+    </style>
+</resources>

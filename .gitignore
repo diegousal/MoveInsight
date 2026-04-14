@@ -1,8 +1,6 @@
 # -------------------------
 # .gitignore unificado para TFG
 # -------------------------
-# NOTA: contiene las reglas de Android (mantiene !gradle.properties),
-# así como patrones para Python, venv, Node, IDEs, datos grandes y modelos.
 
 # -------------------------
 # Sistema / SO
@@ -10,13 +8,17 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+.AppleDouble
+.LSOverride
+._*
 
 # -------------------------
 # IDEs / Editores
 # -------------------------
 .vscode/
-.vscode/*            # si quieres excluir settings locales
 .idea/
+.shelf/
+workspace.xml
 *.iml
 *.sublime-project
 *.sublime-workspace
@@ -24,120 +26,93 @@ desktop.ini
 # -------------------------
 # Python
 # -------------------------
-# Virtual environments
+# Entornos virtuales
 venv/
 .venv/
 env/
 ENV/
-backend/venv/          # detectado en tu zip
-# Byte-compiled / caches
+# Byte-compiled / Caches
 __pycache__/
 *.py[cod]
 *$py.class
-# Distribution / build
-build/
+.pytest_cache/
+# Distribución / Build
 dist/
 *.egg-info/
 .eggs/
 pip-wheel-metadata/
-# PyInstaller
 *.manifest
 *.spec
-# Environments / secrets
+# Entornos / Secrets
 .env
 .env.*
 # Jupyter
 .ipynb_checkpoints/
-# Coverage / test outputs
+# Coverage / Test outputs
 .coverage
 .coverage.*
 htmlcov/
-.pytest_cache/
 
 # -------------------------
-# Node / frontend
+# Node / Frontend
 # -------------------------
 node_modules/
+public/build/
+.pnp.*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnp.*
 .pnpm-debug.log*
-/dist
-/build
-public/build
 
 # -------------------------
-# Java / Android / Gradle
+# Android / Java / Gradle / Mobile
 # -------------------------
-# Local config (CRÍTICO: NO SUBIR)
-local.properties
-*.properties
-# Excepción (mantener si tienes keys en gradle.properties, según tu android/.gitignore original)
-!gradle.properties
-
-# Build outputs
-/build/
+# Build outputs (el comodín **/build/ ignora la carpeta build en cualquier nivel)
 **/build/
-*/build/
-*.apk
-*.aab
 /captures/
 .externalNativeBuild/
 .cxx/
-# Android Studio
+*.apk
+*.aab
+# Gradle y Config local (CRÍTICO: NO SUBIR)
 .gradle/
 .gradle-cache/
-.idea/
-# Android specific
+local.properties
+*.properties
+# Excepción: mantener gradle.properties (si contiene configuraciones o keys necesarias)
+!gradle.properties
+# Keystores y firmas
 *.keystore
 *.jks
-
-# Keep Android Studio shelf/workspace ignores (from frontend/android/.idea/.gitignore)
-# (shelf, workspace.xml are IDE-local)
-.shelf/
-workspace.xml
-
-# app-level ignores (from frontend/android/app/.gitignore)
-# you can keep app/build ignored as well
-/frontend/android/app/build/
-frontend/android/app/build/
-
-# -------------------------
-# Mobile / React Native / expo (if applies)
-# -------------------------
-android/.gradle/
-android/.idea/
+# iOS (por si usas React Native / Expo)
 ios/Pods/
-build/
 
 # -------------------------
-# Data, media, models, outputs (pesados)
+# Datos, Modelos y Outputs (Pesados)
 # -------------------------
-# Vídeos / imágenes de ejemplo / datasets grandes
+backend/modelos/      # <--- Añade esta línea para ignorar esa carpeta específica
 **/Ejemplos/
 **/datasets/
 **/data/
 **/dataset/
 **/raw_data/
-*.mp4
-# Model checkpoints / weights
+# Checkpoints de Modelos / Pesos
 *.h5
 *.pt
 *.pth
 *.ckpt
 *.tflite
+*.npy
 # TensorBoard logs, training outputs
 logs/
 tensorboard/
 runs/
 
 # -------------------------
-# Generic binaries / archives
+# Binarios / Archivos comprimidos / Media
 # -------------------------
 *.exe
 *.bat
-*.npy
 *.dll
 *.so
 *.dylib
@@ -148,26 +123,20 @@ runs/
 *.tar.gz
 *.rar
 *.png
+*.mp4
+*.docx
 
 # -------------------------
-# Misc / Logs
+# Varios / Logs
 # -------------------------
 *.log
-npm-debug.log*
-yarn-debug.log*           
 landmarcks.txt
 
-# Si quieres mantener archivos csv específicos, añade excepción:
+# -------------------------
+# Excepciones personalizadas
+# -------------------------
+**/.claude/
+.claude/
+# Si quieres mantener archivos específicos que caen en las reglas anteriores, 
+# añádelos aquí abajo con un "!" al principio. Ejemplo:
 # !backend/angles_per_frame.csv
-
-# -------------------------
-# Other
-# -------------------------
-# macOS
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# End of file

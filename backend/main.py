@@ -11,7 +11,7 @@ from pose_processor import PoseProcessor
 from rep_report import save_visual_report
 
 # Rutas de modelos y entrenamiento
-MODEL_PATH = Path("./modelos/v13")
+MODEL_PATH = Path("./modelos/v15_sin_kpis")
 TRAINING_DIR = Path("entrenamiento/archivos_entrenamiento")
 
 # Función para determinar la ruta de salida del archivo .npy basado en la fuente de video
