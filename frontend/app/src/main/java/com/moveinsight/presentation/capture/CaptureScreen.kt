@@ -82,7 +82,8 @@ fun CaptureScreen(
     if (isUploadMode) {
         UploadModeContent(
             viewModel      = viewModel,
-            onNavigateBack = onNavigateBack
+            onNavigateBack = onNavigateBack,
+            onUploadSuccess = onUploadSuccess
         )
     } else {
         RecordModeWithPermissions(
@@ -100,7 +101,8 @@ fun CaptureScreen(
 @Composable
 private fun UploadModeContent(
     viewModel      : CaptureViewModel,
-    onNavigateBack : () -> Unit
+    onNavigateBack : () -> Unit,
+    onUploadSuccess : () -> Unit
 ) {
     val context      = LocalContext.current
     val scope        = rememberCoroutineScope()
@@ -116,7 +118,8 @@ private fun UploadModeContent(
         viewModel.events.collectLatest { event ->
             when (event) {
                 is CaptureUiEvent.ShowSnackbar -> snackbarHost.showSnackbar(event.message)
-                else                           -> Unit
+                is CaptureUiEvent.UploadSuccess -> onUploadSuccess()
+                else -> Unit
             }
         }
     }

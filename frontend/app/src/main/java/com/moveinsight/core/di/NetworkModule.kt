@@ -2,7 +2,9 @@ package com.moveinsight.core.di
 
 import com.moveinsight.BuildConfig
 import com.moveinsight.core.network.AuthInterceptor
+import com.moveinsight.data.remote.AnalyticsApiService
 import com.moveinsight.data.remote.AuthApiService
+import com.moveinsight.data.remote.PainCheckInApiService
 import com.moveinsight.data.remote.SessionApiService
 import dagger.Module
 import dagger.Provides
@@ -61,4 +63,11 @@ object NetworkModule {
     @Singleton
     fun provideSessionApiService(retrofit: Retrofit): SessionApiService =
         retrofit.create(SessionApiService::class.java)
+    @Provides @Singleton
+    fun providePainCheckInApiService(retrofit: Retrofit): PainCheckInApiService =
+        retrofit.create(PainCheckInApiService::class.java)
+    @Provides
+    @Singleton
+    fun provideAnalyticsApiService(retrofit: Retrofit): AnalyticsApiService =
+        retrofit.create(AnalyticsApiService::class.java)
 }

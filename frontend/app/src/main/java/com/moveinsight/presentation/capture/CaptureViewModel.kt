@@ -2,6 +2,7 @@ package com.moveinsight.presentation.capture
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moveinsight.core.notifications.SchedulePainNotificationsUseCase
 import com.moveinsight.core.utils.Resource
 import com.moveinsight.domain.session.UploadSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CaptureViewModel @Inject constructor(
-    private val uploadSessionUseCase: UploadSessionUseCase
+    private val uploadSessionUseCase: UploadSessionUseCase,
+    private val schedulePainNotificationsUseCase : SchedulePainNotificationsUseCase   // ← NUEVO
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CaptureUiState>(CaptureUiState.Idle)
@@ -90,30 +92,7 @@ class CaptureViewModel @Inject constructor(
     }
 
     // ── Borg y Upload (común a ambos modos) ───────────────────────────────
-
-    fun onBorgConfirmed() {
-        val stopped  = _uiState.value as? CaptureUiState.RecordingStopped ?: return
-        val weightKg = _form.value.weightKg.toFloatOrNull() ?: return
-
-        viewModelScope.launch {
-            _uiState.value = CaptureUiState.Uploading
-            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, _form.value.borgScore)) {
-                is Resource.Success -> {
-                    stopped.videoFile.delete()
-                    _uiState.value = CaptureUiState.Success(result.data.id)
-                    _events.send(CaptureUiEvent.UploadSuccess)
-                }
-                is Resource.Error -> {
-                    // Volver al estado anterior para no perder el archivo
-                    _uiState.value = CaptureUiState.RecordingStopped(stopped.videoFile)
-                    _events.send(CaptureUiEvent.ShowSnackbar(result.message))
-                }
-                is Resource.Loading -> Unit
-            }
-        }
-    }
-
-    fun onBorgDismissed() {
+        fun onBorgDismissed() {
         val stopped = _uiState.value as? CaptureUiState.RecordingStopped
         stopped?.videoFile?.delete()
         _uiState.value = CaptureUiState.Idle
@@ -136,4 +115,27 @@ class CaptureViewModel @Inject constructor(
     private fun stopTimer() { timerJob?.cancel(); timerJob = null }
 
     override fun onCleared() { super.onCleared(); stopTimer() }
+    fun onBorgConfirmed() {
+        val stopped  = _uiState.value as? CaptureUiState.RecordingStopped ?: return
+        val weightKg = _form.value.weightKg.toFloatOrNull() ?: return
+
+        viewModelScope.launch {
+            _uiState.value = CaptureUiState.Uploading
+            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, _form.value.borgScore)) {
+                is Resource.Success -> {
+                    stopped.videoFile.delete()
+                    // ── NUEVO: programar notificaciones de dolor ──────────
+                    schedulePainNotificationsUseCase(result.data.id)
+                    // ─────────────────────────────────────────────────────
+                    _uiState.value = CaptureUiState.Success(result.data.id)
+                    _events.send(CaptureUiEvent.UploadSuccess)
+                }
+                is Resource.Error -> {
+                    _uiState.value = CaptureUiState.RecordingStopped(stopped.videoFile)
+                    _events.send(CaptureUiEvent.ShowSnackbar(result.message))
+                }
+                is Resource.Loading -> Unit
+            }
+        }
+    }
 }

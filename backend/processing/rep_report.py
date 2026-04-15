@@ -1,8 +1,9 @@
 import os
 import csv # Añadida la librería para manejar el archivo separado
 import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
+import matplotlib as plt
+plt.use("Agg")
 
 class Colors:
     GREEN = "\033[92m"
@@ -182,4 +183,9 @@ def save_visual_report(predicciones, video_source, seq_len=None, output_dir="./r
                 f"{k[0]:.2f}", f"{k[1]:.2f}", f"{k[2]:.2f}", f"{k[3]:.2f}", f"{k[4]:.2f}"
             ])
             
-    return output_path
+        return {
+        "report_path": output_path,
+        "reps": reps_data,
+        "avg_kpis": avg_kpis.tolist(),
+        "overall_score": float(overall_score),
+    }
