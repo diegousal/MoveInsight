@@ -13,6 +13,7 @@ import com.moveinsight.presentation.capture.CaptureScreen
 import com.moveinsight.presentation.checkin.PainCheckInScreen
 import com.moveinsight.presentation.dashboard.DashboardScreen
 import com.moveinsight.presentation.home.HomeScreen
+import com.moveinsight.presentation.results.ResultsScreen
 import com.moveinsight.presentation.splash.SplashScreen
 
 @Composable
@@ -87,7 +88,25 @@ fun NavGraph() {
             CaptureScreen(
                 isUploadMode    = (mode == Routes.Capture.MODE_UPLOAD),
                 onNavigateBack  = { navController.popBackStack() },
-                onUploadSuccess = {
+                onUploadSuccess = { sessionId ->
+                    navController.navigate(Routes.Results.route(sessionId)) {
+                        popUpTo(Routes.Home.route) { inclusive = false }
+                    }
+                }
+            )
+        }
+
+        // ── Resultados del análisis ───────────────────────────────────────
+        composable(
+            route     = Routes.Results.route,
+            arguments = listOf(
+                navArgument(Routes.Results.ARG_SESSION_ID) {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            ResultsScreen(
+                onNavigateHome = {
                     navController.popBackStack(Routes.Home.route, inclusive = false)
                 }
             )

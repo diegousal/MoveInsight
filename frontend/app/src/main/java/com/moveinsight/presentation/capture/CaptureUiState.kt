@@ -6,7 +6,8 @@ data class CaptureFormState(
     val weightKg                 : String  = "",
     val borgScore                : Int     = 5,
     val recordingDurationSeconds : Int     = 0,
-    val isWeightError            : Boolean = false
+    val isWeightError            : Boolean = false,
+    val isBodyweight             : Boolean = false
 )
 
 sealed class CaptureUiState {
@@ -44,7 +45,7 @@ sealed class CaptureUiState {
 }
 
 sealed class CaptureUiEvent {
-    data object NavigateBack                       : CaptureUiEvent()
-    data object UploadSuccess                      : CaptureUiEvent()
-    data class  ShowSnackbar(val message: String)  : CaptureUiEvent()
+    data object NavigateBack                        : CaptureUiEvent()
+    data class  UploadSuccess(val sessionId: Int)   : CaptureUiEvent()
+    data class  ShowSnackbar(val message: String)   : CaptureUiEvent()
 }

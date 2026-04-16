@@ -12,6 +12,7 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.CameraController
 import androidx.camera.view.PreviewView
 import androidx.camera.view.video.AudioConfig
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,8 +45,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moveinsight.core.utils.getDisplayName
 import com.moveinsight.core.utils.toTempFile
+import com.moveinsight.presentation.components.LoadingWithTips
 import com.moveinsight.presentation.components.MoveInsightLogo
-import com.moveinsight.presentation.components.NeuroSquatPrimaryButton
 import com.moveinsight.presentation.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -61,7 +62,7 @@ import java.io.File
 fun CaptureScreen(
     isUploadMode    : Boolean = false,
     onNavigateBack  : () -> Unit,
-    onUploadSuccess : () -> Unit,
+    onUploadSuccess : (Int) -> Unit,
     viewModel       : CaptureViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -77,6 +78,12 @@ fun CaptureScreen(
             },
             onDismiss    = viewModel::onBorgDismissed
         )
+    }
+
+    // ── Pantalla de carga con tips mientras se sube ────────────────────────
+    if (uiState is CaptureUiState.Uploading) {
+        LoadingWithTips(statusMessage = "Subiendo vídeo al servidor…")
+        return
     }
 
     if (isUploadMode) {
@@ -102,7 +109,7 @@ fun CaptureScreen(
 private fun UploadModeContent(
     viewModel      : CaptureViewModel,
     onNavigateBack : () -> Unit,
-    onUploadSuccess : () -> Unit
+    onUploadSuccess : (Int) -> Unit
 ) {
     val context      = LocalContext.current
     val scope        = rememberCoroutineScope()
@@ -117,8 +124,8 @@ private fun UploadModeContent(
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                is CaptureUiEvent.ShowSnackbar -> snackbarHost.showSnackbar(event.message)
-                is CaptureUiEvent.UploadSuccess -> onUploadSuccess()
+                is CaptureUiEvent.ShowSnackbar  -> snackbarHost.showSnackbar(event.message)
+                is CaptureUiEvent.UploadSuccess -> onUploadSuccess(event.sessionId)
                 else -> Unit
             }
         }
@@ -195,27 +202,37 @@ private fun UploadModeContent(
 
             Spacer(Modifier.height(24.dp))
 
-            // ── Campo de carga ────────────────────────────────────────
-            OutlinedTextField(
-                value           = form.weightKg,
-                onValueChange   = viewModel::onWeightChange,
-                label           = { Text("Carga (kg)") },
-                placeholder     = { Text("Ej: 80.5", color = TextSecondary) },
-                isError         = form.isWeightError,
-                supportingText  = if (form.isWeightError) {
-                    { Text("Introduce la carga antes de continuar", color = MaterialTheme.colorScheme.error) }
-                } else null,
-                singleLine      = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                colors          = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor   = OrangePower,
-                    unfocusedBorderColor = DividerColor,
-                    focusedLabelColor    = OrangePower,
-                    unfocusedLabelColor  = TextSecondary,
-                    cursorColor          = OrangePower
-                ),
-                modifier        = Modifier.fillMaxWidth()
+            // ── Toggle sentadilla libre / con carga ───────────────────
+            BodyweightToggle(
+                isBodyweight = form.isBodyweight,
+                onToggle     = viewModel::onBodyweightToggle
             )
+
+            Spacer(Modifier.height(16.dp))
+
+            // ── Campo de carga ────────────────────────────────────────
+            AnimatedVisibility(visible = !form.isBodyweight) {
+                OutlinedTextField(
+                    value           = form.weightKg,
+                    onValueChange   = viewModel::onWeightChange,
+                    label           = { Text("Carga (kg)") },
+                    placeholder     = { Text("Ej: 80.5", color = TextSecondary) },
+                    isError         = form.isWeightError,
+                    supportingText  = if (form.isWeightError) {
+                        { Text("Introduce la carga o selecciona sentadilla libre", color = MaterialTheme.colorScheme.error) }
+                    } else null,
+                    singleLine      = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    colors          = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor   = OrangePower,
+                        unfocusedBorderColor = DividerColor,
+                        focusedLabelColor    = OrangePower,
+                        unfocusedLabelColor  = TextSecondary,
+                        cursorColor          = OrangePower
+                    ),
+                    modifier        = Modifier.fillMaxWidth()
+                )
+            }
 
             Spacer(Modifier.height(32.dp))
 
@@ -339,7 +356,7 @@ private fun VideoPickerCard(
 private fun RecordModeWithPermissions(
     viewModel       : CaptureViewModel,
     onNavigateBack  : () -> Unit,
-    onUploadSuccess : () -> Unit
+    onUploadSuccess : (Int) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -388,7 +405,7 @@ private fun RecordModeWithPermissions(
 private fun RecordModeContent(
     viewModel       : CaptureViewModel,
     onNavigateBack  : () -> Unit,
-    onUploadSuccess : () -> Unit
+    onUploadSuccess : (Int) -> Unit
 ) {
     val context        = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -418,7 +435,7 @@ private fun RecordModeContent(
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                CaptureUiEvent.UploadSuccess     -> onUploadSuccess()
+                is CaptureUiEvent.UploadSuccess  -> onUploadSuccess(event.sessionId)
                 CaptureUiEvent.NavigateBack      -> onNavigateBack()
                 is CaptureUiEvent.ShowSnackbar   -> snackbarHost.showSnackbar(event.message)
             }
@@ -471,12 +488,13 @@ private fun RecordModeContent(
                 onBack          = { activeRecording?.stop(); onNavigateBack() }
             )
             BottomControlsOverlay(
-                uiState          = uiState,
-                form             = form,
-                onWeightChange   = viewModel::onWeightChange,
-                onStartRecording = ::startRecording,
-                onStopRecording  = ::stopRecording,
-                modifier         = Modifier.align(Alignment.BottomCenter)
+                uiState            = uiState,
+                form               = form,
+                onWeightChange     = viewModel::onWeightChange,
+                onBodyweightToggle = viewModel::onBodyweightToggle,
+                onStartRecording   = ::startRecording,
+                onStopRecording    = ::stopRecording,
+                modifier           = Modifier.align(Alignment.BottomCenter)
             )
         }
     }
@@ -542,12 +560,13 @@ private fun RecordingBadge(durationSeconds: Int) {
 
 @Composable
 private fun BottomControlsOverlay(
-    uiState          : CaptureUiState,
-    form             : CaptureFormState,
-    onWeightChange   : (String) -> Unit,
-    onStartRecording : () -> Unit,
-    onStopRecording  : () -> Unit,
-    modifier         : Modifier = Modifier
+    uiState            : CaptureUiState,
+    form               : CaptureFormState,
+    onWeightChange     : (String) -> Unit,
+    onBodyweightToggle : (Boolean) -> Unit,
+    onStartRecording   : () -> Unit,
+    onStopRecording    : () -> Unit,
+    modifier           : Modifier = Modifier
 ) {
     val isRecording = uiState is CaptureUiState.Recording
     val isUploading = uiState is CaptureUiState.Uploading
@@ -561,33 +580,41 @@ private fun BottomControlsOverlay(
             .padding(horizontal = 28.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(
-            value           = form.weightKg,
-            onValueChange   = onWeightChange,
-            label           = { Text("Carga (kg)") },
-            placeholder     = { Text("Ej: 80.5", color = TextSecondary) },
-            isError         = form.isWeightError,
-            supportingText  = if (form.isWeightError) {
-                { Text("Introduce la carga antes de grabar", color = MaterialTheme.colorScheme.error) }
-            } else null,
-            singleLine      = true,
-            enabled         = isIdle,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            colors          = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor   = CyanPrimary,
-                unfocusedBorderColor = DividerColor,
-                focusedLabelColor    = CyanPrimary,
-                unfocusedLabelColor  = TextSecondary,
-                cursorColor          = CyanPrimary
-            ),
-            modifier        = Modifier.fillMaxWidth()
+        BodyweightToggle(
+            isBodyweight = form.isBodyweight,
+            onToggle     = onBodyweightToggle,
+            enabled      = isIdle
         )
+        Spacer(Modifier.height(12.dp))
+        AnimatedVisibility(visible = !form.isBodyweight) {
+            OutlinedTextField(
+                value           = form.weightKg,
+                onValueChange   = onWeightChange,
+                label           = { Text("Carga (kg)") },
+                placeholder     = { Text("Ej: 80.5", color = TextSecondary) },
+                isError         = form.isWeightError,
+                supportingText  = if (form.isWeightError) {
+                    { Text("Introduce la carga o selecciona sentadilla libre", color = MaterialTheme.colorScheme.error) }
+                } else null,
+                singleLine      = true,
+                enabled         = isIdle,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                colors          = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor   = CyanPrimary,
+                    unfocusedBorderColor = DividerColor,
+                    focusedLabelColor    = CyanPrimary,
+                    unfocusedLabelColor  = TextSecondary,
+                    cursorColor          = CyanPrimary
+                ),
+                modifier        = Modifier.fillMaxWidth()
+            )
+        }
         Spacer(Modifier.height(20.dp))
         Text(
             text      = when {
                 isUploading -> "Subiendo al servidor…"
                 isRecording -> "Graba toda la serie. Pulsa ■ al terminar."
-                else        -> "Introduce la carga y pulsa ● para grabar"
+                else        -> if (form.isBodyweight) "Pulsa ● para grabar" else "Introduce la carga y pulsa ● para grabar"
             },
             style     = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
@@ -638,6 +665,68 @@ private fun RecordButton(
                     modifier           = Modifier.size(32.dp)
                 )
             }
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Toggle sentadilla libre / con carga
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun BodyweightToggle(
+    isBodyweight : Boolean,
+    onToggle     : (Boolean) -> Unit,
+    enabled      : Boolean = true
+) {
+    Row(
+        modifier          = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(NavyLight.copy(alpha = 0.6f))
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        // Opción: Con carga
+        val withWeightSelected = !isBodyweight
+        FilledTonalButton(
+            onClick  = { if (enabled) onToggle(false) },
+            enabled  = enabled,
+            modifier = Modifier.weight(1f).height(40.dp),
+            colors   = ButtonDefaults.filledTonalButtonColors(
+                containerColor = if (withWeightSelected) OrangePower else Color.Transparent,
+                contentColor   = if (withWeightSelected) NavyDeep else TextSecondary,
+                disabledContainerColor = if (withWeightSelected) OrangePower.copy(alpha = 0.6f) else Color.Transparent,
+                disabledContentColor   = if (withWeightSelected) NavyDeep.copy(alpha = 0.7f) else TextSecondary.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Icon(
+                Icons.Filled.FitnessCenter, null,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text("Con carga", style = MaterialTheme.typography.labelMedium)
+        }
+        // Opción: Sentadilla libre
+        FilledTonalButton(
+            onClick  = { if (enabled) onToggle(true) },
+            enabled  = enabled,
+            modifier = Modifier.weight(1f).height(40.dp),
+            colors   = ButtonDefaults.filledTonalButtonColors(
+                containerColor = if (isBodyweight) CyanPrimary else Color.Transparent,
+                contentColor   = if (isBodyweight) NavyDeep else TextSecondary,
+                disabledContainerColor = if (isBodyweight) CyanPrimary.copy(alpha = 0.6f) else Color.Transparent,
+                disabledContentColor   = if (isBodyweight) NavyDeep.copy(alpha = 0.7f) else TextSecondary.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Icon(
+                Icons.Filled.DirectionsRun, null,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text("Sin carga", style = MaterialTheme.typography.labelMedium)
         }
     }
 }

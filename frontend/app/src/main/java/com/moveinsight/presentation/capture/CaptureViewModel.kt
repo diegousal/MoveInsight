@@ -38,22 +38,32 @@ class CaptureViewModel @Inject constructor(
         _form.update { it.copy(weightKg = sanitized, isWeightError = false) }
     }
 
+    fun onBodyweightToggle(isBodyweight: Boolean) {
+        _form.update {
+            it.copy(
+                isBodyweight = isBodyweight,
+                weightKg     = if (isBodyweight) "0" else "",
+                isWeightError = false
+            )
+        }
+    }
+
     fun onBorgScoreChange(value: Int) {
         _form.update { it.copy(borgScore = value.coerceIn(0, 10)) }
     }
 
     // ── Validación compartida ─────────────────────────────────────────────
 
-    /**
-     * Devuelve true si el peso es válido.
-     * Si no, marca el campo con error y emite un Snackbar.
-     */
     fun validateBeforeRecording(): Boolean {
-        val weight = _form.value.weightKg.toFloatOrNull()
+        val form = _form.value
+        // Si es sentadilla libre (bodyweight), peso = 0 es válido
+        if (form.isBodyweight) return true
+
+        val weight = form.weightKg.toFloatOrNull()
         return if (weight == null || weight <= 0f) {
             _form.update { it.copy(isWeightError = true) }
             viewModelScope.launch {
-                _events.send(CaptureUiEvent.ShowSnackbar("Introduce la carga (kg) antes de continuar"))
+                _events.send(CaptureUiEvent.ShowSnackbar("Introduce la carga (kg) o selecciona sentadilla libre"))
             }
             false
         } else true
@@ -117,18 +127,17 @@ class CaptureViewModel @Inject constructor(
     override fun onCleared() { super.onCleared(); stopTimer() }
     fun onBorgConfirmed() {
         val stopped  = _uiState.value as? CaptureUiState.RecordingStopped ?: return
-        val weightKg = _form.value.weightKg.toFloatOrNull() ?: return
+        val form     = _form.value
+        val weightKg = if (form.isBodyweight) 0f else (form.weightKg.toFloatOrNull() ?: return)
 
         viewModelScope.launch {
             _uiState.value = CaptureUiState.Uploading
-            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, _form.value.borgScore)) {
+            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, form.borgScore)) {
                 is Resource.Success -> {
                     stopped.videoFile.delete()
-                    // ── NUEVO: programar notificaciones de dolor ──────────
                     schedulePainNotificationsUseCase(result.data.id)
-                    // ─────────────────────────────────────────────────────
                     _uiState.value = CaptureUiState.Success(result.data.id)
-                    _events.send(CaptureUiEvent.UploadSuccess)
+                    _events.send(CaptureUiEvent.UploadSuccess(result.data.id))
                 }
                 is Resource.Error -> {
                     _uiState.value = CaptureUiState.RecordingStopped(stopped.videoFile)

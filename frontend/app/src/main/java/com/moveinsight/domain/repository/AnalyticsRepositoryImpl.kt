@@ -21,16 +21,23 @@ class AnalyticsRepositoryImpl @Inject constructor(
         return when (result) {
             is Resource.Success -> Resource.Success(result.data.map { dto ->
                 SessionDetail(
-                    id             = dto.id,
-                    createdAt      = dto.createdAt,
-                    weightKg       = dto.weightKg,
-                    borgScore      = dto.borgScore,
-                    status         = dto.status,
-                    techniqueScore = dto.techniqueScore,
-                    avgVelocity    = dto.avgVelocity,
-                    depthDeg       = dto.depthDeg,
-                    symmetryPct    = dto.symmetryPct,
-                    repCount       = dto.repCount
+                    id        = dto.id,
+                    status    = dto.status,
+                    message   = dto.message,
+                    createdAt = dto.createdAt ?: "",
+                    weightKg  = dto.weightKg  ?: 0f,
+                    borgScore = dto.borgScore  ?: 0,
+                    results   = dto.results.map { r ->
+                        com.moveinsight.domain.model.RepResult(
+                            repNumber      = r.repNumber,
+                            depthScore     = r.depthScore,
+                            torsoScore     = r.torsoScore,
+                            stabilityScore = r.stabilityScore,
+                            kneesScore     = r.kneesScore,
+                            rhythmScore    = r.rhythmScore,
+                            overallScore   = r.overallScore
+                        )
+                    }
                 )
             })
             is Resource.Error   -> result
@@ -44,9 +51,25 @@ class AnalyticsRepositoryImpl @Inject constructor(
             is Resource.Success -> {
                 val dto = result.data
                 Resource.Success(
-                    SessionDetail(dto.id, dto.createdAt, dto.weightKg, dto.borgScore,
-                        dto.status, dto.techniqueScore, dto.avgVelocity,
-                        dto.depthDeg, dto.symmetryPct, dto.repCount)
+                    SessionDetail(
+                        id        = dto.id,
+                        status    = dto.status,
+                        message   = dto.message,
+                        createdAt = dto.createdAt ?: "",
+                        weightKg  = dto.weightKg  ?: 0f,
+                        borgScore = dto.borgScore  ?: 0,
+                        results   = dto.results.map { r ->
+                            com.moveinsight.domain.model.RepResult(
+                                repNumber      = r.repNumber,
+                                depthScore     = r.depthScore,
+                                torsoScore     = r.torsoScore,
+                                stabilityScore = r.stabilityScore,
+                                kneesScore     = r.kneesScore,
+                                rhythmScore    = r.rhythmScore,
+                                overallScore   = r.overallScore
+                            )
+                        }
+                    )
                 )
             }
             is Resource.Error   -> result

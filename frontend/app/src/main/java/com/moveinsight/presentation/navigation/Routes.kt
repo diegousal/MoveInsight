@@ -15,6 +15,11 @@ sealed class Routes(val route: String) {
         fun upload() = "capture?mode=$MODE_UPLOAD"
     }
 
+    data object Results : Routes("results/{sessionId}") {
+        const val ARG_SESSION_ID = "sessionId"
+        fun route(sessionId: Int) = "results/$sessionId"
+    }
+
     /** Deep link: moveinsight://checkin/{sessionId}?hours={hoursAfter} */
     data object CheckIn : Routes("checkin?sessionId={sessionId}&hours={hoursAfter}") {
         const val ARG_SESSION_ID  = "sessionId"

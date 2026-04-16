@@ -17,8 +17,8 @@ class UploadSessionUseCase @Inject constructor(
         // Validaciones de dominio previas al upload
         if (!videoFile.exists() || videoFile.length() == 0L)
             return Resource.Error("El archivo de vídeo no es válido.")
-        if (weightKg <= 0f)
-            return Resource.Error("La carga debe ser mayor que 0 kg.")
+        if (weightKg < 0f)
+            return Resource.Error("La carga no puede ser negativa.")
         if (borgScore !in 0..10)
             return Resource.Error("La puntuación Borg debe estar entre 0 y 10.")
 

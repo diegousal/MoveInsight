@@ -12,6 +12,6 @@ interface SessionRepository {
         weightKg  : Float,
         borgScore : Int
     ): Resource<Session>
-    suspend fun getSessions(): Resource<List<SessionDetail>>   // ← añadir esta línea
-
+    suspend fun getSessions(): Resource<List<SessionDetail>>
+    suspend fun getSessionDetail(sessionId: Int): Resource<SessionDetail>
 }
