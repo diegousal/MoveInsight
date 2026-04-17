@@ -24,7 +24,7 @@ sealed class Routes(val route: String) {
     data object CheckIn : Routes("checkin?sessionId={sessionId}&hours={hoursAfter}") {
         const val ARG_SESSION_ID  = "sessionId"
         const val ARG_HOURS_AFTER = "hoursAfter"
-        const val DEEP_LINK_URI   = "moveinsight://checkin/{sessionId}"
+        const val DEEP_LINK_URI   = "moveinsight://checkin/{sessionId}?hours={hoursAfter}"
         fun route(sessionId: Int, hoursAfter: Int) =
             "checkin?sessionId=$sessionId&hours=$hoursAfter"
     }

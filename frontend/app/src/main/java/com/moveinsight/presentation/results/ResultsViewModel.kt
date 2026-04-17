@@ -32,44 +32,51 @@ class ResultsViewModel @Inject constructor(
     private fun pollSessionResults() {
         viewModelScope.launch {
             while (true) {
-                when (val result = getSessionDetailUseCase(sessionId)) {
-                    is Resource.Success -> {
-                        val detail = result.data
-                        if (detail.isCompleted && detail.results.isNotEmpty()) {
-                            val reps = detail.results
-                            val avgDepth     = reps.map { it.depthScore }.average().toFloat()
-                            val avgTorso     = reps.map { it.torsoScore }.average().toFloat()
-                            val avgStability = reps.map { it.stabilityScore }.average().toFloat()
-                            val avgKnees     = reps.map { it.kneesScore }.average().toFloat()
-                            val avgRhythm    = reps.map { it.rhythmScore }.average().toFloat()
-                            val overall      = reps.map { it.overallScore }.average().toFloat()
-
-                            _uiState.value = ResultsUiState.Success(
-                                ResultsData(
-                                    sessionId      = sessionId,
-                                    weightKg       = detail.weightKg,
-                                    borgScore      = detail.borgScore,
-                                    createdAt      = detail.createdAt,
-                                    reps           = reps,
-                                    avgDepth       = avgDepth,
-                                    avgTorso       = avgTorso,
-                                    avgStability   = avgStability,
-                                    avgKnees       = avgKnees,
-                                    avgRhythm      = avgRhythm,
-                                    overallAverage = overall
-                                )
-                            )
-                            return@launch // Detener polling
-                        } else {
-                            // Todavía procesando → seguir polling
-                            delay(3_000L)
+                try {
+                    when (val result = getSessionDetailUseCase(sessionId)) {
+                        is Resource.Success -> {
+                            val detail = result.data
+                            when {
+                                detail.status == "failed" -> {
+                                    _uiState.value = ResultsUiState.Error(
+                                        detail.message.ifEmpty { "El análisis falló en el servidor." }
+                                    )
+                                    return@launch
+                                }
+                                detail.isCompleted -> {
+                                    val reps = detail.results
+                                    _uiState.value = ResultsUiState.Success(
+                                        ResultsData(
+                                            sessionId      = sessionId,
+                                            weightKg       = detail.weightKg,
+                                            borgScore      = detail.borgScore,
+                                            createdAt      = detail.createdAt,
+                                            reps           = reps,
+                                            checkins       = detail.checkins,
+                                            avgDepth       = reps.map { it.depthScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            avgTorso       = reps.map { it.torsoScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            avgStability   = reps.map { it.stabilityScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            avgKnees       = reps.map { it.kneesScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            avgRhythm      = reps.map { it.rhythmScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            overallAverage = reps.map { it.overallScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f
+                                        )
+                                    )
+                                    return@launch
+                                }
+                                else -> delay(3_000L)
+                            }
                         }
+                        is Resource.Error -> {
+                            _uiState.value = ResultsUiState.Error(result.message)
+                            return@launch
+                        }
+                        is Resource.Loading -> delay(3_000L)
                     }
-                    is Resource.Error -> {
-                        _uiState.value = ResultsUiState.Error(result.message)
-                        return@launch
-                    }
-                    is Resource.Loading -> Unit
+                } catch (e: Exception) {
+                    _uiState.value = ResultsUiState.Error(
+                        "Error inesperado al obtener los resultados: ${e.localizedMessage}"
+                    )
+                    return@launch
                 }
             }
         }

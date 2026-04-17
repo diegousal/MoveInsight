@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.moveinsight.domain.model.PainCheckInSummary
 import com.moveinsight.domain.model.RepResult
 import com.moveinsight.presentation.components.LoadingWithTips
 import com.moveinsight.presentation.theme.*
@@ -109,6 +110,12 @@ private fun ResultsContent(
                 )
                 Spacer(Modifier.height(8.dp))
                 GlobalKpisGrid(data)
+            }
+
+            // ── Seguimiento del dolor EVA ────────────────────────────────
+            item {
+                Spacer(Modifier.height(4.dp))
+                EvaSection(data.checkins)
             }
 
             // ── Detalle por repetición ───────────────────────────────────
@@ -466,6 +473,131 @@ private fun ErrorContent(
             }
         }
     }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sección EVA
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun EvaSection(checkins: List<PainCheckInSummary>) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text  = "Seguimiento del Dolor (EVA)",
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = TextPrimary
+        )
+
+        if (checkins.isEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors   = CardDefaults.cardColors(containerColor = NavyMid),
+                shape    = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier          = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        imageVector        = Icons.Filled.Notifications,
+                        contentDescription = null,
+                        tint               = CyanPrimary.copy(alpha = 0.7f),
+                        modifier           = Modifier.size(22.dp)
+                    )
+                    Text(
+                        text  = "Recibirás notificaciones a las 24h y 48h para registrar el dolor post-entrenamiento.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                }
+            }
+        } else {
+            checkins.forEach { checkin ->
+                EvaCheckinCard(checkin)
+            }
+        }
+    }
+}
+
+@Composable
+private fun EvaCheckinCard(checkin: PainCheckInSummary) {
+    val evaColor = when {
+        checkin.evaScore <= 3 -> GreenReady
+        checkin.evaScore <= 6 -> YellowCaution
+        else                  -> RedAlert
+    }
+    val zonesStr = checkin.bodyZones.filter { it.isNotBlank() }.joinToString(", ")
+        .ifEmpty { "Sin molestias" }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors   = CardDefaults.cardColors(containerColor = NavyMid),
+        shape    = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier          = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            // Score circle
+            Box(
+                modifier         = Modifier
+                    .size(44.dp)
+                    .clip(androidx.compose.foundation.shape.CircleShape)
+                    .background(evaColor.copy(alpha = 0.18f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text  = "${checkin.evaScore}",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                    color = evaColor
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text  = "EVA ${checkin.hoursAfter}h post-entrenamiento",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = TextPrimary
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text  = if (zonesStr == "Sin molestias") "Sin molestias"
+                            else "Zonas: $zonesStr",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextSecondary
+                )
+                if (checkin.notes.isNotBlank()) {
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text  = checkin.notes,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                }
+            }
+            // Pain level label
+            Surface(
+                color = evaColor.copy(alpha = 0.12f),
+                shape = RoundedCornerShape(6.dp)
+            ) {
+                Text(
+                    text     = evaLabel(checkin.evaScore),
+                    style    = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color    = evaColor,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+        }
+    }
+}
+
+private fun evaLabel(score: Int): String = when {
+    score == 0  -> "Sin dolor"
+    score <= 3  -> "Leve"
+    score <= 6  -> "Moderado"
+    score <= 8  -> "Intenso"
+    else        -> "Severo"
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

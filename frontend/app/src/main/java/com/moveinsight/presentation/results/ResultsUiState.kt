@@ -1,5 +1,6 @@
 package com.moveinsight.presentation.results
 
+import com.moveinsight.domain.model.PainCheckInSummary
 import com.moveinsight.domain.model.RepResult
 
 data class ResultsData(
@@ -8,6 +9,7 @@ data class ResultsData(
     val borgScore      : Int = 0,
     val createdAt      : String = "",
     val reps           : List<RepResult> = emptyList(),
+    val checkins       : List<PainCheckInSummary> = emptyList(),
     val avgDepth       : Float = 0f,
     val avgTorso       : Float = 0f,
     val avgStability   : Float = 0f,

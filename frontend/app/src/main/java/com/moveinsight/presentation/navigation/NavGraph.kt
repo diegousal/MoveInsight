@@ -1,6 +1,11 @@
 package com.moveinsight.presentation.navigation
 
+import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.util.Consumer
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +24,18 @@ import com.moveinsight.presentation.splash.SplashScreen
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
+    val context       = LocalContext.current
+
+    // Reenvía los deep links recibidos mientras la app ya está en ejecución
+    // (p.ej. notificación EVA de 48h cuando la de 24h ya estaba abierta)
+    DisposableEffect(navController) {
+        val activity = context as? ComponentActivity
+        val listener = Consumer<Intent> { intent ->
+            navController.handleDeepLink(intent)
+        }
+        activity?.addOnNewIntentListener(listener)
+        onDispose { activity?.removeOnNewIntentListener(listener) }
+    }
 
     NavHost(navController = navController, startDestination = Routes.Splash.route) {
 
@@ -114,7 +131,12 @@ fun NavGraph() {
 
         // ── Dashboard ─────────────────────────────────────────────────────
         composable(Routes.Dashboard.route) {
-            DashboardScreen(onNavigateBack = { navController.popBackStack() })
+            DashboardScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToResults = { sessionId ->
+                    navController.navigate(Routes.Results.route(sessionId))
+                }
+            )
         }
 
         // ── Check-in EVA (Fase 4) — soporta deep link desde notificación ──

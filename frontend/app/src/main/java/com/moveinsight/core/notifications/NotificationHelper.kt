@@ -45,7 +45,7 @@ class NotificationHelper @Inject constructor(
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showPainCheckInNotification(sessionId: Int, hoursAfter: Int) {
         val deepLinkUri = Uri.parse(
-            "${Constants.DEEP_LINK_SCHEME}://${Constants.DEEP_LINK_HOST_CHECKIN}/$sessionId"
+            "${Constants.DEEP_LINK_SCHEME}://${Constants.DEEP_LINK_HOST_CHECKIN}/$sessionId?hours=$hoursAfter"
         )
 
         val deepLinkIntent = Intent(Intent.ACTION_VIEW, deepLinkUri, context, MainActivity::class.java)

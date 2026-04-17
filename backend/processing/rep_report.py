@@ -2,8 +2,9 @@ import os
 import csv # Añadida la librería para manejar el archivo separado
 import numpy as np
 from datetime import datetime
-import matplotlib as plt
-plt.use("Agg")
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 class Colors:
     GREEN = "\033[92m"

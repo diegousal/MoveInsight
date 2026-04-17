@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
-from app.routers import auth, sessions
+from app.routers import auth, sessions, analytics, checkins
 from app.database import engine, Base
 
 
@@ -40,6 +40,8 @@ app.mount("/static/reportes", StaticFiles(directory=settings.REPORT_DIR), name="
 # --- Routers ---
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(sessions.router, prefix="/api/v1/sessions", tags=["Sessions"])
+app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
+app.include_router(checkins.router, prefix="/api/v1", tags=["CheckIns"])
 
 
 @app.get("/health")

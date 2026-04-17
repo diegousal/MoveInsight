@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -33,8 +34,9 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    onNavigateBack : () -> Unit,
-    viewModel      : DashboardViewModel = hiltViewModel()
+    onNavigateBack      : () -> Unit,
+    onNavigateToResults : (Int) -> Unit = {},
+    viewModel           : DashboardViewModel = hiltViewModel()
 ) {
     val uiState      by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost =  remember { SnackbarHostState() }
@@ -76,6 +78,14 @@ fun DashboardScreen(
                     }
                 },
                 actions        = {
+                    // Botón de prueba de notificación
+                    IconButton(onClick = viewModel::testNotification) {
+                        Icon(
+                            imageVector        = Icons.Filled.Notifications,
+                            contentDescription = "Probar notificación",
+                            tint               = OrangePower
+                        )
+                    }
                     // Botón de exportación PDF
                     if (uiState.isExporting) {
                         CircularProgressIndicator(
@@ -154,7 +164,7 @@ fun DashboardScreen(
 
                 // ── Contenido por tab ─────────────────────────────────
                 when (selectedTab) {
-                    0 -> SessionsTab(uiState, viewModel::loadAll)
+                    0 -> SessionsTab(uiState, viewModel::loadAll, onNavigateToResults)
                     1 -> ChartsTab(uiState)
                     2 -> InsightsTab(uiState)
                 }
@@ -225,8 +235,9 @@ private fun ReadinessBanner(
 
 @Composable
 private fun SessionsTab(
-    uiState  : DashboardUiState,
-    onRetry  : () -> Unit
+    uiState        : DashboardUiState,
+    onRetry        : () -> Unit,
+    onSessionClick : (Int) -> Unit = {}
 ) {
     if (uiState.errorSessions != null) {
         ErrorContent(uiState.errorSessions, onRetry)
@@ -243,7 +254,7 @@ private fun SessionsTab(
         modifier             = Modifier.fillMaxSize()
     ) {
         items(uiState.sessions, key = { it.id }) { session ->
-            SessionCard(session = session)
+            SessionCard(session = session, onClick = { onSessionClick(session.id) })
         }
     }
 }
@@ -259,7 +270,7 @@ private fun ChartsTab(uiState: DashboardUiState) {
     ) {
         item { TechniqueLineChart(uiState.sessions) }
         item { LoadProgressionChart(uiState.sessions) }
-        item { VelocityChart(uiState.sessions) }
+        item { BorgScaleChart(uiState.sessions) }
     }
 }
 

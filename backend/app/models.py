@@ -36,6 +36,7 @@ class Session(Base):
 
     user = relationship("User", back_populates="sessions")
     results = relationship("SessionResult", back_populates="session")
+    pain_checkins = relationship("PainCheckIn", back_populates="session")
 
 
 class SessionResult(Base):
@@ -54,3 +55,17 @@ class SessionResult(Base):
     report_image_path = Column(String(500))
 
     session = relationship("Session", back_populates="results")
+
+
+class PainCheckIn(Base):
+    __tablename__ = "pain_checkins"
+
+    id          = Column(Integer, primary_key=True, autoincrement=True)
+    session_id  = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    eva_score   = Column(Integer, nullable=False)      # 0-10
+    hours_after = Column(Integer, nullable=False)      # 24 o 48
+    body_zones  = Column(Text, default="")             # zonas separadas por coma
+    notes       = Column(Text, default="")             # notas libres opcionales
+    created_at  = Column(TIMESTAMP, server_default=func.now())
+
+    session = relationship("Session", back_populates="pain_checkins")

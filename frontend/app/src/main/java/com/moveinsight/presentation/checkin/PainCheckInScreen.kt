@@ -1,11 +1,16 @@
 package com.moveinsight.presentation.checkin
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,15 +55,7 @@ fun PainCheckInScreen(
         topBar         = {
             TopAppBar(
                 title   = { MoveInsightLogo(fontSize = 22.sp) },
-                actions = {
-                    // Botón "Omitir" — el usuario puede saltar el check-in
-                    TextButton(onClick = viewModel::onSkip) {
-                        Text("Omitir", color = TextSecondary)
-                    }
-                    IconButton(onClick = viewModel::onSkip) {
-                        Icon(Icons.Filled.Close, "Cerrar", tint = TextSecondary)
-                    }
-                },
+                actions = {},
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = NavyDeep)
             )
         }
@@ -95,6 +92,42 @@ fun PainCheckInScreen(
                 score    = form.evaScore,
                 onChange = viewModel::onEvaScoreChange
             )
+
+            // ── Aviso de inconsistencia zonas/EVA ─────────────────────────
+            val hasConflict = form.selectedZones.isNotEmpty() && form.evaScore == 0
+            AnimatedVisibility(
+                visible = hasConflict,
+                enter   = fadeIn(),
+                exit    = fadeOut()
+            ) {
+                Column {
+                    Spacer(Modifier.height(12.dp))
+                    Surface(
+                        color    = OrangePower.copy(alpha = 0.10f),
+                        shape    = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier              = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalAlignment     = Alignment.Top
+                        ) {
+                            Icon(
+                                Icons.Filled.Warning,
+                                contentDescription = null,
+                                tint               = OrangePower,
+                                modifier           = Modifier.size(16.dp).padding(top = 1.dp)
+                            )
+                            Text(
+                                text  = "Si marcas zonas con molestias el nivel de dolor debe ser mayor que 0. " +
+                                        "Usa «Sin molestias» si finalmente no tienes dolor.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = OrangePower
+                            )
+                        }
+                    }
+                }
+            }
 
             // ── Sección 2: Mapa corporal ──────────────────────────────────
             Spacer(Modifier.height(32.dp))
@@ -136,7 +169,7 @@ fun PainCheckInScreen(
             // ── CTA: Enviar ───────────────────────────────────────────────
             Button(
                 onClick  = viewModel::onSubmit,
-                enabled  = !isLoading,
+                enabled  = !isLoading && !hasConflict,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
@@ -158,15 +191,21 @@ fun PainCheckInScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Opción de omitir con texto
-            TextButton(
-                onClick  = viewModel::onSkip,
-                modifier = Modifier.fillMaxWidth()
+            // Opción sin dolor — guarda EVA=0
+            OutlinedButton(
+                onClick  = viewModel::onNoPain,
+                enabled  = !isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                border  = BorderStroke(1.dp, GreenReady.copy(alpha = 0.55f)),
+                colors  = ButtonDefaults.outlinedButtonColors(
+                    contentColor = GreenReady
+                )
             ) {
                 Text(
-                    "No tengo molestias, omitir",
-                    color = TextSecondary,
-                    style = MaterialTheme.typography.bodyMedium
+                    "Sin molestias",
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
 

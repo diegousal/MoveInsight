@@ -55,6 +55,21 @@ class PainCheckInViewModel @Inject constructor(
 
     fun onSubmit() {
         val f = _form.value
+
+        // No tiene sentido tener zonas marcadas con EVA = 0:
+        // o no hay dolor (sin zonas) o si hay molestias deben cuantificarse.
+        if (f.selectedZones.isNotEmpty() && f.evaScore == 0) {
+            viewModelScope.launch {
+                _events.send(
+                    PainCheckInUiEvent.ShowSnackbar(
+                        "Has marcado zonas con molestias. Sube el nivel EVA por encima de 0, " +
+                        "o usa «Sin molestias» si realmente no tienes dolor."
+                    )
+                )
+            }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.value = PainCheckInUiState.Loading
             when (val result = submitPainCheckInUseCase(
@@ -76,6 +91,34 @@ class PainCheckInViewModel @Inject constructor(
         }
     }
 
+    /**
+     * El usuario declara que no tiene ninguna molestia.
+     * Se guarda un EVA = 0 con zonas vacías para que aparezca en el historial.
+     */
+    fun onNoPain() {
+        val f = _form.value
+        viewModelScope.launch {
+            _uiState.value = PainCheckInUiState.Loading
+            when (val result = submitPainCheckInUseCase(
+                sessionId  = f.sessionId,
+                evaScore   = 0,
+                hoursAfter = f.hoursAfter,
+                bodyZones  = emptyList()
+            )) {
+                is Resource.Success -> {
+                    _uiState.value = PainCheckInUiState.Success
+                    _events.send(PainCheckInUiEvent.NavigateHome)
+                }
+                is Resource.Error -> {
+                    _uiState.value = PainCheckInUiState.Error(result.message)
+                    _events.send(PainCheckInUiEvent.ShowSnackbar(result.message))
+                }
+                is Resource.Loading -> Unit
+            }
+        }
+    }
+
+    /** Omite el check-in por completo sin guardar nada. */
     fun onSkip() {
         viewModelScope.launch { _events.send(PainCheckInUiEvent.NavigateHome) }
     }

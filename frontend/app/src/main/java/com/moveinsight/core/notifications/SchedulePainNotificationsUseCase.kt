@@ -55,4 +55,32 @@ class SchedulePainNotificationsUseCase @Inject constructor(
             request
         )
     }
+
+    /**
+     * Dispara notificaciones de prueba a las 10s (24h) y 25s (48h).
+     * Usar solo para desarrollo/QA — NO llamar en producción.
+     */
+    fun triggerTest(sessionId: Int) {
+        // 24h → ~10 segundos
+        scheduleSingleTest(sessionId, hoursAfter = 24, delaySeconds = 10L, tag = "pain_test_24h_$sessionId")
+        // 48h → ~25 segundos (suficiente para completar el 24h primero)
+        scheduleSingleTest(sessionId, hoursAfter = 48, delaySeconds = 25L, tag = "pain_test_48h_$sessionId")
+    }
+
+    private fun scheduleSingleTest(sessionId: Int, hoursAfter: Int, delaySeconds: Long, tag: String) {
+        val inputData = workDataOf(
+            Constants.WORKER_SESSION_ID_KEY to sessionId,
+            Constants.WORKER_HOURS_KEY      to hoursAfter
+        )
+        val request = OneTimeWorkRequestBuilder<PainCheckInWorker>()
+            .setInputData(inputData)
+            .setInitialDelay(delaySeconds, TimeUnit.SECONDS)
+            .addTag(tag)
+            .build()
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            tag,
+            ExistingWorkPolicy.REPLACE,
+            request
+        )
+    }
 }

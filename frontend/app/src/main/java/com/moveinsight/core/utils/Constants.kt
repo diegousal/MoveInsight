@@ -14,7 +14,7 @@ object Constants {
     const val ENDPOINT_SESSIONS       = "api/v1/sessions"
     const val ENDPOINT_SESSION_DETAIL = "api/v1/sessions/{id}"
     const val ENDPOINT_ANALYTICS      = "api/v1/analytics/summary"
-    const val ENDPOINT_EXPORT_PDF     = "api/v1/export/pdf"
+    const val ENDPOINT_EXPORT_PDF     = "api/v1/analytics/pdf"
 
     const val ENDPOINT_GET_SESSIONS = "api/v1/sessions/"
 

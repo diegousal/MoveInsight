@@ -21,13 +21,15 @@ class AnalyticsRepositoryImpl @Inject constructor(
         return when (result) {
             is Resource.Success -> Resource.Success(result.data.map { dto ->
                 SessionDetail(
-                    id        = dto.id,
-                    status    = dto.status,
-                    message   = dto.message,
-                    createdAt = dto.createdAt ?: "",
-                    weightKg  = dto.weightKg  ?: 0f,
-                    borgScore = dto.borgScore  ?: 0,
-                    results   = dto.results.map { r ->
+                    id           = dto.id,
+                    status       = dto.status,
+                    message      = dto.message,
+                    createdAt    = dto.createdAt ?: "",
+                    weightKg     = dto.weightKg  ?: 0f,
+                    borgScore    = dto.borgScore  ?: 0,
+                    overallScore = dto.overallScore,
+                    repCount     = dto.repCount,
+                    results      = dto.results.map { r ->
                         com.moveinsight.domain.model.RepResult(
                             repNumber      = r.repNumber,
                             depthScore     = r.depthScore,
@@ -50,25 +52,28 @@ class AnalyticsRepositoryImpl @Inject constructor(
         return when (result) {
             is Resource.Success -> {
                 val dto = result.data
+                val reps = dto.results.map { r ->
+                    com.moveinsight.domain.model.RepResult(
+                        repNumber      = r.repNumber,
+                        depthScore     = r.depthScore,
+                        torsoScore     = r.torsoScore,
+                        stabilityScore = r.stabilityScore,
+                        kneesScore     = r.kneesScore,
+                        rhythmScore    = r.rhythmScore,
+                        overallScore   = r.overallScore
+                    )
+                }
                 Resource.Success(
                     SessionDetail(
-                        id        = dto.id,
-                        status    = dto.status,
-                        message   = dto.message,
-                        createdAt = dto.createdAt ?: "",
-                        weightKg  = dto.weightKg  ?: 0f,
-                        borgScore = dto.borgScore  ?: 0,
-                        results   = dto.results.map { r ->
-                            com.moveinsight.domain.model.RepResult(
-                                repNumber      = r.repNumber,
-                                depthScore     = r.depthScore,
-                                torsoScore     = r.torsoScore,
-                                stabilityScore = r.stabilityScore,
-                                kneesScore     = r.kneesScore,
-                                rhythmScore    = r.rhythmScore,
-                                overallScore   = r.overallScore
-                            )
-                        }
+                        id           = dto.id,
+                        status       = dto.status,
+                        message      = dto.message,
+                        createdAt    = dto.createdAt ?: "",
+                        weightKg     = dto.weightKg  ?: 0f,
+                        borgScore    = dto.borgScore  ?: 0,
+                        results      = reps,
+                        overallScore = if (reps.isNotEmpty()) reps.map { it.overallScore }.average().toFloat() else null,
+                        repCount     = if (reps.isNotEmpty()) reps.size else null
                     )
                 )
             }

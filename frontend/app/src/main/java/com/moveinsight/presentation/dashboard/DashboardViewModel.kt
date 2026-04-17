@@ -2,6 +2,7 @@ package com.moveinsight.presentation.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moveinsight.core.notifications.SchedulePainNotificationsUseCase
 import com.moveinsight.core.utils.Resource
 import com.moveinsight.domain.repository.ExportReportUseCase
 import com.moveinsight.domain.repository.GetAnalyticsUseCase
@@ -14,9 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val getSessionsUseCase  : GetSessionsUseCase,
-    private val getAnalyticsUseCase : GetAnalyticsUseCase,
-    private val exportReportUseCase : ExportReportUseCase
+    private val getSessionsUseCase           : GetSessionsUseCase,
+    private val getAnalyticsUseCase          : GetAnalyticsUseCase,
+    private val exportReportUseCase          : ExportReportUseCase,
+    private val schedulePainNotificationsUseCase : SchedulePainNotificationsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -72,6 +74,16 @@ class DashboardViewModel @Inject constructor(
                 }
                 else -> Unit
             }
+        }
+    }
+
+    fun testNotification() {
+        val sessionId = _uiState.value.sessions.firstOrNull()?.id ?: 1
+        schedulePainNotificationsUseCase.triggerTest(sessionId)
+        viewModelScope.launch {
+            _events.send(DashboardUiEvent.ShowSnackbar(
+                "🔔 EVA 24h en ~10s · EVA 48h en ~25s (sesión #$sessionId)"
+            ))
         }
     }
 }
