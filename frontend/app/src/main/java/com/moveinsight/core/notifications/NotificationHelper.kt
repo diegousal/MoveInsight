@@ -41,9 +41,12 @@ class NotificationHelper @Inject constructor(
     /**
      * Muestra la notificación de check-in.
      * El tap abre la app con deep link a la pantalla EVA.
+     *
+     * [sessionCreatedAt] es el timestamp ISO de la sesión (ej. "2024-12-15T18:32:00").
+     * Se usa para indicar al usuario a qué sesión pertenece la notificación.
      */
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun showPainCheckInNotification(sessionId: Int, hoursAfter: Int) {
+    fun showPainCheckInNotification(sessionId: Int, hoursAfter: Int, sessionCreatedAt: String = "") {
         val deepLinkUri = Uri.parse(
             "${Constants.DEEP_LINK_SCHEME}://${Constants.DEEP_LINK_HOST_CHECKIN}/$sessionId?hours=$hoursAfter"
         )
@@ -58,9 +61,28 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // ── Formatear fecha/hora de la sesión ─────────────────────────────
+        // Input:  "2024-12-15T18:32:00.123"
+        // Output: "15/12 · 18:32"
+        val sessionLabel = sessionCreatedAt.formatSessionLabel()
+
         val (title, body) = when (hoursAfter) {
-            24   -> "¿Cómo estás a las 24h?" to "Registra tu nivel de dolor para optimizar tu readiness"
-            else -> "Seguimiento 48h post-entrenamiento" to "¿Persiste alguna molestia? Registra cómo te sientes"
+            24 -> {
+                val t = "Seguimiento 24h · $sessionLabel".trimEnd(' ', '·')
+                val b = if (sessionLabel.isNotEmpty())
+                    "Sesión del $sessionLabel — ¿Notas alguna molestia?"
+                else
+                    "Registra tu nivel de dolor para optimizar tu readiness"
+                t to b
+            }
+            else -> {
+                val t = "Seguimiento 48h · $sessionLabel".trimEnd(' ', '·')
+                val b = if (sessionLabel.isNotEmpty())
+                    "Sesión del $sessionLabel — ¿Persiste alguna molestia?"
+                else
+                    "¿Persiste alguna molestia? Registra cómo te sientes"
+                t to b
+            }
         }
 
         val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
@@ -82,5 +104,26 @@ class NotificationHelper @Inject constructor(
         try {
             NotificationManagerCompat.from(context).notify(notificationId, notification)
         } catch (_: SecurityException) { /* Permiso no concedido */ }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    /**
+     * "2024-12-15T18:32:00.123"  →  "15/12 · 18:32"
+     * Devuelve cadena vacía si el formato no es reconocible.
+     */
+    private fun String.formatSessionLabel(): String {
+        return try {
+            // Tomamos los primeros 16 caracteres: "2024-12-15T18:32"
+            val raw = this.take(16)
+            val parts = raw.split("T")
+            if (parts.size != 2) return ""
+            val dateParts = parts[0].split("-")
+            if (dateParts.size != 3) return ""
+            val day   = dateParts[2]   // "15"
+            val month = dateParts[1]   // "12"
+            val time  = parts[1]       // "18:32"
+            "$day/$month · $time"
+        } catch (_: Exception) { "" }
     }
 }

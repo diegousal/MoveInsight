@@ -231,8 +231,49 @@ private fun OverallScoreCard(data: ResultsData) {
                     desc  = "Borg"
                 )
             }
+
+            // Fecha y hora de la sesión
+            val sessionDateTime = data.createdAt.formatSessionDateTime()
+            if (sessionDateTime.isNotEmpty()) {
+                Spacer(Modifier.height(14.dp))
+                HorizontalDivider(
+                    color     = NavyLight,
+                    thickness = 0.5.dp,
+                    modifier  = Modifier.padding(horizontal = 8.dp)
+                )
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment     = Alignment.CenterVertically,
+                    modifier              = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        imageVector        = Icons.Filled.CalendarToday,
+                        contentDescription = null,
+                        tint               = CyanPrimary.copy(alpha = 0.6f),
+                        modifier           = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(5.dp))
+                    Text(
+                        text  = sessionDateTime,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                }
+            }
         }
     }
+}
+
+/** "2024-12-15T18:32:00" → "15/12/2024 · 18:32" */
+private fun String.formatSessionDateTime(): String {
+    return try {
+        val datePart = this.take(10)
+        val timePart = if (this.length >= 16) this.substring(11, 16) else ""
+        val parts    = datePart.split("-")
+        val date     = if (parts.size == 3) "${parts[2]}/${parts[1]}/${parts[0]}" else return ""
+        if (timePart.isNotEmpty()) "$date · $timePart" else date
+    } catch (_: Exception) { "" }
 }
 
 @Composable

@@ -6,8 +6,9 @@ object Constants {
     const val USER_PREFERENCES_DATASTORE = "user_preferences"
 
     // ── Endpoints auth ────────────────────────────────────────────────────
-    const val ENDPOINT_LOGIN    = "api/v1/auth/token"
-    const val ENDPOINT_REGISTER = "api/v1/auth/register"
+    const val ENDPOINT_LOGIN          = "api/v1/auth/token"
+    const val ENDPOINT_REGISTER       = "api/v1/auth/register"
+    const val ENDPOINT_DELETE_ACCOUNT = "api/v1/auth/me"
 
     // ── Endpoints sesión ──────────────────────────────────────────────────
     const val ENDPOINT_UPLOAD_SESSION = "api/v1/sessions/upload"
@@ -31,8 +32,9 @@ object Constants {
     const val MAX_VIDEO_SIZE_MB   = 500
 
     // ── WorkManager ───────────────────────────────────────────────────────
-    const val WORKER_SESSION_ID_KEY    = "session_id"
-    const val WORKER_HOURS_KEY         = "hours_after"
+    const val WORKER_SESSION_ID_KEY         = "session_id"
+    const val WORKER_HOURS_KEY              = "hours_after"
+    const val WORKER_SESSION_CREATED_AT_KEY = "session_created_at"
     const val NOTIFICATION_CHANNEL_ID  = "pain_checkin_channel"
     const val NOTIFICATION_CHANNEL_NAME = "Check-in de Dolor"
     const val PAIN_NOTIFICATION_ID_24H  = 1001

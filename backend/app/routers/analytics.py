@@ -43,8 +43,9 @@ def get_analytics_summary(
         # Lower borg = more ready. Scale: borg 0-3 -> 80-100, 4-6 -> 50-79, 7-10 -> 20-49
         readiness = max(10, min(100, int(100 - (avg_borg * 8))))
     else:
-        readiness = 50
-        avg_borg = 5
+        # Sin sesiones = totalmente descansado → readiness máximo
+        readiness = 100
+        avg_borg = 0
 
     if readiness >= 70:
         label = "high"

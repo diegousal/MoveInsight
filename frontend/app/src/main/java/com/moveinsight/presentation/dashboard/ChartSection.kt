@@ -180,7 +180,7 @@ private fun ChartContainer(
         // Separador sutil + fechas: dan aire entre título y gráfico sin desperdiciar espacio
         Spacer(Modifier.height(6.dp))
         DateRow(firstDate = firstDate, lastDate = lastDate, accentColor = accentColor)
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(1.dp))
 
         // Gráfico
         content()

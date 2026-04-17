@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -29,6 +30,10 @@ class UserPreferencesDataStore @Inject constructor(
         val LAST_SESSION_ID    = intPreferencesKey("last_session_id")
         val LAST_EVA_SCORE     = intPreferencesKey("last_eva_score")
         val LAST_CHECKIN_DATE  = stringPreferencesKey("last_checkin_date")
+        // ── Preferencias de notificación ──────────────────────────────────
+        val NOTIF_GENERAL      = booleanPreferencesKey("notif_general_enabled")
+        val NOTIF_24H          = booleanPreferencesKey("notif_24h_enabled")
+        val NOTIF_48H          = booleanPreferencesKey("notif_48h_enabled")
     }
 
     // ── Token ──────────────────────────────────────────────────────────────
@@ -63,6 +68,19 @@ class UserPreferencesDataStore @Inject constructor(
     }
     fun getLastEvaScore(): Flow<Int?> =
         context.dataStore.data.map { it[Keys.LAST_EVA_SCORE] }
+
+    // ── Preferencias de notificación ─────────────────────────────────────
+    suspend fun saveNotifPrefs(general: Boolean, h24: Boolean, h48: Boolean) {
+        context.dataStore.edit {
+            it[Keys.NOTIF_GENERAL] = general
+            it[Keys.NOTIF_24H]     = h24
+            it[Keys.NOTIF_48H]     = h48
+        }
+    }
+    /** Por defecto activo — un usuario nuevo recibe todas las notificaciones. */
+    fun getNotifGeneral(): Flow<Boolean> = context.dataStore.data.map { it[Keys.NOTIF_GENERAL] ?: true }
+    fun getNotif24h(): Flow<Boolean>     = context.dataStore.data.map { it[Keys.NOTIF_24H]     ?: true }
+    fun getNotif48h(): Flow<Boolean>     = context.dataStore.data.map { it[Keys.NOTIF_48H]     ?: true }
 
     // ── Cierre de sesión ──────────────────────────────────────────────────
     suspend fun clearSession() { context.dataStore.edit { it.clear() } }

@@ -135,7 +135,7 @@ class CaptureViewModel @Inject constructor(
             when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, form.borgScore)) {
                 is Resource.Success -> {
                     stopped.videoFile.delete()
-                    schedulePainNotificationsUseCase(result.data.id)
+                    schedulePainNotificationsUseCase(result.data.id, result.data.createdAt)
                     _uiState.value = CaptureUiState.Success(result.data.id)
                     _events.send(CaptureUiEvent.UploadSuccess(result.data.id))
                 }

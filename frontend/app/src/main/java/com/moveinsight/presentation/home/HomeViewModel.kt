@@ -23,7 +23,11 @@ data class HomeUiData(
     val isLoading          : Boolean        = true,
     val isProcessingAction : Boolean        = false,
     val userFullName       : String         = "",
-    val userEmail          : String         = ""
+    val userEmail          : String         = "",
+    // ── Preferencias de notificación ──────────────────────────────────────
+    val notifGeneral       : Boolean        = true,
+    val notif24h           : Boolean        = true,
+    val notif48h           : Boolean        = true
 ) {
     val userInitials: String get() = userFullName
         .split(" ")
@@ -55,6 +59,7 @@ class HomeViewModel @Inject constructor(
     init {
         loadUserInfo()
         loadReadiness()
+        loadNotifPrefs()
     }
 
     private fun loadUserInfo() {
@@ -66,6 +71,56 @@ class HomeViewModel @Inject constructor(
                 .collect { (name, email) ->
                     _data.update { it.copy(userFullName = name, userEmail = email) }
                 }
+        }
+    }
+
+    /** Llamar cada vez que la pantalla vuelve al foco (ON_RESUME). */
+    fun refresh() { loadReadiness() }
+
+    // ── Preferencias de notificación ──────────────────────────────────────
+
+    private fun loadNotifPrefs() {
+        viewModelScope.launch {
+            combine(
+                dataStore.getNotifGeneral(),
+                dataStore.getNotif24h(),
+                dataStore.getNotif48h()
+            ) { general, h24, h48 -> Triple(general, h24, h48) }
+                .collect { (general, h24, h48) ->
+                    _data.update { it.copy(notifGeneral = general, notif24h = h24, notif48h = h48) }
+                }
+        }
+    }
+
+    /**
+     * Activa/desactiva el interruptor maestro.
+     * – Si se activa y ambas sub-opciones estaban OFF → se activan las dos.
+     * – Si se desactiva → no toca las sub-opciones (solo bloquea el scheduling).
+     */
+    fun onNotifGeneralToggle(enabled: Boolean) {
+        viewModelScope.launch {
+            val current = _data.value
+            val new24h = if (enabled && !current.notif24h && !current.notif48h) true else current.notif24h
+            val new48h = if (enabled && !current.notif24h && !current.notif48h) true else current.notif48h
+            dataStore.saveNotifPrefs(general = enabled, h24 = new24h, h48 = new48h)
+        }
+    }
+
+    /** Al desactivar 24h: si 48h también está OFF → apaga el general. */
+    fun onNotif24hToggle(enabled: Boolean) {
+        viewModelScope.launch {
+            val current   = _data.value
+            val newGeneral = enabled || current.notif48h   // general sigue ON si al menos una está ON
+            dataStore.saveNotifPrefs(general = newGeneral, h24 = enabled, h48 = current.notif48h)
+        }
+    }
+
+    /** Al desactivar 48h: si 24h también está OFF → apaga el general. */
+    fun onNotif48hToggle(enabled: Boolean) {
+        viewModelScope.launch {
+            val current    = _data.value
+            val newGeneral = current.notif24h || enabled
+            dataStore.saveNotifPrefs(general = newGeneral, h24 = current.notif24h, h48 = enabled)
         }
     }
 

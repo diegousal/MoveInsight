@@ -23,10 +23,11 @@ class PainCheckInWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         val sessionId  = inputData.getInt(Constants.WORKER_SESSION_ID_KEY, -1)
         val hoursAfter = inputData.getInt(Constants.WORKER_HOURS_KEY, 24)
+        val createdAt  = inputData.getString(Constants.WORKER_SESSION_CREATED_AT_KEY) ?: ""
 
         if (sessionId == -1) return Result.failure()
 
-        notificationHelper.showPainCheckInNotification(sessionId, hoursAfter)
+        notificationHelper.showPainCheckInNotification(sessionId, hoursAfter, createdAt)
         return Result.success()
     }
 }

@@ -213,9 +213,10 @@ private fun EvaChip(checkin: com.moveinsight.domain.model.PainCheckInSummary) {
 
 private fun String.formatDisplayDate(): String {
     return try {
-        val datePart = this.take(10)           // "2024-12-15"
-        val parts    = datePart.split("-")     // ["2024", "12", "15"]
-        if (parts.size == 3) "${parts[2]}/${parts[1]}/${parts[0]}"
-        else datePart
+        val datePart  = this.take(10)               // "2024-12-15"
+        val timePart  = if (this.length >= 16) this.substring(11, 16) else ""  // "18:32"
+        val parts     = datePart.split("-")          // ["2024", "12", "15"]
+        val date      = if (parts.size == 3) "${parts[2]}/${parts[1]}/${parts[0]}" else datePart
+        if (timePart.isNotEmpty()) "$date · $timePart" else date
     } catch (_: Exception) { this.take(10) }
 }

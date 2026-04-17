@@ -1,6 +1,8 @@
 package com.moveinsight.presentation.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moveinsight.domain.model.ReadinessLevel
 import com.moveinsight.presentation.components.MoveInsightLogo
@@ -42,8 +47,20 @@ fun HomeScreen(
     var showTrainingSheet      by remember { mutableStateOf(false) }
     var showUserMenu           by remember { mutableStateOf(false) }
     var showHelpSheet          by remember { mutableStateOf(false) }
+    var showNotifSheet         by remember { mutableStateOf(false) }
     var showDeleteDialog       by remember { mutableStateOf(false) }
     var showClearHistoryDialog by remember { mutableStateOf(false) }
+
+    // Refresca el readiness cada vez que la pantalla vuelve al foco
+    // (p.ej. al volver de subir un ejercicio)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) viewModel.refresh()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -71,6 +88,19 @@ fun HomeScreen(
     // ── Help bottom sheet ──────────────────────────────────────────────────
     if (showHelpSheet) {
         HelpBottomSheet(onDismiss = { showHelpSheet = false })
+    }
+
+    // ── Notification preferences bottom sheet ─────────────────────────────
+    if (showNotifSheet) {
+        NotificationPrefsBottomSheet(
+            notifGeneral    = data.notifGeneral,
+            notif24h        = data.notif24h,
+            notif48h        = data.notif48h,
+            onGeneralToggle = viewModel::onNotifGeneralToggle,
+            on24hToggle     = viewModel::onNotif24hToggle,
+            on48hToggle     = viewModel::onNotif48hToggle,
+            onDismiss       = { showNotifSheet = false }
+        )
     }
 
     // ── Delete account dialog ──────────────────────────────────────────────
@@ -123,6 +153,7 @@ fun HomeScreen(
                             isProcessing    = data.isProcessingAction,
                             onDismiss       = { showUserMenu = false },
                             onHelp          = { showUserMenu = false; showHelpSheet = true },
+                            onNotifSettings = { showUserMenu = false; showNotifSheet = true },
                             onClearHistory  = { showUserMenu = false; showClearHistoryDialog = true },
                             onDeleteAccount = { showUserMenu = false; showDeleteDialog = true },
                             onLogout        = { showUserMenu = false; viewModel.onLogoutClick() }
@@ -398,29 +429,26 @@ private fun UserAvatarButton(initials: String, onClick: () -> Unit) {
     ) {
         Box(
             modifier         = Modifier
-                .size(36.dp)
+                .size(34.dp)
                 .clip(CircleShape)
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(CyanPrimary.copy(alpha = 0.75f), OrangePower.copy(alpha = 0.55f))
-                    )
-                ),
+                .background(NavyLight)
+                .border(1.5.dp, CyanPrimary.copy(alpha = 0.65f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             if (initials.isNotEmpty()) {
                 Text(
                     text  = initials,
                     style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        color      = NavyDeep,
-                        fontSize   = 14.sp
+                        fontWeight = FontWeight.Bold,
+                        color      = CyanPrimary,
+                        fontSize   = 13.sp
                     )
                 )
             } else {
                 Icon(
-                    Icons.Filled.Person, null,
-                    tint     = NavyDeep,
-                    modifier = Modifier.size(20.dp)
+                    Icons.Filled.AccountCircle, null,
+                    tint     = CyanPrimary,
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }
@@ -435,6 +463,7 @@ private fun UserDropdownMenu(
     isProcessing    : Boolean,
     onDismiss       : () -> Unit,
     onHelp          : () -> Unit,
+    onNotifSettings : () -> Unit,
     onClearHistory  : () -> Unit,
     onDeleteAccount : () -> Unit,
     onLogout        : () -> Unit
@@ -476,13 +505,12 @@ private fun UserDropdownMenu(
             color   = CyanPrimary,
             onClick = onHelp
         )
-        // Notifications info
+        // Notification preferences
         MenuItemRow(
-            icon     = Icons.Filled.Notifications,
-            label    = "Notificaciones EVA",
-            subtitle = "24h y 48h post-entrenamiento",
-            color    = TextPrimary,
-            onClick  = onDismiss
+            icon    = Icons.Filled.NotificationsNone,
+            label   = "Notificaciones EVA",
+            color   = CyanPrimary,
+            onClick = onNotifSettings
         )
 
         HorizontalDivider(color = NavyLight, thickness = 0.5.dp)
@@ -597,10 +625,11 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
             )
 
             HelpSection(
-                icon  = Icons.Filled.Speed,
-                color = OrangePower,
-                title = "Escala de Borg  ·  Esfuerzo percibido (0 – 10)",
-                items = listOf(
+                icon      = Icons.Filled.Speed,
+                color     = OrangePower,
+                title     = "Escala de Borg  ·  Esfuerzo percibido (0 – 10)",
+                keyWeight = 0.22f,
+                items     = listOf(
                     "0 – 3  ·  Esfuerzo muy ligero",
                     "4 – 6  ·  Moderado (zona ideal de entrenamiento)",
                     "7 – 9  ·  Intenso · Vigila la fatiga acumulada",
@@ -609,38 +638,41 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
             )
 
             HelpSection(
-                icon  = Icons.Filled.Healing,
-                color = YellowCaution,
-                title = "Escala EVA  ·  Dolor post-entreno (0 – 10)",
-                items = listOf(
-                    "0       ·  Sin dolor",
-                    "1 – 3   ·  Leve · Normal tras un entreno intenso",
-                    "4 – 6   ·  Moderado · Reduce la carga la próxima sesión",
-                    "7 – 10  ·  Intenso · Consulta con un profesional"
+                icon      = Icons.Filled.Healing,
+                color     = YellowCaution,
+                title     = "Escala EVA  ·  Dolor post-entreno (0 – 10)",
+                keyWeight = 0.22f,
+                items     = listOf(
+                    "0      ·  Sin dolor",
+                    "1 – 3  ·  Leve · Normal tras un entreno intenso",
+                    "4 – 6  ·  Moderado · Reduce la carga la próxima sesión",
+                    "7 – 10 ·  Intenso · Consulta con un profesional"
                 )
             )
 
             HelpSection(
-                icon  = Icons.Filled.Analytics,
-                color = GreenReady,
-                title = "KPIs de Técnica  ·  Puntuación 0 – 10",
-                items = listOf(
-                    "Profundidad   ·  Ángulo de cadera en el punto más bajo",
-                    "Torso         ·  Inclinación del tronco respecto a la vertical",
-                    "Estabilidad   ·  Control del desplazamiento lateral de cadera",
-                    "Rodillas      ·  Alineación con la punta de los pies",
-                    "Ritmo         ·  Control de la fase excéntrica (bajada)"
+                icon      = Icons.Filled.Analytics,
+                color     = GreenReady,
+                title     = "KPIs de Técnica  ·  Puntuación 0 – 10",
+                keyWeight = 0.30f,
+                items     = listOf(
+                    "Profundidad  ·  Ángulo de cadera en el punto más bajo",
+                    "Torso        ·  Inclinación del tronco respecto a la vertical",
+                    "Estabilidad  ·  Control del desplazamiento lateral de cadera",
+                    "Rodillas     ·  Alineación con la punta de los pies",
+                    "Ritmo        ·  Control de la fase excéntrica (bajada)"
                 )
             )
 
             HelpSection(
-                icon  = Icons.Filled.MonitorHeart,
-                color = CyanPrimary,
-                title = "Readiness  ·  Nivel de preparación",
-                items = listOf(
-                    "Alto  (70 – 100)  ·  Óptimo para entrenar fuerte",
-                    "Medio (40 – 69)   ·  Entrena con moderación",
-                    "Bajo  (< 40)      ·  Prioriza el descanso hoy"
+                icon      = Icons.Filled.MonitorHeart,
+                color     = CyanPrimary,
+                title     = "Readiness  ·  Nivel de preparación",
+                keyWeight = 0.35f,
+                items     = listOf(
+                    "Alto (70–100)  ·  Óptimo para entrenar fuerte",
+                    "Medio (40–69)  ·  Entrena con moderación",
+                    "Bajo (< 40)    ·  Prioriza el descanso hoy"
                 )
             )
         }
@@ -649,10 +681,11 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
 
 @Composable
 private fun HelpSection(
-    icon  : ImageVector,
-    color : Color,
-    title : String,
-    items : List<String>
+    icon      : ImageVector,
+    color     : Color,
+    title     : String,
+    items     : List<String>,
+    keyWeight : Float = 0.38f   // proporción de la columna clave; ajustar por sección
 ) {
     Column(modifier = Modifier.padding(bottom = 22.dp)) {
         Row(
@@ -678,24 +711,61 @@ private fun HelpSection(
         }
         Spacer(Modifier.height(10.dp))
         items.forEach { item ->
-            Row(
-                modifier              = Modifier.padding(start = 6.dp, bottom = 5.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment     = Alignment.Top
-            ) {
-                Text(
-                    text     = "·",
-                    color    = color.copy(alpha = 0.6f),
-                    style    = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 1.dp)
-                )
-                Text(
-                    text  = item,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color    = TextSecondary,
-                        lineHeight = 18.sp
+            val dotIdx = item.indexOf('·')
+            if (dotIdx > 0) {
+                // Two-column layout: key · description — all rows align at the same column
+                val key  = item.substring(0, dotIdx).trim()
+                val desc = item.substring(dotIdx + 1).trim()
+                Row(
+                    modifier          = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 6.dp, bottom = 5.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Text(
+                        text     = key,
+                        style    = MaterialTheme.typography.bodySmall.copy(
+                            color      = TextSecondary,
+                            lineHeight = 18.sp
+                        ),
+                        modifier = Modifier.weight(keyWeight)
                     )
-                )
+                    Text(
+                        text     = "·",
+                        color    = color.copy(alpha = 0.6f),
+                        style    = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                    Text(
+                        text     = desc,
+                        style    = MaterialTheme.typography.bodySmall.copy(
+                            color      = TextSecondary,
+                            lineHeight = 18.sp
+                        ),
+                        modifier = Modifier.weight(1f - keyWeight)
+                    )
+                }
+            } else {
+                // Plain bullet item (no key/value separator)
+                Row(
+                    modifier              = Modifier.padding(start = 6.dp, bottom = 5.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment     = Alignment.Top
+                ) {
+                    Text(
+                        text     = "·",
+                        color    = color.copy(alpha = 0.6f),
+                        style    = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 1.dp)
+                    )
+                    Text(
+                        text  = item,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color      = TextSecondary,
+                            lineHeight = 18.sp
+                        )
+                    )
+                }
             }
         }
     }
@@ -746,6 +816,185 @@ private fun ConfirmActionDialog(
             }
         }
     )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notification preferences bottom sheet
+// ─────────────────────────────────────────────────────────────────────────────
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NotificationPrefsBottomSheet(
+    notifGeneral    : Boolean,
+    notif24h        : Boolean,
+    notif48h        : Boolean,
+    onGeneralToggle : (Boolean) -> Unit,
+    on24hToggle     : (Boolean) -> Unit,
+    on48hToggle     : (Boolean) -> Unit,
+    onDismiss       : () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor   = NavyMid,
+        tonalElevation   = 0.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 44.dp)
+        ) {
+            // ── Cabecera ──────────────────────────────────────────────────
+            Row(
+                modifier          = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Notificaciones EVA",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        color      = TextPrimary
+                    )
+                )
+                Icon(
+                    Icons.Filled.NotificationsNone, null,
+                    tint     = CyanPrimary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text  = "Elige cuándo quieres recibir recordatorios de dolor post-entrenamiento",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary
+            )
+            Spacer(Modifier.height(4.dp))
+            HorizontalDivider(color = CyanPrimary.copy(alpha = 0.4f), thickness = 1.dp)
+            Spacer(Modifier.height(16.dp))
+
+            // ── Interruptor maestro ───────────────────────────────────────
+            NotifToggleRow(
+                icon        = Icons.Filled.Notifications,
+                iconColor   = CyanPrimary,
+                title       = "Activar notificaciones",
+                subtitle    = "Recordatorios automáticos tras cada sesión",
+                checked     = notifGeneral,
+                onToggle    = onGeneralToggle,
+                enabled     = true
+            )
+
+            // ── Sub-opciones (solo accesibles si general está ON) ─────────
+            AnimatedVisibility(visible = notifGeneral) {
+                Column {
+                    Spacer(Modifier.height(4.dp))
+                    HorizontalDivider(
+                        color     = NavyLight,
+                        thickness = 0.5.dp,
+                        modifier  = Modifier.padding(start = 48.dp)
+                    )
+
+                    NotifToggleRow(
+                        icon        = Icons.Filled.AccessTime,
+                        iconColor   = OrangePower,
+                        title       = "Recordatorio 24h",
+                        subtitle    = "Un día después del entrenamiento",
+                        checked     = notif24h,
+                        onToggle    = on24hToggle,
+                        enabled     = notifGeneral,
+                        indented    = true
+                    )
+
+                    HorizontalDivider(
+                        color     = NavyLight,
+                        thickness = 0.5.dp,
+                        modifier  = Modifier.padding(start = 48.dp)
+                    )
+
+                    NotifToggleRow(
+                        icon        = Icons.Filled.HourglassBottom,
+                        iconColor   = YellowCaution,
+                        title       = "Recordatorio 48h",
+                        subtitle    = "Dos días después del entrenamiento",
+                        checked     = notif48h,
+                        onToggle    = on48hToggle,
+                        enabled     = notifGeneral,
+                        indented    = true
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NotifToggleRow(
+    icon      : androidx.compose.ui.graphics.vector.ImageVector,
+    iconColor : Color,
+    title     : String,
+    subtitle  : String,
+    checked   : Boolean,
+    onToggle  : (Boolean) -> Unit,
+    enabled   : Boolean,
+    indented  : Boolean = false
+) {
+    Row(
+        modifier          = Modifier
+            .fillMaxWidth()
+            .padding(
+                start   = if (indented) 12.dp else 0.dp,
+                top     = 12.dp,
+                bottom  = 12.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        // Icono
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(iconColor.copy(alpha = if (enabled) 0.12f else 0.06f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector        = icon,
+                contentDescription = null,
+                tint               = iconColor.copy(alpha = if (enabled) 1f else 0.35f),
+                modifier           = Modifier.size(18.dp)
+            )
+        }
+        // Texto
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text  = title,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color      = if (enabled) TextPrimary else TextPrimary.copy(alpha = 0.38f)
+                )
+            )
+            Text(
+                text  = subtitle,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = if (enabled) TextSecondary else TextSecondary.copy(alpha = 0.38f)
+                )
+            )
+        }
+        // Switch
+        Switch(
+            checked         = checked,
+            onCheckedChange = onToggle,
+            enabled         = enabled,
+            colors          = SwitchDefaults.colors(
+                checkedThumbColor   = NavyDeep,
+                checkedTrackColor   = iconColor,
+                uncheckedThumbColor = TextSecondary,
+                uncheckedTrackColor = NavyLight,
+                disabledCheckedTrackColor   = iconColor.copy(alpha = 0.25f),
+                disabledUncheckedTrackColor = NavyLight.copy(alpha = 0.4f)
+            )
+        )
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
