@@ -19,6 +19,7 @@ import com.moveinsight.presentation.checkin.PainCheckInScreen
 import com.moveinsight.presentation.dashboard.DashboardScreen
 import com.moveinsight.presentation.home.HomeScreen
 import com.moveinsight.presentation.results.ResultsScreen
+import com.moveinsight.presentation.skeleton.SkeletonVideoScreen
 import com.moveinsight.presentation.splash.SplashScreen
 
 @Composable
@@ -121,11 +122,30 @@ fun NavGraph() {
                     type = NavType.IntType
                 }
             )
-        ) {
+        ) { backStackEntry ->
+            val sessionId = backStackEntry.arguments?.getInt(Routes.Results.ARG_SESSION_ID) ?: -1
             ResultsScreen(
-                onNavigateHome = {
+                onNavigateHome   = {
                     navController.popBackStack(Routes.Home.route, inclusive = false)
+                },
+                onViewSkeleton   = { id ->
+                    navController.navigate(Routes.Skeleton.route(id))
+                },
+                sessionIdForNav  = sessionId
+            )
+        }
+
+        // ── Skeleton video overlay ────────────────────────────────────────
+        composable(
+            route     = Routes.Skeleton.route,
+            arguments = listOf(
+                navArgument(Routes.Skeleton.ARG_SESSION_ID) {
+                    type = NavType.IntType
                 }
+            )
+        ) {
+            SkeletonVideoScreen(
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 

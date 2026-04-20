@@ -27,6 +27,7 @@ class AnalyticsRepositoryImpl @Inject constructor(
                     createdAt    = dto.createdAt ?: "",
                     weightKg     = dto.weightKg  ?: 0f,
                     borgScore    = dto.borgScore  ?: 0,
+                    userNotes    = dto.userNotes,
                     overallScore = dto.overallScore,
                     repCount     = dto.repCount,
                     results      = dto.results.map { r ->
@@ -71,6 +72,7 @@ class AnalyticsRepositoryImpl @Inject constructor(
                         createdAt    = dto.createdAt ?: "",
                         weightKg     = dto.weightKg  ?: 0f,
                         borgScore    = dto.borgScore  ?: 0,
+                        userNotes    = dto.userNotes,
                         results      = reps,
                         overallScore = if (reps.isNotEmpty()) reps.map { it.overallScore }.average().toFloat() else null,
                         repCount     = if (reps.isNotEmpty()) reps.size else null
@@ -89,13 +91,16 @@ class AnalyticsRepositoryImpl @Inject constructor(
                 val d = result.data
                 Resource.Success(
                     Analytics(
-                        totalSessions     = d.totalSessions,
-                        avgTechniqueScore = d.avgTechniqueScore,
-                        avgVelocity       = d.avgVelocity,
-                        maxWeightKg       = d.maxWeightKg,
-                        readinessScore    = d.readinessScore,
-                        readinessLabel    = d.readinessLabel,
-                        insights          = d.insights.map { Insight(it.type, it.title, it.message) }
+                        totalSessions      = d.totalSessions,
+                        avgTechniqueScore  = d.avgTechniqueScore,
+                        avgVelocity        = d.avgVelocity,
+                        maxWeightKg        = d.maxWeightKg,
+                        bestTechniqueScore = d.bestTechniqueScore,
+                        maxReps            = d.maxReps,
+                        overtrainingRisk   = d.overtrainingRisk,
+                        readinessScore     = d.readinessScore,
+                        readinessLabel     = d.readinessLabel,
+                        insights           = d.insights.map { Insight(it.type, it.title, it.message) }
                     )
                 )
             }

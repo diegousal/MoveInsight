@@ -20,6 +20,11 @@ sealed class Routes(val route: String) {
         fun route(sessionId: Int) = "results/$sessionId"
     }
 
+    data object Skeleton : Routes("skeleton/{sessionId}") {
+        const val ARG_SESSION_ID = "sessionId"
+        fun route(sessionId: Int) = "skeleton/$sessionId"
+    }
+
     /** Deep link: moveinsight://checkin/{sessionId}?hours={hoursAfter} */
     data object CheckIn : Routes("checkin?sessionId={sessionId}&hours={hoursAfter}") {
         const val ARG_SESSION_ID  = "sessionId"

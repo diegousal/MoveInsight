@@ -27,15 +27,88 @@ class NotificationHelper @Inject constructor(
      * Llamar desde Application.onCreate().
      */
     fun createNotificationChannel() {
-        val channel = NotificationChannel(
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Canal check-in dolor
+        val painChannel = NotificationChannel(
             Constants.NOTIFICATION_CHANNEL_ID,
             Constants.NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "Recordatorios para el seguimiento del dolor post-entrenamiento"
         }
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
+        manager.createNotificationChannel(painChannel)
+
+        // Canal resumen semanal / alertas
+        val summaryChannel = NotificationChannel(
+            Constants.NOTIFICATION_CHANNEL_SUMMARY_ID,
+            Constants.NOTIFICATION_CHANNEL_SUMMARY_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = "Resumen semanal de entrenamiento y alertas de sobreentrenamiento"
+        }
+        manager.createNotificationChannel(summaryChannel)
+    }
+
+    /** Muestra el resumen semanal con estadísticas clave. */
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    fun showWeeklySummaryNotification(
+        totalSessions  : Int,
+        avgTechnique   : Float?,
+        readiness      : Int
+    ) {
+        val intent = Intent(context, MainActivity::class.java)
+            .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP }
+        val pendingIntent = PendingIntent.getActivity(
+            context, Constants.WEEKLY_SUMMARY_NOTIFICATION_ID, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val avgStr = avgTechnique?.let { "%.1f/10".format(it) } ?: "—"
+        val body   = "Esta semana: $totalSessions sesiones · Técnica media $avgStr · Readiness $readiness%"
+
+        val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_SUMMARY_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("🏋️ Resumen semanal MoveInsight")
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context)
+                .notify(Constants.WEEKLY_SUMMARY_NOTIFICATION_ID, notification)
+        } catch (_: SecurityException) { }
+    }
+
+    /** Alerta inmediata de riesgo de sobreentrenamiento. */
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    fun showOvertrainingAlert(avgBorg: Float, readiness: Int) {
+        val intent = Intent(context, MainActivity::class.java)
+            .apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP }
+        val pendingIntent = PendingIntent.getActivity(
+            context, Constants.OVERTRAINING_NOTIFICATION_ID, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val body = "Borg medio %.1f con readiness %d%%. Toma al menos 48h de descanso.".format(avgBorg, readiness)
+
+        val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_SUMMARY_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("⚠️ Riesgo de sobreentrenamiento")
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context)
+                .notify(Constants.OVERTRAINING_NOTIFICATION_ID, notification)
+        } catch (_: SecurityException) { }
     }
 
     /**

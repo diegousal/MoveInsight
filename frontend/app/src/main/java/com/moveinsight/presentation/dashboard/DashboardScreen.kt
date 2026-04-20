@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -289,20 +290,36 @@ private fun InsightsTab(uiState: DashboardUiState) {
         return
     }
 
-    // ── Estadísticas globales ──────────────────────────────────────────
     LazyColumn(
         contentPadding      = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier            = Modifier.fillMaxSize()
     ) {
         uiState.analytics?.let { analytics ->
+            // ── Estadísticas globales ────────────────────────────────
             item {
                 GlobalStatsRow(analytics)
-                Spacer(Modifier.height(8.dp))
+            }
+
+            // ── Récords personales ───────────────────────────────────
+            if (analytics.bestTechniqueScore != null || analytics.maxReps != null || analytics.maxWeightKg != null) {
+                item {
+                    Spacer(Modifier.height(4.dp))
+                    PersonalRecordsCard(analytics)
+                }
+            }
+
+            // ── Alerta sobreentrenamiento ────────────────────────────
+            if (analytics.overtrainingRisk) {
+                item { OvertrainingBanner() }
+            }
+
+            item {
+                Spacer(Modifier.height(4.dp))
                 Text(
                     "Recomendaciones",
                     style    = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
             }
         }
@@ -344,6 +361,141 @@ private fun StatChip(label: String, value: String) {
                 )
             )
             Text(label, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+// ── Récords personales ────────────────────────────────────────────────────
+
+@Composable
+private fun PersonalRecordsCard(analytics: com.moveinsight.domain.model.Analytics) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors   = CardDefaults.cardColors(containerColor = NavyLight.copy(alpha = 0.7f)),
+        shape    = RoundedCornerShape(16.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment     = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector        = Icons.Filled.EmojiEvents,
+                    contentDescription = null,
+                    tint               = YellowCaution,
+                    modifier           = Modifier.size(22.dp)
+                )
+                Text(
+                    text  = "Récords personales",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color      = TextPrimary
+                    )
+                )
+            }
+            Spacer(Modifier.height(14.dp))
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                analytics.bestTechniqueScore?.let { best ->
+                    PrChip(
+                        icon  = Icons.Filled.Star,
+                        label = "Mejor técnica",
+                        value = "%.1f/10".format(best),
+                        color = GreenReady
+                    )
+                }
+                analytics.maxWeightKg?.let { maxW ->
+                    PrChip(
+                        icon  = Icons.Filled.FitnessCenter,
+                        label = "Máx. carga",
+                        value = "${maxW.toInt()} kg",
+                        color = CyanPrimary
+                    )
+                }
+                analytics.maxReps?.let { maxR ->
+                    PrChip(
+                        icon  = Icons.Filled.Repeat,
+                        label = "Máx. reps",
+                        value = "$maxR",
+                        color = OrangePower
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PrChip(
+    icon  : androidx.compose.ui.graphics.vector.ImageVector,
+    label : String,
+    value : String,
+    color : androidx.compose.ui.graphics.Color
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier         = Modifier
+                .size(44.dp)
+                .clip(CircleShape)
+                .background(color.copy(alpha = 0.15f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, null, tint = color, modifier = Modifier.size(20.dp))
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text  = value,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Black,
+                color      = color
+            )
+        )
+        Text(
+            text      = label,
+            style     = MaterialTheme.typography.bodySmall,
+            color     = TextSecondary,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+    }
+}
+
+// ── Alerta sobreentrenamiento ─────────────────────────────────────────────
+
+@Composable
+private fun OvertrainingBanner() {
+    Surface(
+        color  = RedAlert.copy(alpha = 0.12f),
+        shape  = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier              = Modifier.padding(14.dp),
+            verticalAlignment     = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector        = Icons.Filled.Warning,
+                contentDescription = null,
+                tint               = RedAlert,
+                modifier           = Modifier.size(24.dp)
+            )
+            Column {
+                Text(
+                    text  = "Riesgo de sobreentrenamiento",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color      = RedAlert
+                    )
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text  = "Tu fatiga acumulada es elevada. Toma al menos 48h de descanso antes de tu próximo entreno.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextSecondary
+                )
+            }
         }
     }
 }

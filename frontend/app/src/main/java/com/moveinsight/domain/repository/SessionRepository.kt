@@ -10,7 +10,8 @@ interface SessionRepository {
     suspend fun uploadSession(
         videoFile : File,
         weightKg  : Float,
-        borgScore : Int
+        borgScore : Int,
+        userNotes : String = ""
     ): Resource<Session>
     suspend fun getSessions(): Resource<List<SessionDetail>>
     suspend fun getSessionDetail(sessionId: Int): Resource<SessionDetail>

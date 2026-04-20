@@ -32,6 +32,26 @@ def get_analytics_summary(
         Session.user_id == current_user.id
     ).scalar()
 
+    # Best technique score: best average session score
+    session_avgs = db.query(
+        sql_func.avg(SessionResult.overall_score).label("avg_score")
+    ).join(Session).filter(
+        Session.user_id == current_user.id
+    ).group_by(SessionResult.session_id).all()
+    best_technique = max(
+        (row.avg_score for row in session_avgs if row.avg_score is not None),
+        default=None
+    )
+
+    # Max reps in a single session
+    rep_counts = db.query(
+        SessionResult.session_id,
+        sql_func.count(SessionResult.id).label("cnt")
+    ).join(Session).filter(
+        Session.user_id == current_user.id
+    ).group_by(SessionResult.session_id).all()
+    max_reps = max((row.cnt for row in rep_counts), default=None)
+
     # Readiness: based on recent borg scores (simple heuristic)
     recent_sessions = db.query(Session).filter(
         Session.user_id == current_user.id,
@@ -53,6 +73,9 @@ def get_analytics_summary(
         label = "medium"
     else:
         label = "low"
+
+    # Overtraining risk: high borg + low readiness
+    overtraining_risk = avg_borg > 7 and readiness < 40
 
     # Generate insights
     insights: list[InsightResponse] = []
@@ -126,11 +149,30 @@ def get_analytics_summary(
                 message=f"Tu carga maxima registrada es {max_weight:.0f} kg."
             ))
 
+        # Overtraining alert
+        if overtraining_risk:
+            insights.append(InsightResponse(
+                type="warning",
+                title="Riesgo de sobreentrenamiento",
+                message=f"Borg medio {avg_borg:.1f} con readiness {readiness}%. Toma al menos 48h de descanso."
+            ))
+
+        # Personal records
+        if best_technique is not None and best_technique > 0:
+            insights.append(InsightResponse(
+                type="achievement",
+                title="Record de tecnica",
+                message=f"Tu mejor sesion alcanzó {float(best_technique):.1f}/10 de media. ¡Supéralo!"
+            ))
+
     return AnalyticsSummary(
         total_sessions=total,
         avg_technique_score=round(float(avg_technique), 1) if avg_technique else None,
         avg_velocity=None,
         max_weight_kg=round(float(max_weight), 1) if max_weight else None,
+        best_technique_score=round(float(best_technique), 1) if best_technique else None,
+        max_reps=int(max_reps) if max_reps else None,
+        overtraining_risk=overtraining_risk,
         readiness_score=readiness,
         readiness_label=label,
         insights=insights,

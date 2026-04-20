@@ -5,6 +5,7 @@ import java.io.File
 data class CaptureFormState(
     val weightKg                 : String  = "",
     val borgScore                : Int     = 5,
+    val sessionNotes             : String  = "",
     val recordingDurationSeconds : Int     = 0,
     val isWeightError            : Boolean = false,
     val isBodyweight             : Boolean = false

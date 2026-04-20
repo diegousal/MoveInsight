@@ -1,7 +1,9 @@
+import os
 import shutil
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException, BackgroundTasks
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session as DBSession
 from sqlalchemy import func as sql_func
 
@@ -21,6 +23,7 @@ def upload_session(
     video: UploadFile = File(...),
     weight_kg: float = Form(...),
     borg_score: int = Form(...),
+    user_notes: str = Form(default=""),
     current_user: User = Depends(get_current_user),
     db: DBSession = Depends(get_db),
 ):
@@ -43,6 +46,7 @@ def upload_session(
         video_path=str(video_path),
         weight_kg=weight_kg,
         borg_score=borg_score,
+        user_notes=user_notes,
     )
     db.add(session)
     db.commit()
@@ -108,6 +112,7 @@ def get_session(
         message=session.message,
         weight_kg=session.weight_kg,
         borg_score=session.borg_score,
+        user_notes=session.user_notes or "",
         created_at=str(session.created_at) if session.created_at else None,
         results=[RepResult(
             rep_number=r.rep_number,
@@ -126,6 +131,36 @@ def get_session(
             notes=c.notes or "",
             created_at=c.created_at,
         ) for c in checkins],
+    )
+
+
+@router.get("/{session_id}/skeleton-video")
+def get_skeleton_video(
+    session_id   : int,
+    current_user : User     = Depends(get_current_user),
+    db           : DBSession = Depends(get_db),
+):
+    """
+    Devuelve el vídeo con el esqueleto de MediaPipe superpuesto.
+    Retorna 404 si aún no se ha generado o si la sesión no pertenece al usuario.
+    """
+    session = db.query(Session).filter(
+        Session.id      == session_id,
+        Session.user_id == current_user.id
+    ).first()
+
+    if not session:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+
+    skel_path = session.skeleton_video_path
+    if not skel_path or not os.path.exists(skel_path):
+        raise HTTPException(status_code=404, detail="Vídeo de esqueleto no disponible aún")
+
+    return FileResponse(
+        path         = skel_path,
+        media_type   = "video/mp4",
+        filename     = f"skeleton_{session_id}.mp4",
+        headers      = {"Accept-Ranges": "bytes"}
     )
 
 
@@ -158,6 +193,7 @@ def list_sessions(
             message=s.message,
             weight_kg=s.weight_kg,
             borg_score=s.borg_score,
+            user_notes=s.user_notes or "",
             created_at=str(s.created_at) if s.created_at else None,
             overall_score=round(float(avg_score), 2) if avg_score else None,
             rep_count=rep_count if rep_count > 0 else None,

@@ -4,8 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,10 +49,11 @@ private fun borgColor(score: Int): Color = when (score) {
 @Composable
 fun BorgScaleDialog(
     initialScore : Int = 5,
-    onConfirm    : (borgScore: Int) -> Unit,
+    onConfirm    : (borgScore: Int, notes: String) -> Unit,
     onDismiss    : () -> Unit
 ) {
     var currentScore by remember { mutableIntStateOf(initialScore) }
+    var notes        by remember { mutableStateOf("") }
 
     val scoreColor by animateColorAsState(
         targetValue   = borgColor(currentScore),
@@ -68,7 +73,10 @@ fun BorgScaleDialog(
                 .background(NavyMid)
                 .padding(28.dp)
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier            = Modifier.verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 // ── Encabezado ────────────────────────────────────────────
                 Text(
@@ -143,7 +151,39 @@ fun BorgScaleDialog(
                     Text("Máximo", style = MaterialTheme.typography.bodyMedium)
                 }
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(24.dp))
+
+                // ── Etiqueta de sesión (opcional) ─────────────────────────
+                OutlinedTextField(
+                    value         = notes,
+                    onValueChange = { if (it.length <= 120) notes = it },
+                    label         = { Text("Etiqueta / notas (opcional)") },
+                    placeholder   = { Text("Ej: Día de pierna, PR intento…") },
+                    leadingIcon   = { Icon(Icons.Filled.Notes, null, tint = CyanPrimary.copy(alpha = 0.7f)) },
+                    singleLine    = false,
+                    maxLines      = 3,
+                    modifier      = Modifier.fillMaxWidth(),
+                    colors        = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor   = CyanPrimary,
+                        unfocusedBorderColor = DividerColor,
+                        focusedLabelColor    = CyanPrimary,
+                        unfocusedLabelColor  = TextSecondary,
+                        focusedTextColor     = TextPrimary,
+                        unfocusedTextColor   = TextPrimary,
+                        cursorColor          = CyanPrimary
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                if (notes.length >= 100) {
+                    Text(
+                        text  = "${notes.length}/120",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
+                        modifier = Modifier.align(Alignment.End).padding(top = 2.dp)
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
 
                 // ── Botones ───────────────────────────────────────────────
                 Row(
@@ -158,7 +198,7 @@ fun BorgScaleDialog(
                         Text("Descartar", color = TextSecondary)
                     }
                     Button(
-                        onClick  = { onConfirm(currentScore) },
+                        onClick  = { onConfirm(currentScore, notes.trim()) },
                         modifier = Modifier.weight(1f).height(50.dp),
                         colors   = ButtonDefaults.buttonColors(
                             containerColor = CyanPrimary,

@@ -2,6 +2,8 @@ package com.moveinsight.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moveinsight.core.notifications.NotificationHelper
+import com.moveinsight.core.notifications.ScheduleWeeklySummaryUseCase
 import com.moveinsight.core.security.UserPreferencesDataStore
 import com.moveinsight.core.utils.Resource
 import com.moveinsight.core.utils.safeApiCall
@@ -44,10 +46,12 @@ sealed class HomeUiEvent {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val logoutUseCase       : LogoutUseCase,
-    private val getAnalyticsUseCase : GetAnalyticsUseCase,
-    private val sessionApiService   : SessionApiService,
-    private val dataStore           : UserPreferencesDataStore
+    private val logoutUseCase              : LogoutUseCase,
+    private val getAnalyticsUseCase        : GetAnalyticsUseCase,
+    private val sessionApiService          : SessionApiService,
+    private val dataStore                  : UserPreferencesDataStore,
+    private val scheduleWeeklySummaryUseCase : ScheduleWeeklySummaryUseCase,
+    private val notificationHelper         : NotificationHelper
 ) : ViewModel() {
 
     private val _data   = MutableStateFlow(HomeUiData())
@@ -60,6 +64,7 @@ class HomeViewModel @Inject constructor(
         loadUserInfo()
         loadReadiness()
         loadNotifPrefs()
+        scheduleWeeklySummaryUseCase()   // programa el resumen semanal (KEEP si ya existe)
     }
 
     private fun loadUserInfo() {
@@ -128,12 +133,22 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _data.update { it.copy(isLoading = true) }
             when (val result = getAnalyticsUseCase()) {
-                is Resource.Success -> _data.update {
-                    it.copy(
-                        analytics      = result.data,
-                        readinessLevel = result.data.readinessLevel(),
-                        isLoading      = false
-                    )
+                is Resource.Success -> {
+                    val analytics = result.data
+                    _data.update {
+                        it.copy(
+                            analytics      = analytics,
+                            readinessLevel = analytics.readinessLevel(),
+                            isLoading      = false
+                        )
+                    }
+                    // Alerta de sobreentrenamiento (solo si no se ha mostrado ya hoy)
+                    if (analytics.overtrainingRisk) {
+                        val avgBorg = if (analytics.readinessScore < 40)
+                            ((100 - analytics.readinessScore) / 8f)
+                        else 8f
+                        notificationHelper.showOvertrainingAlert(avgBorg, analytics.readinessScore)
+                    }
                 }
                 else -> _data.update { it.copy(isLoading = false) }
             }
@@ -142,6 +157,7 @@ class HomeViewModel @Inject constructor(
 
     fun onLogoutClick() {
         viewModelScope.launch {
+            scheduleWeeklySummaryUseCase.cancel()
             logoutUseCase()
             _events.send(HomeUiEvent.NavigateToLogin)
         }

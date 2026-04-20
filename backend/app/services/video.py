@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 import tensorflow as tf
 
 from app.config import settings
@@ -8,6 +9,7 @@ from app.models import Session, SessionResult
 from processing.pose_processor import PoseProcessor
 from processing.pose_features import process_historial
 from processing.rep_report import save_visual_report
+from processing.visualization import generate_skeleton_video
 
 
 def process_video(session_id: int, video_path: str):
@@ -97,7 +99,26 @@ def process_video(session_id: int, video_path: str):
                 report_image_path=result["report_path"],
             ))
 
-        session.status = "completed"
+        # 7. Generar vídeo con esqueleto superpuesto
+        skeleton_path = None
+        try:
+            skel_dir = str(settings.REPORT_DIR / str(session.user_id))
+            os.makedirs(skel_dir, exist_ok=True)
+            base_name     = os.path.splitext(os.path.basename(video_path))[0]
+            skel_out_path = os.path.join(skel_dir, f"{base_name}_skeleton.mp4")
+
+            # Segundo PoseProcessor para el pass de dibujado (no afecta al historial)
+            skel_processor = PoseProcessor(fps=fps, model_path=mediapipe_model)
+            ok = generate_skeleton_video(video_path, skel_out_path, skel_processor)
+            skel_processor.close()
+            if ok:
+                skeleton_path = skel_out_path
+        except Exception as e_skel:
+            # No fallamos la sesión entera si el vídeo de esqueleto falla
+            print(f"[skeleton] Error generando vídeo de esqueleto: {e_skel}")
+
+        session.skeleton_video_path = skeleton_path
+        session.status  = "completed"
         session.message = f"Análisis completado: {len(result['reps'])} repeticiones detectadas"
         db.commit()
 

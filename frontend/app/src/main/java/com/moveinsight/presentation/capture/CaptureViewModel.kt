@@ -125,14 +125,19 @@ class CaptureViewModel @Inject constructor(
     private fun stopTimer() { timerJob?.cancel(); timerJob = null }
 
     override fun onCleared() { super.onCleared(); stopTimer() }
-    fun onBorgConfirmed() {
-        val stopped  = _uiState.value as? CaptureUiState.RecordingStopped ?: return
-        val form     = _form.value
-        val weightKg = if (form.isBodyweight) 0f else (form.weightKg.toFloatOrNull() ?: return)
+    fun onSessionNotesChange(notes: String) {
+        _form.update { it.copy(sessionNotes = notes) }
+    }
+
+    fun onBorgConfirmed(notes: String = "") {
+        val stopped    = _uiState.value as? CaptureUiState.RecordingStopped ?: return
+        val form       = _form.value
+        val weightKg   = if (form.isBodyweight) 0f else (form.weightKg.toFloatOrNull() ?: return)
+        val finalNotes = notes.ifBlank { form.sessionNotes }
 
         viewModelScope.launch {
             _uiState.value = CaptureUiState.Uploading
-            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, form.borgScore)) {
+            when (val result = uploadSessionUseCase(stopped.videoFile, weightKg, form.borgScore, finalNotes)) {
                 is Resource.Success -> {
                     stopped.videoFile.delete()
                     schedulePainNotificationsUseCase(result.data.id, result.data.createdAt)

@@ -32,7 +32,9 @@ class Session(Base):
     video_path = Column(String(500), nullable=False)
     weight_kg = Column(Float)
     borg_score = Column(Integer)
-    created_at = Column(TIMESTAMP, server_default=func.now())
+    user_notes          = Column(Text, default="")
+    skeleton_video_path = Column(String(500), nullable=True)
+    created_at          = Column(TIMESTAMP, server_default=func.now())
 
     user = relationship("User", back_populates="sessions")
     results = relationship("SessionResult", back_populates="session")

@@ -6,6 +6,7 @@ data class SessionDetail(
     val message        : String = "",
     val weightKg       : Float = 0f,
     val borgScore      : Int = 0,
+    val userNotes      : String = "",
     val createdAt      : String = "",
     val results        : List<RepResult> = emptyList(),
     val overallScore   : Float? = null,

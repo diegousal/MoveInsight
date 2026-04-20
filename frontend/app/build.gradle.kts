@@ -1,4 +1,13 @@
 // build.gradle.kts (App)
+import java.util.Properties
+
+// Lee local.properties para obtener la URL del servidor de desarrollo
+val localProps = Properties().also { props ->
+    val file = rootProject.file("local.properties")
+    if (file.exists()) props.load(file.inputStream())
+}
+val localBaseUrl: String = localProps.getProperty("BASE_URL", "http://10.0.2.2:8000/")
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -23,8 +32,8 @@ android {
 
     buildTypes {
         debug {
-            // ── Apunta al localhost del emulador ──────────────────────────
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.20:8000/\"")
+            // ── IP leída de local.properties (sin rastro en git) ──────────
+            buildConfigField("String", "BASE_URL", "\"$localBaseUrl\"")
             isDebuggable = true
         }
         release {

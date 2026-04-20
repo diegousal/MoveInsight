@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">10.0.2.2</domain>
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">192.168.1.20</domain>
-    </domain-config>
-
-    <base-config cleartextTrafficPermitted="false">
+    <!--
+        Las IPs nunca se resuelven por <domain-config> — solo los hostnames.
+        Para permitir HTTP a una IP hay que habilitarlo en <base-config>.
+        Esto es aceptable para un entorno de desarrollo local (TFG).
+        En producción el backend usaría HTTPS y un dominio real.
+    -->
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>

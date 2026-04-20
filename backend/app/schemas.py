@@ -28,6 +28,7 @@ class SessionResponse(BaseModel):
     id: int
     status: str
     message: str = ""
+    user_notes: str = ""
 
     class Config:
         from_attributes = True
@@ -64,6 +65,7 @@ class SessionDetail(BaseModel):
     message: str = ""
     weight_kg: float | None = None
     borg_score: int | None = None
+    user_notes: str = ""
     created_at: datetime | None = None
     results: list[RepResult] = []
     checkins: list[CheckInSummary] = []
@@ -77,6 +79,7 @@ class SessionListResponse(BaseModel):
     message: str = ""
     weight_kg: float | None = None
     borg_score: int | None = None
+    user_notes: str = ""
     created_at: datetime | None = None
     overall_score: float | None = None
     rep_count: int | None = None
@@ -98,6 +101,9 @@ class AnalyticsSummary(BaseModel):
     avg_technique_score: float | None = None
     avg_velocity: float | None = None
     max_weight_kg: float | None = None
+    best_technique_score: float | None = None
+    max_reps: int | None = None
+    overtraining_risk: bool = False
     readiness_score: int = 50
     readiness_label: str = "medium"
     insights: list[InsightResponse] = []

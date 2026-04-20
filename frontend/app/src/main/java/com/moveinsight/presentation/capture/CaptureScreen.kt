@@ -72,9 +72,9 @@ fun CaptureScreen(
     if (uiState is CaptureUiState.RecordingStopped) {
         BorgScaleDialog(
             initialScore = form.borgScore,
-            onConfirm    = { score ->
+            onConfirm    = { score, notes ->
                 viewModel.onBorgScoreChange(score)
-                viewModel.onBorgConfirmed()
+                viewModel.onBorgConfirmed(notes)
             },
             onDismiss    = viewModel::onBorgDismissed
         )

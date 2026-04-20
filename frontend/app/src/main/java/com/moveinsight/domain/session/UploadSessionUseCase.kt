@@ -12,7 +12,8 @@ class UploadSessionUseCase @Inject constructor(
     suspend operator fun invoke(
         videoFile : File,
         weightKg  : Float,
-        borgScore : Int
+        borgScore : Int,
+        userNotes : String = ""
     ): Resource<Session> {
         // Validaciones de dominio previas al upload
         if (!videoFile.exists() || videoFile.length() == 0L)
@@ -22,6 +23,6 @@ class UploadSessionUseCase @Inject constructor(
         if (borgScore !in 0..10)
             return Resource.Error("La puntuación Borg debe estar entre 0 y 10.")
 
-        return repository.uploadSession(videoFile, weightKg, borgScore)
+        return repository.uploadSession(videoFile, weightKg, borgScore, userNotes)
     }
 }

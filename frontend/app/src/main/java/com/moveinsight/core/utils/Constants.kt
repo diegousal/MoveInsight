@@ -35,10 +35,19 @@ object Constants {
     const val WORKER_SESSION_ID_KEY         = "session_id"
     const val WORKER_HOURS_KEY              = "hours_after"
     const val WORKER_SESSION_CREATED_AT_KEY = "session_created_at"
-    const val NOTIFICATION_CHANNEL_ID  = "pain_checkin_channel"
-    const val NOTIFICATION_CHANNEL_NAME = "Check-in de Dolor"
-    const val PAIN_NOTIFICATION_ID_24H  = 1001
-    const val PAIN_NOTIFICATION_ID_48H  = 1002
+    const val NOTIFICATION_CHANNEL_ID       = "pain_checkin_channel"
+    const val NOTIFICATION_CHANNEL_NAME     = "Check-in de Dolor"
+    const val PAIN_NOTIFICATION_ID_24H      = 1001
+    const val PAIN_NOTIFICATION_ID_48H      = 1002
+
+    // ── Canal / IDs para resumen semanal y alertas ────────────────────────
+    const val NOTIFICATION_CHANNEL_SUMMARY_ID   = "weekly_summary_channel"
+    const val NOTIFICATION_CHANNEL_SUMMARY_NAME = "Resumen Semanal"
+    const val WEEKLY_SUMMARY_NOTIFICATION_ID    = 2001
+    const val OVERTRAINING_NOTIFICATION_ID      = 2002
+
+    // ── WorkManager unique names ──────────────────────────────────────────
+    const val WORK_WEEKLY_SUMMARY = "weekly_summary_work"
 
     // ── Deep link ─────────────────────────────────────────────────────────
     const val DEEP_LINK_SCHEME      = "moveinsight"

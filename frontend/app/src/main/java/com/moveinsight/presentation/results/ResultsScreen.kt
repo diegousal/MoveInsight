@@ -10,6 +10,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
+import androidx.compose.material.icons.automirrored.filled.TrendingFlat
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,8 +36,10 @@ import com.moveinsight.presentation.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultsScreen(
-    onNavigateHome : () -> Unit,
-    viewModel      : ResultsViewModel = hiltViewModel()
+    onNavigateHome  : () -> Unit,
+    onViewSkeleton  : (Int) -> Unit = {},
+    sessionIdForNav : Int = -1,
+    viewModel       : ResultsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -51,8 +56,9 @@ fun ResultsScreen(
         }
         is ResultsUiState.Success -> {
             ResultsContent(
-                data   = state.data,
-                onBack = onNavigateHome
+                data          = state.data,
+                onBack        = onNavigateHome,
+                onViewSkeleton = { onViewSkeleton(state.data.sessionId) }
             )
         }
     }
@@ -65,8 +71,9 @@ fun ResultsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ResultsContent(
-    data   : ResultsData,
-    onBack : () -> Unit
+    data           : ResultsData,
+    onBack         : () -> Unit,
+    onViewSkeleton : () -> Unit = {}
 ) {
     Scaffold(
         containerColor = NavyDeep,
@@ -112,6 +119,21 @@ private fun ResultsContent(
                 GlobalKpisGrid(data)
             }
 
+            // ── Etiqueta de sesión ───────────────────────────────────────
+            if (data.userNotes.isNotBlank()) {
+                item { SessionNotesCard(data.userNotes) }
+            }
+
+            // ── Comparativa con sesión anterior ──────────────────────────
+            data.comparison?.let { cmp ->
+                item { ComparisonCard(cmp) }
+            }
+
+            // ── Fatiga intra-sesión ──────────────────────────────────────
+            data.fatigue?.let { fat ->
+                item { FatigueCard(fat) }
+            }
+
             // ── Seguimiento del dolor EVA ────────────────────────────────
             item {
                 Spacer(Modifier.height(4.dp))
@@ -132,9 +154,30 @@ private fun ResultsContent(
                 RepCard(rep = rep, index = index)
             }
 
-            // ── Espacio final ────────────────────────────────────────────
+            // ── Acciones finales ─────────────────────────────────────────
             item {
                 Spacer(Modifier.height(8.dp))
+                // Botón ver esqueleto
+                OutlinedButton(
+                    onClick  = onViewSkeleton,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    border   = androidx.compose.foundation.BorderStroke(1.dp, CyanPrimary.copy(alpha = 0.6f)),
+                    shape    = RoundedCornerShape(14.dp)
+                ) {
+                    Icon(
+                        imageVector        = Icons.Filled.Accessibility,
+                        contentDescription = null,
+                        tint               = CyanPrimary,
+                        modifier           = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        "Ver overlay de esqueleto",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = CyanPrimary
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
                 Button(
                     onClick  = onBack,
                     modifier = Modifier.fillMaxWidth().height(52.dp),
@@ -639,6 +682,227 @@ private fun evaLabel(score: Int): String = when {
     score <= 6  -> "Moderado"
     score <= 8  -> "Intenso"
     else        -> "Severo"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Etiqueta de sesión
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun SessionNotesCard(notes: String) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors   = CardDefaults.cardColors(containerColor = NavyMid),
+        shape    = RoundedCornerShape(16.dp)
+    ) {
+        Row(
+            modifier          = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector        = Icons.Filled.Notes,
+                contentDescription = null,
+                tint               = CyanPrimary.copy(alpha = 0.8f),
+                modifier           = Modifier.size(20.dp)
+            )
+            Column {
+                Text(
+                    text  = "Etiqueta de sesión",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextSecondary
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text  = notes,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                    color = TextPrimary
+                )
+            }
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Comparativa con sesión anterior
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun ComparisonCard(cmp: SessionComparison) {
+    val overallColor = when {
+        cmp.overallDelta >  0.3f -> GreenReady
+        cmp.overallDelta < -0.3f -> RedAlert
+        else                     -> YellowCaution
+    }
+    val overallIcon = when {
+        cmp.overallDelta >  0.3f -> Icons.AutoMirrored.Filled.TrendingUp
+        cmp.overallDelta < -0.3f -> Icons.AutoMirrored.Filled.TrendingDown
+        else                     -> Icons.AutoMirrored.Filled.TrendingFlat
+    }
+    val weightColor = when {
+        cmp.weightDelta >  0f -> CyanPrimary
+        cmp.weightDelta <  0f -> OrangePower
+        else                  -> TextSecondary
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors   = CardDefaults.cardColors(containerColor = NavyMid),
+        shape    = RoundedCornerShape(16.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier          = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector        = Icons.Filled.CompareArrows,
+                    contentDescription = null,
+                    tint               = CyanPrimary,
+                    modifier           = Modifier.size(18.dp)
+                )
+                Text(
+                    text  = "vs sesión anterior (${cmp.prevCreatedAt})",
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = TextPrimary
+                )
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                // Técnica delta
+                DeltaChip(
+                    label  = "Técnica",
+                    value  = "%+.1f".format(cmp.overallDelta),
+                    color  = overallColor,
+                    icon   = overallIcon
+                )
+                // Carga delta
+                DeltaChip(
+                    label = "Carga",
+                    value = "%+.0f kg".format(cmp.weightDelta),
+                    color = weightColor,
+                    icon  = if (cmp.weightDelta >= 0f)
+                                Icons.AutoMirrored.Filled.TrendingUp
+                            else
+                                Icons.AutoMirrored.Filled.TrendingDown
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeltaChip(
+    label : String,
+    value : String,
+    color : Color,
+    icon  : ImageVector
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            verticalAlignment     = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Icon(icon, null, tint = color, modifier = Modifier.size(18.dp))
+            Text(
+                text  = value,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = color
+            )
+        }
+        Text(label, style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Fatiga intra-sesión
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun FatigueCard(fat: RepFatigueData) {
+    val labelColor = when (fat.label) {
+        "Fatiga detectada"     -> OrangePower
+        "Mejora intra-sesión"  -> GreenReady
+        else                   -> CyanPrimary
+    }
+    val labelIcon = when (fat.label) {
+        "Fatiga detectada"     -> Icons.AutoMirrored.Filled.TrendingDown
+        "Mejora intra-sesión"  -> Icons.AutoMirrored.Filled.TrendingUp
+        else                   -> Icons.AutoMirrored.Filled.TrendingFlat
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors   = CardDefaults.cardColors(containerColor = NavyMid),
+        shape    = RoundedCornerShape(16.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier          = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector        = Icons.Filled.ShowChart,
+                    contentDescription = null,
+                    tint               = CyanPrimary,
+                    modifier           = Modifier.size(18.dp)
+                )
+                Text(
+                    text  = "Fatiga intra-sesión",
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = TextPrimary
+                )
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment     = Alignment.CenterVertically
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text  = "%.1f".format(fat.firstHalfAvg),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = scoreToColor(fat.firstHalfAvg)
+                    )
+                    Text("1ª mitad", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                }
+                Icon(
+                    imageVector        = labelIcon,
+                    contentDescription = null,
+                    tint               = labelColor,
+                    modifier           = Modifier.size(28.dp)
+                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text  = "%.1f".format(fat.secondHalfAvg),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = scoreToColor(fat.secondHalfAvg)
+                    )
+                    Text("2ª mitad", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            Surface(
+                color  = labelColor.copy(alpha = 0.12f),
+                shape  = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text      = fat.label,
+                    style     = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color     = labelColor,
+                    textAlign = TextAlign.Center,
+                    modifier  = Modifier.padding(vertical = 8.dp)
+                )
+            }
+        }
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

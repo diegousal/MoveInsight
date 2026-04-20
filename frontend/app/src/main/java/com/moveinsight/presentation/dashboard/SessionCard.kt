@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,6 +78,33 @@ fun SessionCard(
                         value = session.repCount?.toString() ?: "-",
                         icon  = null,
                         color = CyanPrimary
+                    )
+                }
+            }
+
+            // ── Etiqueta de sesión ────────────────────────────────────────
+            if (session.userNotes.isNotBlank()) {
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    modifier          = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(CyanPrimary.copy(alpha = 0.07f))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Notes, null,
+                        tint     = CyanPrimary.copy(alpha = 0.7f),
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Text(
+                        text     = session.userNotes,
+                        style    = MaterialTheme.typography.bodySmall,
+                        color    = TextSecondary,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

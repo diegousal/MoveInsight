@@ -107,3 +107,88 @@ def mostrar_frame(frame, results):
     cv2.moveWindow("Debug - Pose", pos_x, pos_y)
     cv2.imshow("Debug - Pose", display)
     cv2.waitKey(1)
+
+
+def draw_skeleton_on_frame(frame, results):
+    """
+    Dibuja el esqueleto de pose sobre el frame BGR (sin mostrar por pantalla).
+    Devuelve el frame con el esqueleto pintado, listo para escribir en vídeo.
+
+    Args:
+        frame:   Frame BGR original de OpenCV.
+        results: Objeto de resultados devuelto por PoseProcessor.process_frame().
+    Returns:
+        frame modificado (BGR) con esqueleto dibujado.
+    """
+    out = frame.copy()
+    h, w = out.shape[:2]
+
+    if results.pose_landmarks:
+        for pose_landmarks in results.pose_landmarks:
+            puntos = []
+            for lm in pose_landmarks:
+                px = int(lm.x * w)
+                py = int(lm.y * h)
+                puntos.append((px, py))
+
+            grosor_linea = max(2, int(w / 320))
+            radio_punto  = max(3, int(w / 220))
+
+            # Conexiones coloreadas por zona
+            for (a, b) in POSE_CONNECTIONS:
+                if a < len(puntos) and b < len(puntos):
+                    zona  = _CONEXION_ZONA.get((a, b), "torso")
+                    color = _COLORES_CONEXION[zona]
+                    cv2.line(out, puntos[a], puntos[b], color, grosor_linea, cv2.LINE_AA)
+
+            # Landmarks
+            for (px, py) in puntos:
+                cv2.circle(out, (px, py), radio_punto + 1, (0, 0, 0),       -1, cv2.LINE_AA)
+                cv2.circle(out, (px, py), radio_punto,     (255, 255, 255),  -1, cv2.LINE_AA)
+
+    return out
+
+
+def generate_skeleton_video(video_path: str, output_path: str, pose_processor) -> bool:
+    """
+    Procesa el vídeo original frame a frame, dibuja el esqueleto de MediaPipe
+    sobre cada frame y escribe el resultado en *output_path*.
+
+    Usa un segundo PoseProcessor (ya inicializado) para no interferir con
+    el pipeline principal.  Si la función falla devuelve False y el archivo
+    de salida no existe (o está vacío).
+
+    Args:
+        video_path:    Ruta al vídeo original.
+        output_path:   Ruta donde guardar el vídeo con esqueleto (mp4).
+        pose_processor: Instancia de PoseProcessor ya configurada.
+    Returns:
+        True si se generó correctamente, False en caso de error.
+    """
+    import os
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        return False
+
+    fps    = cap.get(cv2.CAP_PROP_FPS) or 30.0
+    width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            results, _ = pose_processor.process_frame(frame)
+            annotated   = draw_skeleton_on_frame(frame, results)
+            writer.write(annotated)
+    except Exception:
+        return False
+    finally:
+        cap.release()
+        writer.release()
+
+    return os.path.exists(output_path) and os.path.getsize(output_path) > 0
