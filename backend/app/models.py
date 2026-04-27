@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, String, Float, Enum, ForeignKey, Text, TIMESTAMP
+    Column, Integer, String, Float, Enum, ForeignKey, Text, TIMESTAMP, Boolean
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -10,13 +10,27 @@ from app.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(255), unique=True, nullable=False, index=True)
-    full_name = Column(String(255), nullable=False)
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    email           = Column(String(255), unique=True, nullable=False, index=True)
+    full_name       = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    created_at = Column(TIMESTAMP, server_default=func.now())
+    is_verified     = Column(Boolean, default=False, nullable=False)
+    created_at      = Column(TIMESTAMP, server_default=func.now())
 
     sessions = relationship("Session", back_populates="user")
+
+
+class EmailCode(Base):
+    """Códigos de 6 dígitos para verificación de email y reseteo de contraseña."""
+    __tablename__ = "email_codes"
+
+    id         = Column(Integer, primary_key=True, autoincrement=True)
+    email      = Column(String(255), nullable=False, index=True)
+    code       = Column(String(6), nullable=False)
+    purpose    = Column(Enum("verify_email", "reset_password"), nullable=False)
+    expires_at = Column(TIMESTAMP, nullable=False)
+    used       = Column(Boolean, default=False, nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.now())
 
 
 class Session(Base):

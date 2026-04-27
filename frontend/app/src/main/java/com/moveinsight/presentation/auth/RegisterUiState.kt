@@ -15,6 +15,7 @@ sealed class RegisterUiState {
 }
 
 sealed class RegisterUiEvent {
-    data object NavigateToLogin              : RegisterUiEvent()
-    data class  ShowSnackbar(val msg: String): RegisterUiEvent()
+    data object NavigateToLogin                          : RegisterUiEvent()
+    data class  NavigateToVerifyEmail(val email: String) : RegisterUiEvent()
+    data class  ShowSnackbar(val msg: String)            : RegisterUiEvent()
 }

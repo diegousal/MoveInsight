@@ -35,11 +35,12 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onLogout              : () -> Unit,
-    onNavigateToRecord    : () -> Unit,
-    onNavigateToUpload    : () -> Unit,
-    onNavigateToDashboard : () -> Unit,
-    viewModel             : HomeViewModel = hiltViewModel()
+    onLogout                    : () -> Unit,
+    onNavigateToRecord          : () -> Unit,
+    onNavigateToUpload          : () -> Unit,
+    onNavigateToDashboard       : () -> Unit,
+    onNavigateToChangePassword  : () -> Unit = {},
+    viewModel                   : HomeViewModel = hiltViewModel()
 ) {
     val data         by viewModel.data.collectAsStateWithLifecycle()
     val snackbarHost =  remember { SnackbarHostState() }
@@ -147,16 +148,17 @@ fun HomeScreen(
                             onClick  = { showUserMenu = true }
                         )
                         UserDropdownMenu(
-                            expanded        = showUserMenu,
-                            userName        = data.userFullName,
-                            userEmail       = data.userEmail,
-                            isProcessing    = data.isProcessingAction,
-                            onDismiss       = { showUserMenu = false },
-                            onHelp          = { showUserMenu = false; showHelpSheet = true },
-                            onNotifSettings = { showUserMenu = false; showNotifSheet = true },
-                            onClearHistory  = { showUserMenu = false; showClearHistoryDialog = true },
-                            onDeleteAccount = { showUserMenu = false; showDeleteDialog = true },
-                            onLogout        = { showUserMenu = false; viewModel.onLogoutClick() }
+                            expanded           = showUserMenu,
+                            userName           = data.userFullName,
+                            userEmail          = data.userEmail,
+                            isProcessing       = data.isProcessingAction,
+                            onDismiss          = { showUserMenu = false },
+                            onHelp             = { showUserMenu = false; showHelpSheet = true },
+                            onNotifSettings    = { showUserMenu = false; showNotifSheet = true },
+                            onChangePassword   = { showUserMenu = false; onNavigateToChangePassword() },
+                            onClearHistory     = { showUserMenu = false; showClearHistoryDialog = true },
+                            onDeleteAccount    = { showUserMenu = false; showDeleteDialog = true },
+                            onLogout           = { showUserMenu = false; viewModel.onLogoutClick() }
                         )
                     }
                 }
@@ -457,16 +459,17 @@ private fun UserAvatarButton(initials: String, onClick: () -> Unit) {
 
 @Composable
 private fun UserDropdownMenu(
-    expanded        : Boolean,
-    userName        : String,
-    userEmail       : String,
-    isProcessing    : Boolean,
-    onDismiss       : () -> Unit,
-    onHelp          : () -> Unit,
-    onNotifSettings : () -> Unit,
-    onClearHistory  : () -> Unit,
-    onDeleteAccount : () -> Unit,
-    onLogout        : () -> Unit
+    expanded           : Boolean,
+    userName           : String,
+    userEmail          : String,
+    isProcessing       : Boolean,
+    onDismiss          : () -> Unit,
+    onHelp             : () -> Unit,
+    onNotifSettings    : () -> Unit,
+    onChangePassword   : () -> Unit,
+    onClearHistory     : () -> Unit,
+    onDeleteAccount    : () -> Unit,
+    onLogout           : () -> Unit
 ) {
     DropdownMenu(
         expanded         = expanded,
@@ -511,6 +514,14 @@ private fun UserDropdownMenu(
             label   = "Notificaciones EVA",
             color   = CyanPrimary,
             onClick = onNotifSettings
+        )
+
+        // Change password
+        MenuItemRow(
+            icon    = Icons.Filled.Lock,
+            label   = "Cambiar contraseña",
+            color   = CyanPrimary,
+            onClick = onChangePassword
         )
 
         HorizontalDivider(color = NavyLight, thickness = 0.5.dp)

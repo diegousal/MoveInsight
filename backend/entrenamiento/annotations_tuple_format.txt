@@ -1,0 +1,37 @@
+"mio2.npy": {
+  "reps": [
+    {
+      "frames": (0, 17, 37, 44, 64), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (64, 105, 123, 127, 146), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (146, 152, 171, 175, 193), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (193, 204, 220, 224, 242), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (242, 260, 282, 288, 307), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (307, 317, 339, 342, 366), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (366, 392, 415, 418, 440), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+    {
+      "frames": (440, 444, 465, 469, 488), 
+      "kpis": {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
+    },
+  ]
+}
+

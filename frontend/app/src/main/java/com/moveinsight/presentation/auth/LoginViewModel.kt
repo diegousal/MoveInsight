@@ -44,8 +44,13 @@ class LoginViewModel @Inject constructor(
                     _events.send(LoginUiEvent.NavigateToHome)
                 }
                 is Resource.Error -> {
-                    _uiState.value = LoginUiState.Error(result.message)
-                    _events.send(LoginUiEvent.ShowSnackbar(result.message))
+                    if (result.code == 403 && result.message == "email_not_verified") {
+                        _uiState.value = LoginUiState.Idle
+                        _events.send(LoginUiEvent.NavigateToVerifyEmail(_form.value.email))
+                    } else {
+                        _uiState.value = LoginUiState.Error(result.message)
+                        _events.send(LoginUiEvent.ShowSnackbar(result.message))
+                    }
                 }
                 is Resource.Loading -> Unit
             }

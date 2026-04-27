@@ -30,9 +30,11 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel()
+    onLoginSuccess        : () -> Unit,
+    onNavigateToRegister  : () -> Unit,
+    onNavigateToVerify    : (email: String) -> Unit = {},
+    onNavigateToForgot    : () -> Unit = {},
+    viewModel             : LoginViewModel = hiltViewModel()
 ) {
     val form          by viewModel.form.collectAsStateWithLifecycle()
     val uiState       by viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,8 +45,9 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                LoginUiEvent.NavigateToHome       -> onLoginSuccess()
-                is LoginUiEvent.ShowSnackbar      -> snackbarHost.showSnackbar(event.msg)
+                LoginUiEvent.NavigateToHome              -> onLoginSuccess()
+                is LoginUiEvent.NavigateToVerifyEmail    -> onNavigateToVerify(event.email)
+                is LoginUiEvent.ShowSnackbar             -> snackbarHost.showSnackbar(event.msg)
             }
         }
     }
@@ -114,7 +117,16 @@ fun LoginScreen(
                 )
             )
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(8.dp))
+            TextButton(
+                onClick  = onNavigateToForgot,
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("¿Olvidaste tu contraseña?", color = CyanPrimary,
+                    style = MaterialTheme.typography.labelMedium)
+            }
+
+            Spacer(Modifier.height(16.dp))
 
             // ── CTA ───────────────────────────────────────────────────────
             NeuroSquatPrimaryButton(

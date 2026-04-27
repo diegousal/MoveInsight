@@ -12,8 +12,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.moveinsight.presentation.auth.ChangePasswordScreen
+import com.moveinsight.presentation.auth.ForgotPasswordScreen
 import com.moveinsight.presentation.auth.LoginScreen
 import com.moveinsight.presentation.auth.RegisterScreen
+import com.moveinsight.presentation.auth.ResetPasswordScreen
+import com.moveinsight.presentation.auth.VerifyEmailScreen
 import com.moveinsight.presentation.capture.CaptureScreen
 import com.moveinsight.presentation.checkin.PainCheckInScreen
 import com.moveinsight.presentation.dashboard.DashboardScreen
@@ -63,32 +67,88 @@ fun NavGraph() {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 },
-                onNavigateToRegister = { navController.navigate(Routes.Register.route) }
+                onNavigateToRegister = { navController.navigate(Routes.Register.route) },
+                onNavigateToVerify   = { email ->
+                    navController.navigate(Routes.VerifyEmail.route(email))
+                },
+                onNavigateToForgot   = { navController.navigate(Routes.ForgotPassword.route) }
             )
         }
 
         composable(Routes.Register.route) {
             RegisterScreen(
-                onRegisterSuccess = {
-                    navController.navigate(Routes.Login.route) {
+                onNavigateToVerify = { email ->
+                    navController.navigate(Routes.VerifyEmail.route(email)) {
                         popUpTo(Routes.Register.route) { inclusive = true }
                     }
                 },
-                onNavigateToLogin = { navController.popBackStack() }
+                onNavigateToLogin  = { navController.popBackStack() }
             )
+        }
+
+        // ── Verificación de email ─────────────────────────────────────────
+        composable(
+            route     = Routes.VerifyEmail.route,
+            arguments = listOf(navArgument(Routes.VerifyEmail.ARG_EMAIL) {
+                type         = NavType.StringType
+                defaultValue = ""
+            })
+        ) {
+            VerifyEmailScreen(
+                onNavigateToLogin = {
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Login.route) { inclusive = false }
+                    }
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // ── Contraseña olvidada ───────────────────────────────────────────
+        composable(Routes.ForgotPassword.route) {
+            ForgotPasswordScreen(
+                onNavigateToReset = { email ->
+                    navController.navigate(Routes.ResetPassword.route(email))
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // ── Resetear contraseña ───────────────────────────────────────────
+        composable(
+            route     = Routes.ResetPassword.route,
+            arguments = listOf(navArgument(Routes.ResetPassword.ARG_EMAIL) {
+                type         = NavType.StringType
+                defaultValue = ""
+            })
+        ) {
+            ResetPasswordScreen(
+                onNavigateToLogin = {
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Login.route) { inclusive = false }
+                    }
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // ── Cambiar contraseña (autenticado) ──────────────────────────────
+        composable(Routes.ChangePassword.route) {
+            ChangePasswordScreen(onNavigateBack = { navController.popBackStack() })
         }
 
         // ── Home ──────────────────────────────────────────────────────────
         composable(Routes.Home.route) {
             HomeScreen(
-                onLogout              = {
+                onLogout                   = {
                     navController.navigate(Routes.Login.route) {
                         popUpTo(Routes.Home.route) { inclusive = true }
                     }
                 },
-                onNavigateToRecord    = { navController.navigate(Routes.Capture.record()) },
-                onNavigateToUpload    = { navController.navigate(Routes.Capture.upload()) },
-                onNavigateToDashboard = { navController.navigate(Routes.Dashboard.route) }
+                onNavigateToRecord         = { navController.navigate(Routes.Capture.record()) },
+                onNavigateToUpload         = { navController.navigate(Routes.Capture.upload()) },
+                onNavigateToDashboard      = { navController.navigate(Routes.Dashboard.route) },
+                onNavigateToChangePassword = { navController.navigate(Routes.ChangePassword.route) }
             )
         }
 

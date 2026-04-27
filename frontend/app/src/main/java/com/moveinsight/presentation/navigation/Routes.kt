@@ -25,6 +25,20 @@ sealed class Routes(val route: String) {
         fun route(sessionId: Int) = "skeleton/$sessionId"
     }
 
+    data object VerifyEmail : Routes("verify_email?email={email}") {
+        const val ARG_EMAIL = "email"
+        fun route(email: String) = "verify_email?email=${android.net.Uri.encode(email)}"
+    }
+
+    data object ForgotPassword : Routes("forgot_password")
+
+    data object ResetPassword : Routes("reset_password?email={email}") {
+        const val ARG_EMAIL = "email"
+        fun route(email: String) = "reset_password?email=${android.net.Uri.encode(email)}"
+    }
+
+    data object ChangePassword : Routes("change_password")
+
     /** Deep link: moveinsight://checkin/{sessionId}?hours={hoursAfter} */
     data object CheckIn : Routes("checkin?sessionId={sessionId}&hours={hoursAfter}") {
         const val ARG_SESSION_ID  = "sessionId"

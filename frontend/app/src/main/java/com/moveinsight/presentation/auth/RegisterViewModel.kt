@@ -36,7 +36,7 @@ class RegisterViewModel @Inject constructor(
             when (val r = registerUseCase(f.email, f.password, f.confirmPassword, f.fullName)) {
                 is Resource.Success -> {
                     _uiState.value = RegisterUiState.Success
-                    _events.send(RegisterUiEvent.NavigateToLogin)
+                    _events.send(RegisterUiEvent.NavigateToVerifyEmail(f.email.trim()))
                 }
                 is Resource.Error -> {
                     _uiState.value = RegisterUiState.Error(r.message)

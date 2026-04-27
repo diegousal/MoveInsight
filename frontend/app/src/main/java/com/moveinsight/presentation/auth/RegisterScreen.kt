@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun RegisterScreen(
-    onRegisterSuccess: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    viewModel: RegisterViewModel = hiltViewModel()
+    onNavigateToVerify : (email: String) -> Unit,
+    onNavigateToLogin  : () -> Unit,
+    viewModel          : RegisterViewModel = hiltViewModel()
 ) {
     val form         by viewModel.form.collectAsStateWithLifecycle()
     val uiState      by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,8 +42,9 @@ fun RegisterScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                RegisterUiEvent.NavigateToLogin  -> onRegisterSuccess()
-                is RegisterUiEvent.ShowSnackbar  -> snackbarHost.showSnackbar(event.msg)
+                is RegisterUiEvent.NavigateToVerifyEmail -> onNavigateToVerify(event.email)
+                RegisterUiEvent.NavigateToLogin          -> onNavigateToLogin()
+                is RegisterUiEvent.ShowSnackbar          -> snackbarHost.showSnackbar(event.msg)
             }
         }
     }
