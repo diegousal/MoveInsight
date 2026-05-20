@@ -2,18 +2,22 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+
+from app.config import settings
 from sqlalchemy.orm import Session as DBSession
 
 from app.auth import (
-    get_current_user, hash_password, verify_password, create_access_token
+    get_current_user, hash_password, verify_password,
+    create_access_token, create_refresh_token,
 )
 from app.database import get_db
 from app.email_utils import generate_code, send_reset_email, send_verification_email
 from app.models import EmailCode, User
 from app.schemas import (
     ChangePasswordRequest, ForgotPasswordRequest, MessageResponse,
-    ResetPasswordRequest, ResendVerificationRequest, Token,
-    UserCreate, UserResponse, VerifyEmailRequest,
+    OnboardingRequest, ResetPasswordRequest, ResendVerificationRequest, Token,
+    UserCreate, UserResponse, VerifyEmailRequest, RefreshRequest,
 )
 
 router = APIRouter()
@@ -131,7 +135,43 @@ def login(
     if not user.is_verified:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "email_not_verified")
 
-    return Token(access_token=create_access_token(user.email))
+    return Token(
+        access_token  = create_access_token(user.email),
+        refresh_token = create_refresh_token(user.email),
+    )
+
+
+# ── Renovar access token ──────────────────────────────────────────────────────
+
+@router.post("/refresh", response_model=Token)
+def refresh_token(data: RefreshRequest):
+    """
+    Renueva el access token usando un refresh token válido.
+    No requiere estar autenticado (el propio refresh token es la credencial).
+    """
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Refresh token inválido o expirado. Inicia sesión de nuevo.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(
+            data.refresh_token,
+            settings.JWT_SECRET_KEY,
+            algorithms=[settings.JWT_ALGORITHM],
+        )
+        email: str      = payload.get("sub")
+        token_type: str = payload.get("type", "")
+
+        if email is None or token_type != "refresh":
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    return Token(
+        access_token  = create_access_token(email),
+        refresh_token = create_refresh_token(email),  # rotación: nuevo refresh en cada renovación
+    )
 
 
 # ── Contraseña olvidada ───────────────────────────────────────────────────────
@@ -186,6 +226,24 @@ def change_password(
     current_user.hashed_password = hash_password(data.new_password)
     db.commit()
     return {"message": "Contraseña actualizada correctamente."}
+
+
+# ── Onboarding ───────────────────────────────────────────────────────────────
+
+@router.post("/onboarding", response_model=MessageResponse)
+def complete_onboarding(
+    data: OnboardingRequest,
+    current_user: User = Depends(get_current_user),
+    db: DBSession = Depends(get_db),
+):
+    """Guarda el perfil inicial del usuario y marca el onboarding como completado."""
+    current_user.age                  = data.age
+    current_user.body_weight_kg       = data.body_weight_kg
+    current_user.level                = data.level
+    current_user.objective            = data.objective
+    current_user.onboarding_completed = True
+    db.commit()
+    return {"message": "Perfil completado correctamente."}
 
 
 # ── Perfil ────────────────────────────────────────────────────────────────────

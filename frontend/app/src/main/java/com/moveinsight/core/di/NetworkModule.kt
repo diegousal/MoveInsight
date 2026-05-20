@@ -2,10 +2,13 @@ package com.moveinsight.core.di
 
 import com.moveinsight.BuildConfig
 import com.moveinsight.core.network.AuthInterceptor
+import com.moveinsight.core.network.TokenAuthenticator
 import com.moveinsight.data.remote.AnalyticsApiService
 import com.moveinsight.data.remote.AuthApiService
 import com.moveinsight.data.remote.PainCheckInApiService
+import com.moveinsight.data.remote.RecommendationsApiService
 import com.moveinsight.data.remote.SessionApiService
+import com.moveinsight.data.remote.WellnessApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,10 +36,12 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         authInterceptor    : AuthInterceptor,
+        tokenAuthenticator : TokenAuthenticator,
         loggingInterceptor : HttpLoggingInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthenticator)   // ← renueva tokens en 401 automáticamente
+            .addInterceptor(authInterceptor)     // ← añade Bearer a cada petición
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30,  TimeUnit.SECONDS)
             .readTimeout(30,     TimeUnit.SECONDS)
@@ -70,4 +75,14 @@ object NetworkModule {
     @Singleton
     fun provideAnalyticsApiService(retrofit: Retrofit): AnalyticsApiService =
         retrofit.create(AnalyticsApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWellnessApiService(retrofit: Retrofit): WellnessApiService =
+        retrofit.create(WellnessApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRecommendationsApiService(retrofit: Retrofit): RecommendationsApiService =
+        retrofit.create(RecommendationsApiService::class.java)
 }

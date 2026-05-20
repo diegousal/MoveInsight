@@ -37,7 +37,15 @@ sealed class Routes(val route: String) {
         fun route(email: String) = "reset_password?email=${android.net.Uri.encode(email)}"
     }
 
-    data object ChangePassword : Routes("change_password")
+    data object ChangePassword     : Routes("change_password")
+    data object Onboarding         : Routes("onboarding")
+    data object ReadinessBreakdown : Routes("readiness_breakdown")
+    data object Wellness           : Routes("wellness")
+
+    data object IncidentFactors : Routes("incident_factors/{incidentId}") {
+        const val ARG_INCIDENT_ID = "incidentId"
+        fun route(incidentId: Int) = "incident_factors/$incidentId"
+    }
 
     /** Deep link: moveinsight://checkin/{sessionId}?hours={hoursAfter} */
     data object CheckIn : Routes("checkin?sessionId={sessionId}&hours={hoursAfter}") {

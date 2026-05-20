@@ -4,6 +4,7 @@ package com.moveinsight.domain.repository
 import com.moveinsight.core.utils.Resource
 import com.moveinsight.domain.model.AuthToken
 import com.moveinsight.domain.model.User
+import com.moveinsight.domain.model.UserProfile
 import kotlinx.coroutines.flow.Flow
 
 /** Contrato puro — el dominio no sabe nada de Retrofit ni DataStore */
@@ -15,6 +16,11 @@ interface AuthRepository {
     suspend fun forgotPassword(email: String): Resource<String>
     suspend fun resetPassword(email: String, code: String, newPassword: String): Resource<String>
     suspend fun changePassword(currentPassword: String, newPassword: String): Resource<String>
+    suspend fun completeOnboarding(
+        age: Int?, bodyWeightKg: Float?, level: String, objective: String
+    ): Resource<String>
+    suspend fun getUserProfile(): Resource<UserProfile>
     fun getAccessToken(): Flow<String?>
+    fun getOnboardingCompleted(): Flow<Boolean?>
     suspend fun logout()
 }

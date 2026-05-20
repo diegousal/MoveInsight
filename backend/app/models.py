@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, String, Float, Enum, ForeignKey, Text, TIMESTAMP, Boolean
+    Column, Integer, String, Float, Enum, ForeignKey, Text, TIMESTAMP, Boolean, Date
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -16,6 +16,17 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     is_verified     = Column(Boolean, default=False, nullable=False)
     created_at      = Column(TIMESTAMP, server_default=func.now())
+
+    # ── Perfil de onboarding ──────────────────────────────────────────────
+    age                  = Column(Integer, nullable=True)
+    body_weight_kg       = Column(Float, nullable=True)
+    level                = Column(
+        Enum("beginner", "intermediate", "advanced"), nullable=True
+    )
+    objective            = Column(
+        Enum("technique", "progression", "pain_monitoring", "health"), nullable=True
+    )
+    onboarding_completed = Column(Boolean, default=False, nullable=False)
 
     sessions = relationship("Session", back_populates="user")
 
@@ -71,6 +82,26 @@ class SessionResult(Base):
     report_image_path = Column(String(500))
 
     session = relationship("Session", back_populates="results")
+
+
+class Incident(Base):
+    """Incidencias / molestias registradas por el usuario en el apartado Bienestar."""
+    __tablename__ = "incidents"
+
+    id            = Column(Integer, primary_key=True, autoincrement=True)
+    user_id       = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    body_zone     = Column(String(50), nullable=False)         # ej. "rodilla_izq", "lumbar"
+    severity      = Column(Integer, nullable=False)            # 0-10
+    incident_type = Column(
+        Enum("molestia", "dolor_agudo", "fatiga", "contractura", "lesion", "otro"),
+        default="molestia", nullable=False
+    )
+    start_date    = Column(Date, nullable=False)
+    end_date      = Column(Date, nullable=True)                # NULL = activa
+    notes         = Column(Text, default="")
+    created_at    = Column(TIMESTAMP, server_default=func.now())
+
+    user = relationship("User")
 
 
 class PainCheckIn(Base):

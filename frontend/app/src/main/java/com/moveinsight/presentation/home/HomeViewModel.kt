@@ -10,7 +10,9 @@ import com.moveinsight.core.utils.safeApiCall
 import com.moveinsight.data.remote.SessionApiService
 import com.moveinsight.domain.model.Analytics
 import com.moveinsight.domain.model.ReadinessLevel
+import com.moveinsight.domain.model.Recommendation
 import com.moveinsight.domain.model.readinessLevel
+import com.moveinsight.domain.recommendations.GetRecommendationsUseCase
 import com.moveinsight.domain.repository.GetAnalyticsUseCase
 import com.moveinsight.domain.auth.LogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,16 +22,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUiData(
-    val analytics          : Analytics?     = null,
-    val readinessLevel     : ReadinessLevel = ReadinessLevel.HIGH,
-    val isLoading          : Boolean        = true,
-    val isProcessingAction : Boolean        = false,
-    val userFullName       : String         = "",
-    val userEmail          : String         = "",
+    val analytics          : Analytics?          = null,
+    val readinessLevel     : ReadinessLevel      = ReadinessLevel.HIGH,
+    val isLoading          : Boolean             = true,
+    val isProcessingAction : Boolean             = false,
+    val userFullName       : String              = "",
+    val userEmail          : String              = "",
+    val recommendations    : List<Recommendation> = emptyList(),
     // ── Preferencias de notificación ──────────────────────────────────────
-    val notifGeneral       : Boolean        = true,
-    val notif24h           : Boolean        = true,
-    val notif48h           : Boolean        = true
+    val notifGeneral       : Boolean             = true,
+    val notif24h           : Boolean             = true,
+    val notif48h           : Boolean             = true
 ) {
     val userInitials: String get() = userFullName
         .split(" ")
@@ -46,12 +49,13 @@ sealed class HomeUiEvent {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val logoutUseCase              : LogoutUseCase,
-    private val getAnalyticsUseCase        : GetAnalyticsUseCase,
-    private val sessionApiService          : SessionApiService,
-    private val dataStore                  : UserPreferencesDataStore,
-    private val scheduleWeeklySummaryUseCase : ScheduleWeeklySummaryUseCase,
-    private val notificationHelper         : NotificationHelper
+    private val logoutUseCase               : LogoutUseCase,
+    private val getAnalyticsUseCase         : GetAnalyticsUseCase,
+    private val getRecommendationsUseCase   : GetRecommendationsUseCase,
+    private val sessionApiService           : SessionApiService,
+    private val dataStore                   : UserPreferencesDataStore,
+    private val scheduleWeeklySummaryUseCase: ScheduleWeeklySummaryUseCase,
+    private val notificationHelper          : NotificationHelper
 ) : ViewModel() {
 
     private val _data   = MutableStateFlow(HomeUiData())
@@ -67,6 +71,15 @@ class HomeViewModel @Inject constructor(
         scheduleWeeklySummaryUseCase()   // programa el resumen semanal (KEEP si ya existe)
     }
 
+    private fun loadRecommendations() {
+        viewModelScope.launch {
+            when (val r = getRecommendationsUseCase()) {
+                is Resource.Success -> _data.update { it.copy(recommendations = r.data) }
+                else -> Unit   // no mostramos error — las recs son opcionales
+            }
+        }
+    }
+
     private fun loadUserInfo() {
         viewModelScope.launch {
             combine(
@@ -80,7 +93,10 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Llamar cada vez que la pantalla vuelve al foco (ON_RESUME). */
-    fun refresh() { loadReadiness() }
+    fun refresh() {
+        loadReadiness()
+        loadRecommendations()
+    }
 
     // ── Preferencias de notificación ──────────────────────────────────────
 
@@ -142,6 +158,7 @@ class HomeViewModel @Inject constructor(
                             isLoading      = false
                         )
                     }
+                    loadRecommendations()
                     // Alerta de sobreentrenamiento (solo si no se ha mostrado ya hoy)
                     if (analytics.overtrainingRisk) {
                         val avgBorg = if (analytics.readinessScore < 40)

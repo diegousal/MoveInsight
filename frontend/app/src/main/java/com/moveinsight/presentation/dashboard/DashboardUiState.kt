@@ -1,6 +1,7 @@
 package com.moveinsight.presentation.dashboard
 
 import com.moveinsight.domain.model.Analytics
+import com.moveinsight.domain.model.Incident
 import com.moveinsight.domain.model.SessionDetail
 
 data class DashboardUiState(
@@ -8,6 +9,7 @@ data class DashboardUiState(
     val isLoadingAnalytics : Boolean             = true,
     val sessions           : List<SessionDetail> = emptyList(),
     val analytics          : Analytics?          = null,
+    val incidents          : List<Incident>      = emptyList(),
     val errorSessions      : String?             = null,
     val errorAnalytics     : String?             = null,
     val isExporting        : Boolean             = false,

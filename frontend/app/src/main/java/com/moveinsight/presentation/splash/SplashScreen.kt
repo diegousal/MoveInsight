@@ -20,17 +20,19 @@ import com.moveinsight.presentation.theme.*
 
 @Composable
 fun SplashScreen(
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    viewModel: SplashViewModel = hiltViewModel()
+    onNavigateToHome       : () -> Unit,
+    onNavigateToLogin      : () -> Unit,
+    onNavigateToOnboarding : () -> Unit = {},
+    viewModel              : SplashViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(state) {
         when (state) {
-            AuthCheckState.Authenticated    -> onNavigateToHome()
-            AuthCheckState.Unauthenticated  -> onNavigateToLogin()
-            AuthCheckState.Checking         -> Unit
+            AuthCheckState.Authenticated   -> onNavigateToHome()
+            AuthCheckState.NeedsOnboarding -> onNavigateToOnboarding()
+            AuthCheckState.Unauthenticated -> onNavigateToLogin()
+            AuthCheckState.Checking        -> Unit
         }
     }
 

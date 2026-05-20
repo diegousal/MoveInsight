@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.util.Consumer
 import androidx.navigation.NavType
@@ -12,9 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.moveinsight.core.session.SessionManager
 import com.moveinsight.presentation.auth.ChangePasswordScreen
 import com.moveinsight.presentation.auth.ForgotPasswordScreen
 import com.moveinsight.presentation.auth.LoginScreen
+import com.moveinsight.presentation.auth.OnboardingScreen
 import com.moveinsight.presentation.auth.RegisterScreen
 import com.moveinsight.presentation.auth.ResetPasswordScreen
 import com.moveinsight.presentation.auth.VerifyEmailScreen
@@ -22,14 +25,26 @@ import com.moveinsight.presentation.capture.CaptureScreen
 import com.moveinsight.presentation.checkin.PainCheckInScreen
 import com.moveinsight.presentation.dashboard.DashboardScreen
 import com.moveinsight.presentation.home.HomeScreen
+import com.moveinsight.presentation.readiness.ReadinessBreakdownScreen
 import com.moveinsight.presentation.results.ResultsScreen
+import com.moveinsight.presentation.wellness.IncidentFactorsScreen
+import com.moveinsight.presentation.wellness.WellnessScreen
 import com.moveinsight.presentation.skeleton.SkeletonVideoScreen
 import com.moveinsight.presentation.splash.SplashScreen
 
 @Composable
-fun NavGraph() {
+fun NavGraph(sessionManager: SessionManager) {
     val navController = rememberNavController()
     val context       = LocalContext.current
+
+    // ── Sesión expirada: redirigir a Login limpiando el back-stack ────────
+    LaunchedEffect(Unit) {
+        sessionManager.sessionExpired.collect {
+            navController.navigate(Routes.Login.route) {
+                popUpTo(0) { inclusive = true }   // borra todo el back-stack
+            }
+        }
+    }
 
     // Reenvía los deep links recibidos mientras la app ya está en ejecución
     // (p.ej. notificación EVA de 48h cuando la de 24h ya estaba abierta)
@@ -47,13 +62,18 @@ fun NavGraph() {
         // ── Auth ──────────────────────────────────────────────────────────
         composable(Routes.Splash.route) {
             SplashScreen(
-                onNavigateToHome  = {
+                onNavigateToHome = {
                     navController.navigate(Routes.Home.route) {
                         popUpTo(Routes.Splash.route) { inclusive = true }
                     }
                 },
                 onNavigateToLogin = {
                     navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToOnboarding = {
+                    navController.navigate(Routes.Onboarding.route) {
                         popUpTo(Routes.Splash.route) { inclusive = true }
                     }
                 }
@@ -71,7 +91,12 @@ fun NavGraph() {
                 onNavigateToVerify   = { email ->
                     navController.navigate(Routes.VerifyEmail.route(email))
                 },
-                onNavigateToForgot   = { navController.navigate(Routes.ForgotPassword.route) }
+                onNavigateToForgot   = { navController.navigate(Routes.ForgotPassword.route) },
+                onNavigateToOnboarding = {
+                    navController.navigate(Routes.Onboarding.route) {
+                        popUpTo(Routes.Login.route) { inclusive = true }
+                    }
+                }
             )
         }
 
@@ -137,6 +162,46 @@ fun NavGraph() {
             ChangePasswordScreen(onNavigateBack = { navController.popBackStack() })
         }
 
+        // ── Onboarding (primera vez) ───────────────────────────────────────
+        composable(Routes.Onboarding.route) {
+            OnboardingScreen(
+                onNavigateToHome = {
+                    navController.navigate(Routes.Home.route) {
+                        popUpTo(Routes.Onboarding.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // ── Detalle del semáforo de readiness ─────────────────────────────
+        composable(Routes.ReadinessBreakdown.route) {
+            ReadinessBreakdownScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // ── Bienestar ──────────────────────────────────────────────────────
+        composable(Routes.Wellness.route) {
+            WellnessScreen(
+                onNavigateBack      = { navController.popBackStack() },
+                onNavigateToFactors = { id ->
+                    navController.navigate(Routes.IncidentFactors.route(id))
+                }
+            )
+        }
+
+        // ── Factores observados de una incidencia (F5) ─────────────────────
+        composable(
+            route     = Routes.IncidentFactors.route,
+            arguments = listOf(navArgument(Routes.IncidentFactors.ARG_INCIDENT_ID) {
+                type = NavType.StringType
+            })
+        ) {
+            IncidentFactorsScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
         // ── Home ──────────────────────────────────────────────────────────
         composable(Routes.Home.route) {
             HomeScreen(
@@ -148,7 +213,9 @@ fun NavGraph() {
                 onNavigateToRecord         = { navController.navigate(Routes.Capture.record()) },
                 onNavigateToUpload         = { navController.navigate(Routes.Capture.upload()) },
                 onNavigateToDashboard      = { navController.navigate(Routes.Dashboard.route) },
-                onNavigateToChangePassword = { navController.navigate(Routes.ChangePassword.route) }
+                onNavigateToChangePassword = { navController.navigate(Routes.ChangePassword.route) },
+                onNavigateToReadiness      = { navController.navigate(Routes.ReadinessBreakdown.route) },
+                onNavigateToWellness       = { navController.navigate(Routes.Wellness.route) }
             )
         }
 

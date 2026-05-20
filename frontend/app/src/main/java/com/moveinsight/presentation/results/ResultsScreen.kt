@@ -29,8 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moveinsight.domain.model.PainCheckInSummary
+import com.moveinsight.domain.model.Recommendation
+import com.moveinsight.domain.model.RecommendationCategory
 import com.moveinsight.domain.model.RepResult
 import com.moveinsight.presentation.components.LoadingWithTips
+import com.moveinsight.presentation.components.RecommendationCard
 import com.moveinsight.presentation.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -154,6 +157,15 @@ private fun ResultsContent(
                 RepCard(rep = rep, index = index)
             }
 
+            // ── Consejo basado en KPI más bajo (F7) ─────────────────────
+            item {
+                val tip = lowestKpiTip(data)
+                if (tip != null) {
+                    Spacer(Modifier.height(4.dp))
+                    RecommendationCard(rec = tip, compact = false)
+                }
+            }
+
             // ── Acciones finales ─────────────────────────────────────────
             item {
                 Spacer(Modifier.height(8.dp))
@@ -194,6 +206,57 @@ private fun ResultsContent(
         }
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Consejo rápido basado en el KPI más bajo (F7)
+// ─────────────────────────────────────────────────────────────────────────────
+
+private fun lowestKpiTip(data: ResultsData): Recommendation? {
+    data class KpiEntry(val score: Float, val recId: String)
+
+    val kpis = listOf(
+        KpiEntry(data.avgDepth,   "tech_depth"),
+        KpiEntry(data.avgKnees,   "tech_knees"),
+        KpiEntry(data.avgTorso,   "tech_torso"),
+    )
+
+    // Solo mostramos consejo si el KPI más bajo < 5 (escala 0-10)
+    val worst = kpis.minByOrNull { it.score } ?: return null
+    if (worst.score >= 5f) return null
+
+    return RESULTS_TIPS[worst.recId]
+}
+
+/** Catálogo local reducido para la pantalla de resultados (sin llamada extra al servidor). */
+private val RESULTS_TIPS: Map<String, Recommendation> = mapOf(
+    "tech_depth" to Recommendation(
+        id       = "tech_depth",
+        category = RecommendationCategory.TECHNIQUE,
+        title    = "Trabaja la profundidad de la sentadilla",
+        body     = "Tu profundidad esta sesión fue inferior a 5/10. Practica sentadillas con pausa en el punto más bajo y trabaja la movilidad de cadera y tobillo.",
+        priority = 1,
+        videoUrl = "https://www.youtube.com/watch?v=ultWZbUMPL8",
+        trigger  = "Profundidad < 5/10 en esta sesión",
+    ),
+    "tech_knees" to Recommendation(
+        id       = "tech_knees",
+        category = RecommendationCategory.TECHNIQUE,
+        title    = "Alineación de rodillas en la sentadilla",
+        body     = "Tus rodillas tendieron a caer hacia dentro esta sesión. Activa glúteos con ejercicios de abducción antes de cada entrenamiento.",
+        priority = 2,
+        videoUrl = "https://www.youtube.com/watch?v=MeIiIdhvXT4",
+        trigger  = "Rodillas < 5/10 en esta sesión",
+    ),
+    "tech_torso" to Recommendation(
+        id       = "tech_torso",
+        category = RecommendationCategory.TECHNIQUE,
+        title    = "Mantén el torso erguido",
+        body     = "La inclinación de torso fue elevada esta sesión. Trabaja los erectores de columna y practica la sentadilla con palo en overhead.",
+        priority = 3,
+        videoUrl = "https://www.youtube.com/watch?v=HKbOECHcgFs",
+        trigger  = "Torso < 5/10 en esta sesión",
+    ),
+)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Tarjeta de puntuación global

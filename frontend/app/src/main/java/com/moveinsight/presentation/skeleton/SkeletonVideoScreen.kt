@@ -61,10 +61,21 @@ fun SkeletonVideoScreen(
                         CircularProgressIndicator(color = CyanPrimary)
                         Spacer(Modifier.height(16.dp))
                         Text(
-                            "Descargando vídeo de esqueleto…",
+                            text  = if (state.attempt == 1)
+                                "Descargando vídeo de esqueleto…"
+                            else
+                                "Generando overlay del esqueleto en el servidor…",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
+                        if (state.attempt > 1) {
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text  = "Esto puede tardar hasta 1-2 min · intento ${state.attempt}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSecondary
+                            )
+                        }
                     }
                 }
                 is SkeletonUiState.Ready -> {

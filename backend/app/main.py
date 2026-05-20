@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
-from app.routers import auth, sessions, analytics, checkins
+from app.routers import auth, sessions, analytics, checkins, incidents, wellness, recommendations
 from app.database import engine, Base
 
 
@@ -42,6 +42,9 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(sessions.router, prefix="/api/v1/sessions", tags=["Sessions"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
 app.include_router(checkins.router, prefix="/api/v1", tags=["CheckIns"])
+app.include_router(incidents.router, prefix="/api/v1", tags=["Incidents"])
+app.include_router(wellness.router,         prefix="/api/v1", tags=["Wellness"])
+app.include_router(recommendations.router, prefix="/api/v1", tags=["Recommendations"])
 
 
 @app.get("/health")

@@ -11,6 +11,14 @@ from processing.pose_features import process_historial
 from processing.rep_report import save_visual_report
 from processing.visualization import generate_skeleton_video
 
+# ── Modelo cargado una sola vez al importar el módulo ────────────────────────
+#    Evita recargar el Bi-LSTM desde disco en cada análisis (~5-10 s extra).
+_model: tf.keras.Model = tf.keras.models.load_model(
+    settings.MODEL_DIR / "best_model.h5"
+)
+_norm_mean: np.ndarray = np.load(settings.MODEL_DIR / "norm_mean.npy")
+_norm_std:  np.ndarray = np.load(settings.MODEL_DIR / "norm_std.npy")
+
 
 def process_video(session_id: int, video_path: str):
     """
@@ -57,21 +65,12 @@ def process_video(session_id: int, video_path: str):
         df_angles = process_historial(historial, fps)
         datos = df_angles.fillna(0.0).values
 
-        # 4. Inferencia con el modelo Bi-LSTM
-        model = tf.keras.models.load_model(settings.MODEL_DIR / "best_model.h5")
-        mean = np.load(settings.MODEL_DIR / "norm_mean.npy")
-        std = np.load(settings.MODEL_DIR / "norm_std.npy")
-
+        # 4. Inferencia con el modelo Bi-LSTM (modelo ya cargado en memoria)
         mask = (datos != 0).astype(np.float32)
-        datos_norm = (datos - mean) / std * mask
+        datos_norm = (datos - _norm_mean) / _norm_std * mask
         input_tensor = np.expand_dims(datos_norm, axis=0)
 
-        pred_phases, pred_kpis = model.predict(input_tensor, verbose=0)
-        # --- DEBUG: borrar después ---
-        import collections
-        phase_seq = pred_phases[0].argmax(axis=-1)
-        print(f"DEBUG: {len(historial)} frames, fases únicas: {collections.Counter(phase_seq.tolist())}")
-        # --- FIN DEBUG ---
+        pred_phases, pred_kpis = _model.predict(input_tensor, verbose=0)
 
         # 5. Reporte visual + datos estructurados
         user_report_dir = str(settings.REPORT_DIR / str(session.user_id))
@@ -83,8 +82,9 @@ def process_video(session_id: int, video_path: str):
             min_run_length=3,
         )
 
-        # 6. Guardar resultados en BD
-        kpi_names = ["depth", "torso", "stability", "knees", "rhythm"]
+        # 6. Guardar resultados en BD y marcar como completado
+        #    ── Commit AQUÍ para que la app reciba los resultados de inmediato,
+        #       sin esperar a que termine la generación del vídeo de esqueleto.
         for i, rep in enumerate(result["reps"], start=1):
             kpis = rep["kpis"]
             db.add(SessionResult(
@@ -99,28 +99,27 @@ def process_video(session_id: int, video_path: str):
                 report_image_path=result["report_path"],
             ))
 
+        session.status  = "completed"
+        session.message = f"Análisis completado: {len(result['reps'])} repeticiones detectadas"
+        db.commit()   # ← a partir de aquí el polling de la app detecta "completed"
+
         # 7. Generar vídeo con esqueleto superpuesto
-        skeleton_path = None
+        #    Este paso puede tardar pero ya no bloquea la respuesta al cliente.
         try:
             skel_dir = str(settings.REPORT_DIR / str(session.user_id))
             os.makedirs(skel_dir, exist_ok=True)
             base_name     = os.path.splitext(os.path.basename(video_path))[0]
             skel_out_path = os.path.join(skel_dir, f"{base_name}_skeleton.mp4")
 
-            # Segundo PoseProcessor para el pass de dibujado (no afecta al historial)
             skel_processor = PoseProcessor(fps=fps, model_path=mediapipe_model)
             ok = generate_skeleton_video(video_path, skel_out_path, skel_processor)
             skel_processor.close()
-            if ok:
-                skeleton_path = skel_out_path
-        except Exception as e_skel:
-            # No fallamos la sesión entera si el vídeo de esqueleto falla
-            print(f"[skeleton] Error generando vídeo de esqueleto: {e_skel}")
 
-        session.skeleton_video_path = skeleton_path
-        session.status  = "completed"
-        session.message = f"Análisis completado: {len(result['reps'])} repeticiones detectadas"
-        db.commit()
+            if ok:
+                session.skeleton_video_path = skel_out_path
+                db.commit()   # segundo commit solo para el path del esqueleto
+        except Exception as e_skel:
+            print(f"[skeleton] Error generando vídeo de esqueleto: {e_skel}")
 
     except Exception as e:
         db.rollback()

@@ -26,3 +26,28 @@ fun Analytics.readinessLevel(): ReadinessLevel = when (readinessLabel.lowercase(
     "medium" -> ReadinessLevel.MEDIUM
     else     -> ReadinessLevel.LOW
 }
+
+/** Etapa del cálculo según madurez de los datos */
+enum class ReadinessStage { COLD_START, EARLY, ESTABLISHED }
+
+data class ReadinessComponent(
+    val name        : String,
+    val value       : Int,    // 0-100
+    val weight      : Float,  // 0.0-1.0
+    val explanation : String
+)
+
+data class ReadinessBreakdown(
+    val score       : Int,
+    val label       : String,
+    val stage       : ReadinessStage,
+    val components  : List<ReadinessComponent>,
+    val summary     : String,
+    val mainWarning : String?
+)
+
+fun ReadinessBreakdown.level(): ReadinessLevel = when (label.lowercase()) {
+    "high"   -> ReadinessLevel.HIGH
+    "medium" -> ReadinessLevel.MEDIUM
+    else     -> ReadinessLevel.LOW
+}

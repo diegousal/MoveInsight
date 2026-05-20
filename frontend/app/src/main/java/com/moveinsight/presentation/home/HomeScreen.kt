@@ -3,6 +3,7 @@ package com.moveinsight.presentation.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +30,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moveinsight.domain.model.ReadinessLevel
 import com.moveinsight.presentation.components.MoveInsightLogo
+import com.moveinsight.presentation.components.RecommendationsSection
 import com.moveinsight.presentation.theme.*
 import kotlinx.coroutines.flow.collectLatest
 
@@ -40,6 +42,8 @@ fun HomeScreen(
     onNavigateToUpload          : () -> Unit,
     onNavigateToDashboard       : () -> Unit,
     onNavigateToChangePassword  : () -> Unit = {},
+    onNavigateToReadiness       : () -> Unit = {},
+    onNavigateToWellness        : () -> Unit = {},
     viewModel                   : HomeViewModel = hiltViewModel()
 ) {
     val data         by viewModel.data.collectAsStateWithLifecycle()
@@ -177,7 +181,11 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             // ── Readiness ──────────────────────────────────────────────────
-            ReadinessSection(data = data, readinessColor = readinessColor)
+            ReadinessSection(
+                data            = data,
+                readinessColor  = readinessColor,
+                onScoreClick    = onNavigateToReadiness
+            )
 
             Spacer(Modifier.height(36.dp))
 
@@ -213,6 +221,26 @@ fun HomeScreen(
                 onClick     = onNavigateToDashboard
             )
 
+            Spacer(Modifier.height(14.dp))
+
+            // ── Card 3: Bienestar ──────────────────────────────────────────
+            HeroActionCard(
+                title       = "Bienestar",
+                subtitle    = "Estado físico · Incidencias · Análisis temporal",
+                icon        = Icons.Filled.HealthAndSafety,
+                accentColor = GreenReady,
+                onClick     = onNavigateToWellness
+            )
+
+            // ── Recomendaciones personalizadas (F6/F7) ─────────────────────
+            if (data.recommendations.isNotEmpty()) {
+                Spacer(Modifier.height(28.dp))
+                RecommendationsSection(
+                    recommendations = data.recommendations,
+                    maxVisible      = 2
+                )
+            }
+
             Spacer(Modifier.height(32.dp))
         }
     }
@@ -223,7 +251,11 @@ fun HomeScreen(
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun ReadinessSection(data: HomeUiData, readinessColor: Color) {
+private fun ReadinessSection(
+    data           : HomeUiData,
+    readinessColor : Color,
+    onScoreClick   : () -> Unit
+) {
     val readinessText = when (data.readinessLevel) {
         ReadinessLevel.HIGH   -> "Óptimo para entrenar"
         ReadinessLevel.MEDIUM -> "Entrena con moderación"
@@ -236,12 +268,13 @@ private fun ReadinessSection(data: HomeUiData, readinessColor: Color) {
             CircularProgressIndicator(color = CyanPrimary, modifier = Modifier.size(48.dp))
             Spacer(Modifier.height(40.dp))
         } else {
-            // Score circle
+            // Score circle (clickable → abre breakdown)
             Box(
                 modifier         = Modifier
                     .size(110.dp)
                     .clip(CircleShape)
-                    .background(readinessColor.copy(alpha = 0.12f)),
+                    .background(readinessColor.copy(alpha = 0.12f))
+                    .clickable(onClick = onScoreClick),
                 contentAlignment = Alignment.Center
             ) {
                 val score = data.analytics?.readinessScore?.toString()
@@ -263,6 +296,12 @@ private fun ReadinessSection(data: HomeUiData, readinessColor: Color) {
                     )
                 }
             }
+            Spacer(Modifier.height(4.dp))
+            // Hint visual de que es clickable
+            Text(
+                text  = "Toca para ver detalle",
+                style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+            )
 
             Spacer(Modifier.height(14.dp))
 

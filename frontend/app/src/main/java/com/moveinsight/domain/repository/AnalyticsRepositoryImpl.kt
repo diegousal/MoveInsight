@@ -5,6 +5,9 @@ import com.moveinsight.core.utils.safeApiCall
 import com.moveinsight.data.remote.AnalyticsApiService
 import com.moveinsight.domain.model.Analytics
 import com.moveinsight.domain.model.Insight
+import com.moveinsight.domain.model.ReadinessBreakdown
+import com.moveinsight.domain.model.ReadinessComponent
+import com.moveinsight.domain.model.ReadinessStage
 import com.moveinsight.domain.model.SessionDetail
 import com.moveinsight.domain.repository.AnalyticsRepository
 import kotlinx.coroutines.Dispatchers
@@ -101,6 +104,38 @@ class AnalyticsRepositoryImpl @Inject constructor(
                         readinessScore     = d.readinessScore,
                         readinessLabel     = d.readinessLabel,
                         insights           = d.insights.map { Insight(it.type, it.title, it.message) }
+                    )
+                )
+            }
+            is Resource.Error   -> result
+            is Resource.Loading -> result
+        }
+    }
+
+    override suspend fun getReadinessBreakdown(): Resource<ReadinessBreakdown> {
+        val result = safeApiCall { api.getReadinessBreakdown() }
+        return when (result) {
+            is Resource.Success -> {
+                val d = result.data
+                Resource.Success(
+                    ReadinessBreakdown(
+                        score   = d.score,
+                        label   = d.label,
+                        stage   = when (d.stage) {
+                            "cold_start"  -> ReadinessStage.COLD_START
+                            "early"       -> ReadinessStage.EARLY
+                            else          -> ReadinessStage.ESTABLISHED
+                        },
+                        components = d.components.map { c ->
+                            ReadinessComponent(
+                                name        = c.name,
+                                value       = c.value,
+                                weight      = c.weight,
+                                explanation = c.explanation
+                            )
+                        },
+                        summary     = d.summary,
+                        mainWarning = d.mainWarning
                     )
                 )
             }

@@ -269,10 +269,114 @@ private fun ChartsTab(uiState: DashboardUiState) {
         verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier            = Modifier.fillMaxSize()
     ) {
-        item { TechniqueLineChart(uiState.sessions) }
-        item { LoadProgressionChart(uiState.sessions) }
-        item { BorgScaleChart(uiState.sessions) }
+        // ── Banner de periodos de lesión ─────────────────────────────────
+        if (uiState.incidents.isNotEmpty()) {
+            item { InjuryPeriodsBanner(uiState.incidents) }
+        }
+        item { TechniqueLineChart(uiState.sessions, uiState.incidents) }
+        item { LoadProgressionChart(uiState.sessions, uiState.incidents) }
+        item { BorgScaleChart(uiState.sessions, uiState.incidents) }
     }
+}
+
+/**
+ * Banner que lista los periodos de lesión registrados (activos + recientes).
+ * Aparece encima de los gráficos para que el usuario interprete posibles caídas
+ * en técnica/carga teniendo presente si hubo lesión durante esas sesiones.
+ */
+@Composable
+private fun InjuryPeriodsBanner(incidents: List<com.moveinsight.domain.model.Incident>) {
+    val active = incidents.filter { it.isActive }
+    val recent = incidents
+        .filterNot { it.isActive }
+        .sortedByDescending { it.endDate ?: it.startDate }
+        .take(3)
+    val toShow = (active + recent)
+    if (toShow.isEmpty()) return
+
+    val fmt = java.time.format.DateTimeFormatter.ofPattern("dd MMM yy")
+
+    Surface(
+        color    = RedAlert.copy(alpha = 0.10f),
+        shape    = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.HealthAndSafety,
+                    null,
+                    tint     = RedAlert,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text  = "Periodos de lesión registrados",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Bold, color = TextPrimary
+                    )
+                )
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text  = "Las sesiones realizadas durante estos periodos pueden mostrar técnica/carga reducida.",
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = TextSecondary, lineHeight = 17.sp
+                )
+            )
+            Spacer(Modifier.height(10.dp))
+            toShow.forEach { inc ->
+                val start = runCatching { java.time.LocalDate.parse(inc.startDate) }.getOrNull()
+                val end   = inc.endDate?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
+                val period = when {
+                    start != null && end != null -> "${start.format(fmt)} → ${end.format(fmt)}"
+                    start != null && inc.isActive -> "${start.format(fmt)} → hoy"
+                    start != null                -> start.format(fmt)
+                    else                          -> "—"
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .clip(CircleShape)
+                            .background(RedAlert.copy(alpha = if (inc.isActive) 0.85f else 0.45f))
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text  = displayBodyZoneShort(inc.bodyZone),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            color = TextPrimary, fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text  = period,
+                        style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                    )
+                }
+            }
+        }
+    }
+}
+
+private fun displayBodyZoneShort(code: String): String = when (code) {
+    "rodilla_izq" -> "Rodilla izq."
+    "rodilla_der" -> "Rodilla der."
+    "lumbar"      -> "Lumbar"
+    "cervical"    -> "Cervical"
+    "cadera_izq"  -> "Cadera izq."
+    "cadera_der"  -> "Cadera der."
+    "tobillo_izq" -> "Tobillo izq."
+    "tobillo_der" -> "Tobillo der."
+    "hombro_izq"  -> "Hombro izq."
+    "hombro_der"  -> "Hombro der."
+    "general"     -> "General"
+    else          -> code.replaceFirstChar { it.uppercase() }
 }
 
 // ── Tab: Insights ─────────────────────────────────────────────────────────

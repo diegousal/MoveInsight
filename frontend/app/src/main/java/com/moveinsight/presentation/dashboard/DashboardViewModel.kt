@@ -7,6 +7,7 @@ import com.moveinsight.core.utils.Resource
 import com.moveinsight.domain.repository.ExportReportUseCase
 import com.moveinsight.domain.repository.GetAnalyticsUseCase
 import com.moveinsight.domain.session.GetSessionsUseCase
+import com.moveinsight.domain.wellness.ListIncidentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -18,7 +19,8 @@ class DashboardViewModel @Inject constructor(
     private val getSessionsUseCase           : GetSessionsUseCase,
     private val getAnalyticsUseCase          : GetAnalyticsUseCase,
     private val exportReportUseCase          : ExportReportUseCase,
-    private val schedulePainNotificationsUseCase : SchedulePainNotificationsUseCase
+    private val schedulePainNotificationsUseCase : SchedulePainNotificationsUseCase,
+    private val listIncidentsUseCase         : ListIncidentsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -32,6 +34,17 @@ class DashboardViewModel @Inject constructor(
     fun loadAll() {
         loadSessions()
         loadAnalytics()
+        loadIncidents()
+    }
+
+    private fun loadIncidents() {
+        viewModelScope.launch {
+            when (val result = listIncidentsUseCase()) {
+                is Resource.Success ->
+                    _uiState.update { it.copy(incidents = result.data) }
+                else -> Unit   // silencioso: no es bloqueante para el dashboard
+            }
+        }
     }
 
     private fun loadSessions() {

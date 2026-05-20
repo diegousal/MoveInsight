@@ -30,11 +30,12 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess        : () -> Unit,
-    onNavigateToRegister  : () -> Unit,
-    onNavigateToVerify    : (email: String) -> Unit = {},
-    onNavigateToForgot    : () -> Unit = {},
-    viewModel             : LoginViewModel = hiltViewModel()
+    onLoginSuccess          : () -> Unit,
+    onNavigateToRegister    : () -> Unit,
+    onNavigateToVerify      : (email: String) -> Unit = {},
+    onNavigateToForgot      : () -> Unit = {},
+    onNavigateToOnboarding  : () -> Unit = {},
+    viewModel               : LoginViewModel = hiltViewModel()
 ) {
     val form          by viewModel.form.collectAsStateWithLifecycle()
     val uiState       by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,6 +47,7 @@ fun LoginScreen(
         viewModel.events.collectLatest { event ->
             when (event) {
                 LoginUiEvent.NavigateToHome              -> onLoginSuccess()
+                LoginUiEvent.NavigateToOnboarding        -> onNavigateToOnboarding()
                 is LoginUiEvent.NavigateToVerifyEmail    -> onNavigateToVerify(event.email)
                 is LoginUiEvent.ShowSnackbar             -> snackbarHost.showSnackbar(event.msg)
             }

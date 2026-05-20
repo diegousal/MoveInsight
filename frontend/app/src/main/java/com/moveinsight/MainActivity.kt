@@ -6,12 +6,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.moveinsight.core.session.SessionManager
 import com.moveinsight.presentation.navigation.NavGraph
 import com.moveinsight.presentation.theme.MoveInsightTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var sessionManager: SessionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Debe llamarse ANTES de super.onCreate()
         installSplashScreen()
@@ -19,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoveInsightTheme {
-                NavGraph()
+                NavGraph(sessionManager = sessionManager)
             }
         }
     }

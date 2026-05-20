@@ -1,13 +1,17 @@
 package com.moveinsight.core.di
 
 import com.moveinsight.data.repository.AuthRepositoryImpl
+import com.moveinsight.data.repository.RecommendationsRepositoryImpl
 import com.moveinsight.data.repository.SessionRepositoryImpl
+import com.moveinsight.data.repository.WellnessRepositoryImpl
 import com.moveinsight.domain.repository.AnalyticsRepository
 import com.moveinsight.domain.repository.AnalyticsRepositoryImpl
 import com.moveinsight.domain.repository.AuthRepository
 import com.moveinsight.domain.repository.PainCheckInRepository
 import com.moveinsight.domain.repository.PainCheckInRepositoryImpl
+import com.moveinsight.domain.repository.RecommendationsRepository
 import com.moveinsight.domain.repository.SessionRepository
+import com.moveinsight.domain.repository.WellnessRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -30,4 +34,14 @@ abstract class RepositoryModule {
     abstract fun bindPainCheckInRepository(
         impl: PainCheckInRepositoryImpl
     ): PainCheckInRepository
+
+    @Binds @Singleton
+    abstract fun bindWellnessRepository(
+        impl: WellnessRepositoryImpl
+    ): WellnessRepository
+
+    @Binds @Singleton
+    abstract fun bindRecommendationsRepository(
+        impl: RecommendationsRepositoryImpl
+    ): RecommendationsRepository
 }
