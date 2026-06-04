@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 # Conexiones estándar del modelo de pose de MediaPipe (33 landmarks)
 POSE_CONNECTIONS = [
@@ -37,118 +38,6 @@ _CONEXION_ZONA = {
     (30,32):"pierna_d", (28,32):"pierna_d",
 }
 
-# Cache de resolución de pantalla (se detecta solo la primera vez)
-_SCREEN_SIZE = None
-
-def _get_screen_size():
-    global _SCREEN_SIZE
-    if _SCREEN_SIZE is None:
-        try:
-            import tkinter as tk
-            root = tk.Tk()
-            root.withdraw()
-            _SCREEN_SIZE = (root.winfo_screenwidth(), root.winfo_screenheight())
-            root.destroy()
-        except Exception:
-            _SCREEN_SIZE = (1920, 1080)
-    return _SCREEN_SIZE
-
-
-def mostrar_frame(frame, results):
-    """
-    Dibuja los landmarks de pose detectados sobre el frame y lo muestra por pantalla.
-    Uso: comentar/descomentar la llamada en main.py para activar/desactivar el debug visual.
-
-    Args:
-        frame:   Frame BGR original de OpenCV.
-        results: Objeto de resultados devuelto por PoseProcessor.process_frame().
-    """
-    # --- 1. Redimensionar primero al tamaño de display (40% de pantalla) ---
-    screen_w, screen_h = _get_screen_size()
-    max_w = int(screen_w * 0.60)
-    max_h = int(screen_h * 0.60)
-
-    h, w = frame.shape[:2]
-    scale = min(max_w / w, max_h / h, 1.0)
-    disp_w = int(w * scale)
-    disp_h = int(h * scale)
-    display = cv2.resize(frame, (disp_w, disp_h), interpolation=cv2.INTER_AREA)
-
-    # --- 2. Dibujar sobre el frame ya reducido ---
-    if results.pose_landmarks:
-        for pose_landmarks in results.pose_landmarks:
-            puntos = []
-            for lm in pose_landmarks:
-                px = int(lm.x * disp_w)
-                py = int(lm.y * disp_h)
-                puntos.append((px, py))
-
-            # Grosor y radio proporcionales al tamaño del frame reducido
-            grosor_linea = max(1, int(disp_w / 300))
-            radio_punto  = max(2, int(disp_w / 200))
-
-            # Conexiones con color por zona
-            for (a, b) in POSE_CONNECTIONS:
-                if a < len(puntos) and b < len(puntos):
-                    zona = _CONEXION_ZONA.get((a, b), "torso")
-                    color = _COLORES_CONEXION[zona]
-                    cv2.line(display, puntos[a], puntos[b], color, grosor_linea, cv2.LINE_AA)
-
-            # Landmarks: círculo blanco con borde negro para que resalten
-            for (px, py) in puntos:
-                cv2.circle(display, (px, py), radio_punto + 1, (0, 0, 0),   -1, cv2.LINE_AA)
-                cv2.circle(display, (px, py), radio_punto,     (255, 255, 255), -1, cv2.LINE_AA)
-
-    # --- 3. Mostrar centrada y redimensionable ---
-    cv2.namedWindow("Debug - Pose", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Debug - Pose", disp_w, disp_h)
-    pos_x = (screen_w - disp_w) // 2
-    pos_y = (screen_h - disp_h) // 2
-    cv2.moveWindow("Debug - Pose", pos_x, pos_y)
-    cv2.imshow("Debug - Pose", display)
-    cv2.waitKey(1)
-
-
-def draw_skeleton_on_frame(frame, results):
-    """
-    Dibuja el esqueleto de pose sobre el frame BGR (sin mostrar por pantalla).
-    Devuelve el frame con el esqueleto pintado, listo para escribir en vídeo.
-
-    Args:
-        frame:   Frame BGR original de OpenCV.
-        results: Objeto de resultados devuelto por PoseProcessor.process_frame().
-    Returns:
-        frame modificado (BGR) con esqueleto dibujado.
-    """
-    out = frame.copy()
-    h, w = out.shape[:2]
-
-    if results.pose_landmarks:
-        for pose_landmarks in results.pose_landmarks:
-            puntos = []
-            for lm in pose_landmarks:
-                px = int(lm.x * w)
-                py = int(lm.y * h)
-                puntos.append((px, py))
-
-            grosor_linea = max(2, int(w / 320))
-            radio_punto  = max(3, int(w / 220))
-
-            # Conexiones coloreadas por zona
-            for (a, b) in POSE_CONNECTIONS:
-                if a < len(puntos) and b < len(puntos):
-                    zona  = _CONEXION_ZONA.get((a, b), "torso")
-                    color = _COLORES_CONEXION[zona]
-                    cv2.line(out, puntos[a], puntos[b], color, grosor_linea, cv2.LINE_AA)
-
-            # Landmarks
-            for (px, py) in puntos:
-                cv2.circle(out, (px, py), radio_punto + 1, (0, 0, 0),       -1, cv2.LINE_AA)
-                cv2.circle(out, (px, py), radio_punto,     (255, 255, 255),  -1, cv2.LINE_AA)
-
-    return out
-
-
 def _draw_skeleton_from_coords(frame, landmarks):
     """
     Dibuja el esqueleto a partir de coordenadas normalizadas (0-1) ya calculadas.
@@ -180,32 +69,69 @@ def _draw_skeleton_from_coords(frame, landmarks):
     return out
 
 
-def generate_skeleton_video(video_path: str, output_path: str, pose_processor) -> bool:
+def generate_skeleton_video(video_path: str, output_path: str, frame_landmarks: list) -> bool:
     """
-    Procesa el vídeo original frame a frame, dibuja el esqueleto de MediaPipe
-    sobre cada frame y escribe el resultado en *output_path*.
+    Dibuja el esqueleto sobre cada frame del vídeo REUTILIZANDO los landmarks
+    ya calculados durante el análisis (no se vuelve a ejecutar MediaPipe).
 
-    Aplica dos técnicas para eliminar el parpadeo de landmarks:
-      · Persistencia por landmark: si un punto concreto desaparece (visibilidad
-        baja), se reutiliza su última posición conocida en lugar de borrarlo.
-      · Suavizado EMA: las coordenadas se interpolan entre el frame anterior y
-        el actual para evitar saltos bruscos.
+    Antes este vídeo se generaba con una segunda pasada completa de pose, lo que
+    duplicaba el coste de cómputo. Ahora recibe los landmarks precalculados.
+
+    Como disponemos de TODA la secuencia de antemano, el suavizado se hace con
+    una media móvil CENTRADA (filtro de fase cero): elimina el parpadeo SIN el
+    retardo visible ("lag") que introducía el antiguo EMA causal, que solo podía
+    mirar al pasado y por eso arrastraba los puntos por detrás del movimiento.
 
     Args:
-        video_path:     Ruta al vídeo original.
-        output_path:    Ruta donde guardar el vídeo con esqueleto (mp4).
-        pose_processor: Instancia de PoseProcessor ya configurada.
+        video_path:      Ruta al vídeo original.
+        output_path:     Ruta donde guardar el vídeo con esqueleto (mp4).
+        frame_landmarks: Lista paralela a los frames del vídeo. Cada elemento es
+                         un vector plano (33*4) [x, y, z, visibility] o None si
+                         no hubo detección de pose en ese frame.
     Returns:
         True si se generó correctamente, False en caso de error.
     """
     import os
 
-    # ── Parámetros de suavizado ───────────────────────────────────────────
-    # ALPHA: peso del frame actual en el EMA (0=todo pasado, 1=sin suavizado)
-    # 0.45 da prioridad ligera al historial → movimiento fluido sin lag excesivo
-    ALPHA               = 0.45
-    VISIBILITY_THRESHOLD = 0.45   # por debajo → usar última posición conocida
+    T = len(frame_landmarks)
+    if T == 0:
+        return False
 
+    SMOOTH_WINDOW = 5   # impar → media móvil centrada (fase cero, sin lag)
+
+    # ── 1) Coordenadas normalizadas (T, 33, 2); NaN en frames sin pose ────────
+    coords = np.full((T, 33, 2), np.nan, dtype=np.float32)
+    for t, vec in enumerate(frame_landmarks):
+        if vec is None:
+            continue
+        lm = np.asarray(vec, dtype=np.float32).reshape(-1, 4)
+        if lm.shape[0] < 33:
+            continue
+        coords[t, :, 0] = lm[:33, 0]
+        coords[t, :, 1] = lm[:33, 1]
+
+    # ── 2) Interpolación temporal por landmark (rellena los frames sin pose) ──
+    idx = np.arange(T)
+    for j in range(33):
+        for c in range(2):
+            s = coords[:, j, c]
+            m = np.isnan(s)
+            if m.all():
+                s[:] = 0.0                       # landmark nunca detectado
+            elif m.any():
+                s[m] = np.interp(idx[m], idx[~m], s[~m])
+            coords[:, j, c] = s
+
+    # ── 3) Suavizado de fase cero (media móvil centrada) ──────────────────────
+    if T >= SMOOTH_WINDOW:
+        pad    = SMOOTH_WINDOW // 2
+        kernel = np.ones(SMOOTH_WINDOW, dtype=np.float32) / SMOOTH_WINDOW
+        for j in range(33):
+            for c in range(2):
+                padded = np.pad(coords[:, j, c], pad, mode="edge")
+                coords[:, j, c] = np.convolve(padded, kernel, mode="valid")
+
+    # ── 4) Dibujar sobre los frames del vídeo original ────────────────────────
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         return False
@@ -217,52 +143,19 @@ def generate_skeleton_video(video_path: str, output_path: str, pose_processor) -
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 
-    # Buffer de coordenadas suavizadas: lista de 33 tuplas (x_norm, y_norm) o None
-    smoothed = None   # None hasta detectar la primera pose
-
     try:
+        t = 0
         while True:
             ret, frame = cap.read()
             if not ret:
                 break
-
-            results, _ = pose_processor.process_frame(frame)
-
-            # ── Extraer landmarks del frame actual ────────────────────────
-            raw = None
-            if results.pose_landmarks:
-                for pose_lms in results.pose_landmarks:
-                    raw = [(lm.x, lm.y, lm.visibility) for lm in pose_lms]
-                    break  # una sola persona
-
-            if raw is not None:
-                if smoothed is None:
-                    # Primera detección: inicializar sin suavizado
-                    smoothed = [(x, y) for (x, y, _) in raw]
-                else:
-                    # EMA landmark a landmark, con persistencia por visibilidad
-                    new_smoothed = []
-                    for i, (rx, ry, vis) in enumerate(raw):
-                        sx, sy = smoothed[i]
-                        if vis >= VISIBILITY_THRESHOLD:
-                            # Landmark visible: suavizar con EMA
-                            new_smoothed.append((
-                                ALPHA * rx + (1 - ALPHA) * sx,
-                                ALPHA * ry + (1 - ALPHA) * sy,
-                            ))
-                        else:
-                            # Landmark no fiable: mantener última posición conocida
-                            new_smoothed.append((sx, sy))
-                    smoothed = new_smoothed
-            # Si raw es None (pose completa no detectada) → smoothed sin cambios (persistencia total)
-
-            # ── Dibujar ───────────────────────────────────────────────────
-            if smoothed is not None:
-                annotated = _draw_skeleton_from_coords(frame, smoothed)
+            if t < T:
+                pts = [(float(coords[t, j, 0]), float(coords[t, j, 1])) for j in range(33)]
+                annotated = _draw_skeleton_from_coords(frame, pts)
             else:
-                annotated = frame.copy()   # Aún no hay ninguna detección inicial
-
+                annotated = frame   # más frames que landmarks (no debería ocurrir)
             writer.write(annotated)
+            t += 1
 
     except Exception:
         return False

@@ -35,10 +35,8 @@ def _load_sessions_with_technique(db: DBSession, user_id: int) -> list[Session]:
         results = db.query(SessionResult).filter(
             SessionResult.session_id == s.id
         ).all()
-        if results:
-            s.avg_technique = sum(r.overall_score for r in results) / len(results)
-        else:
-            s.avg_technique = None
+        valid = [r.overall_score for r in results if r.overall_score is not None]
+        s.avg_technique = (sum(valid) / len(valid)) if valid else None
 
     return sessions
 
@@ -133,7 +131,7 @@ def get_analytics_summary(
             elif avg_t >= 5.0:
                 insights.append(InsightResponse(
                     type="tip", title="Tecnica mejorable",
-                    message=f"Tu puntuacion media es {avg_t:.1f}/10. Enfocate en profundidad y estabilidad."
+                    message=f"Tu puntuacion media es {avg_t:.1f}/10. Enfocate en profundidad y control postural."
                 ))
             else:
                 insights.append(InsightResponse(
@@ -280,7 +278,7 @@ def _compute_personal_records(sessions: list[Session], session_data: list[dict])
       - Mejor técnica (sesión con mejor media)
       - Carga máxima registrada
       - Repeticiones máximas en una sola sesión
-      - Mejores puntuaciones en cada KPI individual (depth, knees, torso, stability, rhythm)
+      - Mejores puntuaciones en cada KPI individual (depth, knees/valgo, torso, symmetry, rhythm)
       - Mejor combinación Borg bajo + técnica alta
     Devuelve un dict con `value`, `date`, `extra` por cada PR (cuando aplica).
     """
@@ -322,11 +320,11 @@ def _compute_personal_records(sessions: list[Session], session_data: list[dict])
 
     # ── Mejores KPIs individuales (mejor rep, no media) ─────────────────
     kpi_fields = [
-        ("best_depth"     , "depth_score"     , "Profundidad"),
-        ("best_knees"     , "knees_score"     , "Rodillas"),
-        ("best_torso"     , "torso_score"     , "Torso"),
-        ("best_stability" , "stability_score" , "Estabilidad"),
-        ("best_rhythm"    , "rhythm_score"    , "Ritmo"),
+        ("best_depth"    , "depth_score"    , "Profundidad"),
+        ("best_knees"    , "knees_score"    , "Valgo de rodilla"),
+        ("best_torso"    , "torso_score"    , "Torso"),
+        ("best_symmetry" , "symmetry_score" , "Simetría"),
+        ("best_rhythm"   , "rhythm_score"   , "Ritmo"),
     ]
     for pr_key, attr, _label in kpi_fields:
         best_kpi = None
@@ -701,7 +699,8 @@ def export_pdf(
         reps = db.query(SessionResult).filter(
             SessionResult.session_id == s.id
         ).order_by(SessionResult.rep_number).all()
-        avg_score = sum(r.overall_score for r in reps) / len(reps) if reps else None
+        _valid = [r.overall_score for r in reps if r.overall_score is not None]
+        avg_score = (sum(_valid) / len(_valid)) if _valid else None
         session_data.append({"session": s, "reps": reps, "avg_score": avg_score})
 
     # avg_technique como atributo dinámico (necesario para readiness)
@@ -898,9 +897,9 @@ def export_pdf(
                 _fmt_pr_date(prs["max_reps"]["date"]),
             ])
         for key, label in (("best_depth", "Mejor profundidad (rep)"),
-                            ("best_knees", "Mejor alineación rodillas (rep)"),
+                            ("best_knees", "Mejor alineación rodillas / valgo (rep)"),
                             ("best_torso", "Mejor control de torso (rep)"),
-                            ("best_stability", "Mejor estabilidad (rep)"),
+                            ("best_symmetry", "Mejor simetría L/R (rep)"),
                             ("best_rhythm", "Mejor ritmo (rep)")):
             if key in prs:
                 pr_rows.append([
@@ -1000,7 +999,7 @@ def export_pdf(
                     f"Tu puntuación media de técnica es {at:.1f}/10. ¡Sigue así!"))
             elif at >= 5.0:
                 insights_list.append(("tip", "Técnica mejorable",
-                    f"Tu puntuación media es {at:.1f}/10. Enfócate en profundidad y estabilidad."))
+                    f"Tu puntuación media es {at:.1f}/10. Enfócate en profundidad y control postural."))
             else:
                 insights_list.append(("warning", "Revisa tu técnica",
                     f"Tu puntuación media es {at:.1f}/10. Reduce carga y trabaja la forma."))
@@ -1216,18 +1215,22 @@ def export_pdf(
             story.append(hdr_t)
 
             if reps:
-                rep_header = ["Rep", "Profundidad", "Torso", "Estabilidad",
-                              "Rodillas", "Ritmo", "Global"]
+                # "N/D" para KPIs no medibles en el perfil de la sesión (valgo/simetría en lateral)
+                def _kpi(v):
+                    return f"{v:.1f}" if v is not None else "N/D"
+
+                rep_header = ["Rep", "Profundidad", "Torso", "Valgo",
+                              "Simetría", "Ritmo", "Global"]
                 rep_rows = [rep_header]
                 for r in reps:
                     rep_rows.append([
                         str(r.rep_number),
-                        f"{r.depth_score:.1f}",
-                        f"{r.torso_score:.1f}",
-                        f"{r.stability_score:.1f}",
-                        f"{r.knees_score:.1f}",
-                        f"{r.rhythm_score:.1f}",
-                        f"{r.overall_score:.1f}",
+                        _kpi(r.depth_score),
+                        _kpi(r.torso_score),
+                        _kpi(r.knees_score),
+                        _kpi(r.symmetry_score),
+                        _kpi(r.rhythm_score),
+                        _kpi(r.overall_score),
                     ])
                 col_w = tw / len(rep_header)
                 rep_t = Table(rep_rows, colWidths=[col_w] * len(rep_header))

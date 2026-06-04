@@ -147,7 +147,7 @@ private fun DisclaimerStep(onNext: () -> Unit) {
             icon    = Icons.Filled.Analytics,
             color   = CyanPrimary,
             title   = "Herramienta de seguimiento",
-            message = "MoveInsight analiza tu técnica de sentadilla y estima tu estado de readiness a partir de los datos que registras."
+            message = "MoveInsight analiza tu técnica de sentadilla y estima tu estado físico a partir de los datos que registras."
         )
         Spacer(Modifier.height(12.dp))
         DisclaimerCard(

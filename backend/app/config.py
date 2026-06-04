@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     UPLOAD_DIR: Path = BASE_DIR / "uploads"
     REPORT_DIR: Path = BASE_DIR / "reportes"
-    MODEL_DIR:  Path = BASE_DIR / "modelos" / "v15"
+    MODEL_DIR:  Path = BASE_DIR / "modelos" / "v16"
 
     # ── Email ─────────────────────────────────────────────────────────────
     EMAIL_HOST:     str = "smtp.gmail.com"

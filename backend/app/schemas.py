@@ -82,12 +82,13 @@ class SessionResponse(BaseModel):
 # --- Session results (para GET) ---
 class RepResult(BaseModel):
     rep_number: int
-    depth_score: float
-    torso_score: float
-    stability_score: float
-    knees_score: float
-    rhythm_score: float
-    overall_score: float
+    # KPIs 0-10. knees (valgo) y symmetry son None en vista lateral (no medibles).
+    depth_score    : float | None = None
+    torso_score    : float | None = None
+    knees_score    : float | None = None   # valgo de rodilla
+    symmetry_score : float | None = None
+    rhythm_score   : float | None = None
+    overall_score  : float | None = None
 
     class Config:
         from_attributes = True

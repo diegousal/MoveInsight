@@ -120,7 +120,7 @@ fun DashboardScreen(
         } else {
             // ── Contenido principal con tabs ──────────────────────────
             var selectedTab by remember { mutableIntStateOf(0) }
-            val tabs = listOf("Sesiones", "Gráficos", "Insights")
+            val tabs = listOf("Sesiones", "Gráficos", "Análisis")
 
             Column(
                 modifier = Modifier
@@ -220,7 +220,7 @@ private fun ReadinessBanner(
             }
             Column {
                 Text(
-                    text  = "Readiness",
+                    text  = "Estado físico",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(

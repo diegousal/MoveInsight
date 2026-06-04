@@ -53,7 +53,7 @@ fun ReadinessBreakdownScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Detalle de Readiness",
+                        "Detalle del estado físico",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.SemiBold,
                             color      = TextPrimary

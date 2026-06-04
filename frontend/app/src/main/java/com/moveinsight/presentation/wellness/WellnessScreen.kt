@@ -332,7 +332,7 @@ private fun ValidationContent(val_: ValidationResult) {
         // ── Disclaimer ────────────────────────────────────────────────────
         Spacer(Modifier.height(10.dp))
         Text(
-            "Análisis descriptivo para el TFG. No implica relación causal entre readiness y lesión.",
+            "Análisis descriptivo para el TFG. No implica relación causal entre estado físico y lesión.",
             style = MaterialTheme.typography.labelSmall.copy(
                 color = TextSecondary, lineHeight = 15.sp
             )

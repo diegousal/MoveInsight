@@ -1,0 +1,64 @@
+{
+  "20260604_192551_mi_upload_1780593947187.npy": [
+    {
+      "start": 72,
+      "end": 137,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 157,
+      "end": 224,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 243,
+      "end": 318,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 339,
+      "end": 421,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 479,
+      "end": 566,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 604,
+      "end": 693,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ]
+}

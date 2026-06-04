@@ -215,7 +215,7 @@ fun HomeScreen(
             // ── Card 2: Historial ──────────────────────────────────────────
             HeroActionCard(
                 title       = "Mi Historial",
-                subtitle    = "Sesiones · Gráficos · Insights · Informe PDF",
+                subtitle    = "Sesiones · Gráficos · Análisis · Informe PDF",
                 icon        = Icons.Filled.BarChart,
                 accentColor = OrangePower,
                 onClick     = onNavigateToDashboard
@@ -669,7 +669,7 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
                 items = listOf(
                     "Graba o sube un vídeo de tu sentadilla",
                     "La IA analiza la postura fotograma a fotograma",
-                    "Obtienes 5 KPIs puntuados de 0 a 10",
+                    "Obtienes 5 métricas puntuadas de 0 a 10",
                     "Recibes notificaciones a las 24h y 48h para registrar el dolor"
                 )
             )
@@ -703,13 +703,13 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
             HelpSection(
                 icon      = Icons.Filled.Analytics,
                 color     = GreenReady,
-                title     = "KPIs de Técnica  ·  Puntuación 0 – 10",
+                title     = "Métricas de Técnica  ·  Puntuación 0 – 10",
                 keyWeight = 0.30f,
                 items     = listOf(
                     "Profundidad  ·  Ángulo de cadera en el punto más bajo",
                     "Torso        ·  Inclinación del tronco respecto a la vertical",
-                    "Estabilidad  ·  Control del desplazamiento lateral de cadera",
-                    "Rodillas     ·  Alineación con la punta de los pies",
+                    "Valgo        ·  Alineación de la rodilla con la punta del pie (solo de frente)",
+                    "Simetría     ·  Equilibrio entre lado izquierdo y derecho (solo de frente)",
                     "Ritmo        ·  Control de la fase excéntrica (bajada)"
                 )
             )
@@ -717,12 +717,65 @@ private fun HelpBottomSheet(onDismiss: () -> Unit) {
             HelpSection(
                 icon      = Icons.Filled.MonitorHeart,
                 color     = CyanPrimary,
-                title     = "Readiness  ·  Nivel de preparación",
+                title     = "Estado físico  ·  Nivel de preparación",
                 keyWeight = 0.35f,
                 items     = listOf(
                     "Alto (70–100)  ·  Óptimo para entrenar fuerte",
                     "Medio (40–69)  ·  Entrena con moderación",
                     "Bajo (< 40)    ·  Prioriza el descanso hoy"
+                )
+            )
+
+            HelpSection(
+                icon  = Icons.Filled.MedicalServices,
+                color = YellowCaution,
+                title = "Bienestar  ·  Seguimiento de molestias",
+                items = listOf(
+                    "Registra una incidencia indicando zona del cuerpo, intensidad (0–10) y fechas",
+                    "La gráfica relaciona tu estado físico con los periodos de molestia o lesión",
+                    "Te ayuda a detectar patrones entre carga, técnica y aparición de dolor"
+                )
+            )
+
+            HelpSection(
+                icon  = Icons.Filled.Videocam,
+                color = CyanPrimary,
+                title = "Vídeo con esqueleto",
+                items = listOf(
+                    "Tras el análisis puedes ver tu vídeo con el esqueleto superpuesto",
+                    "Muestra fotograma a fotograma cómo se ha detectado tu postura",
+                    "Útil para entender de forma visual cada puntuación de técnica"
+                )
+            )
+
+            HelpSection(
+                icon  = Icons.Filled.Lightbulb,
+                color = OrangePower,
+                title = "Recomendaciones personalizadas",
+                items = listOf(
+                    "Según tu técnica y tu estado físico, la app sugiere acciones concretas",
+                    "Aparecen en la pantalla de Inicio y en los resultados de cada sesión",
+                    "Se actualizan a medida que registras nuevas sesiones"
+                )
+            )
+
+            HelpSection(
+                icon  = Icons.Filled.PictureAsPdf,
+                color = GreenReady,
+                title = "Historial e informe PDF",
+                items = listOf(
+                    "En Historial revisas tus sesiones, gráficos de evolución y análisis",
+                    "Puedes exportar un informe en PDF y abrirlo o compartirlo desde el móvil"
+                )
+            )
+
+            HelpSection(
+                icon  = Icons.Filled.Info,
+                color = TextSecondary,
+                title = "Aviso importante",
+                items = listOf(
+                    "MoveInsight es una herramienta de apoyo al entrenamiento, no un sustituto del criterio de un profesional médico o sanitario",
+                    "Ante dolor persistente, molestias intensas o una posible lesión, consulta siempre con un profesional cualificado"
                 )
             )
         }

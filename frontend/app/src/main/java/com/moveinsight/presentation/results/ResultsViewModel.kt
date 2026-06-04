@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moveinsight.core.utils.Resource
+import com.moveinsight.domain.model.RepResult
 import com.moveinsight.domain.model.SessionDetail
 import com.moveinsight.domain.session.GetSessionDetailUseCase
 import com.moveinsight.domain.session.GetSessionsUseCase
@@ -50,8 +51,12 @@ class ResultsViewModel @Inject constructor(
                                 }
                                 detail.isCompleted -> {
                                     val reps           = detail.results
-                                    val overallAverage = reps.map { it.overallScore }.average()
-                                        .toFloat().takeIf { it.isFinite() } ?: 0f
+                                    // Media de un KPI usando solo las reps con valor (ignora N/D).
+                                    fun avgOf(selector: (RepResult) -> Float?): Float? =
+                                        reps.mapNotNull(selector).takeIf { it.isNotEmpty() }?.average()?.toFloat()
+
+                                    val overallScores  = reps.mapNotNull { it.overallScore }
+                                    val overallAverage = overallScores.takeIf { it.isNotEmpty() }?.average()?.toFloat() ?: 0f
 
                                     // ── Fetch session list for comparison (parallel) ──
                                     val sessionsDeferred = async { getSessionsUseCase() }
@@ -67,13 +72,13 @@ class ResultsViewModel @Inject constructor(
                                             createdAt      = detail.createdAt,
                                             reps           = reps,
                                             checkins       = detail.checkins,
-                                            avgDepth       = reps.map { it.depthScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
-                                            avgTorso       = reps.map { it.torsoScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
-                                            avgStability   = reps.map { it.stabilityScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
-                                            avgKnees       = reps.map { it.kneesScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
-                                            avgRhythm      = reps.map { it.rhythmScore }.average().toFloat().takeIf { it.isFinite() } ?: 0f,
+                                            avgDepth       = avgOf { it.depthScore },
+                                            avgTorso       = avgOf { it.torsoScore },
+                                            avgKnees       = avgOf { it.kneesScore },
+                                            avgSymmetry    = avgOf { it.symmetryScore },
+                                            avgRhythm      = avgOf { it.rhythmScore },
                                             overallAverage = overallAverage,
-                                            fatigue        = calcFatigue(reps.map { it.overallScore }),
+                                            fatigue        = calcFatigue(overallScores),
                                             comparison     = comparison
                                         )
                                     )

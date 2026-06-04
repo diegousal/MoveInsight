@@ -104,7 +104,7 @@ private fun ChartLegend(hasIncidents: Boolean) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment     = Alignment.CenterVertically
     ) {
-        LegendItem(label = "Readiness diario", color = CyanPrimary, isLine = true)
+        LegendItem(label = "Estado físico diario", color = CyanPrimary, isLine = true)
         if (hasIncidents) {
             LegendItem(label = "Periodo de lesión", color = RedAlert, isLine = false)
         }

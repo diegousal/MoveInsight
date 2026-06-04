@@ -27,7 +27,8 @@ def _attach_avg_technique(db: DBSession, sessions: list[Session]) -> None:
     """Añade `avg_technique` a cada sesión consultando SessionResult."""
     for s in sessions:
         results = db.query(SessionResult).filter(SessionResult.session_id == s.id).all()
-        s.avg_technique = (sum(r.overall_score for r in results) / len(results)) if results else None
+        valid = [r.overall_score for r in results if r.overall_score is not None]
+        s.avg_technique = (sum(valid) / len(valid)) if valid else None
 
 
 def _to_incident_dict(i: Incident) -> dict:

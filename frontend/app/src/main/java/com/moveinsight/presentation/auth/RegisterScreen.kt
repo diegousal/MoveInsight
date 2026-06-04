@@ -84,7 +84,7 @@ fun RegisterScreen(
             Spacer(Modifier.height(14.dp))
             NeuroSquatTextField(
                 value = form.email, onValueChange = viewModel::onEmailChange,
-                label = "Email", leadingIcon = Icons.Filled.Email,
+                label = "Correo electrónico", leadingIcon = Icons.Filled.Email,
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })

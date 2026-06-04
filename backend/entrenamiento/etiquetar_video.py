@@ -100,23 +100,21 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-    # --- NUEVA LÓGICA DE PROCESAMIENTO ---
-    # Buscamos la secuencia: stand -> bajando -> abajo -> subiendo -> stand
+    # --- PROCESAMIENTO DE REPETICIONES ---
+    # Buscamos la secuencia: stand → bajando → abajo → subiendo → stand.
+    # La red solo se entrena para segmentar fases, así que no necesitamos
+    # etiquetar KPIs a mano: se calcularán geométricamente tras la inferencia.
     reps = []
     i = 0
     while i + 4 < len(labels):
-        # Tomamos 5 etiquetas consecutivas
-        window = labels[i:i+5]
+        window  = labels[i:i+5]
         l_names = [lab['label'] for lab in window]
-        
+
         if l_names == ['stand', 'bajando', 'abajo', 'subiendo', 'stand']:
             frames_tuple = tuple(lab['frame'] for lab in window)
-            kpis_zero = {"depth": 0, "torso": 0, "stability": 0, "knees": 0, "ritmo": 0}
-            reps.append({'frames': frames_tuple, 'kpis': kpis_zero})
-            # Avanzamos 4 posiciones: el último 'stand' de esta rep es el primero de la siguiente
+            reps.append({'frames': frames_tuple})
             i += 4
         else:
-            # Si no encaja, avanzamos de uno en uno buscando el siguiente 'stand'
             i += 1
 
     # --- GUARDADO ---
@@ -125,8 +123,7 @@ def main():
         with open(args.pretty, 'a', encoding='utf-8') as f:
             f.write(f'"{base_key}": {{\n  "reps": [\n')
             for r in reps:
-                # Ahora r['frames'] tiene 5 valores: (inicio, bajada, fondo, subida, fin)
-                f.write(f"    {{\n      \"frames\": {r['frames']}, \n      \"kpis\": {json.dumps(r['kpis'])}\n    }},\n")
+                f.write(f"    {{\n      \"frames\": {r['frames']}\n    }},\n")
             f.write('  ]\n}\n\n')
         print(f"\nSe han guardado {len(reps)} repeticiones en {args.pretty}")
     else:

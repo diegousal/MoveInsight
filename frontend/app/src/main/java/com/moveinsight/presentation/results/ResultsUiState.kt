@@ -26,11 +26,12 @@ data class ResultsData(
     val createdAt      : String = "",
     val reps           : List<RepResult> = emptyList(),
     val checkins       : List<PainCheckInSummary> = emptyList(),
-    val avgDepth       : Float = 0f,
-    val avgTorso       : Float = 0f,
-    val avgStability   : Float = 0f,
-    val avgKnees       : Float = 0f,
-    val avgRhythm      : Float = 0f,
+    // KPIs 0-10. knees (valgo) y symmetry son null en vídeos laterales (no medibles).
+    val avgDepth       : Float? = null,
+    val avgTorso       : Float? = null,
+    val avgKnees       : Float? = null,   // valgo de rodilla
+    val avgSymmetry    : Float? = null,
+    val avgRhythm      : Float? = null,
     val overallAverage : Float = 0f,
     val fatigue        : RepFatigueData?    = null,
     val comparison     : SessionComparison? = null

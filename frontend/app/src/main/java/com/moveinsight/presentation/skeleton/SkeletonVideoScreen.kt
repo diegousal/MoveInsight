@@ -34,7 +34,7 @@ fun SkeletonVideoScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Overlay de esqueleto",
+                        "Vídeo con esqueleto",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         color = TextPrimary
                     )
@@ -64,14 +64,14 @@ fun SkeletonVideoScreen(
                             text  = if (state.attempt == 1)
                                 "Descargando vídeo de esqueleto…"
                             else
-                                "Generando overlay del esqueleto en el servidor…",
+                                "Generando el vídeo con esqueleto en el servidor…",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
                         if (state.attempt > 1) {
                             Spacer(Modifier.height(6.dp))
                             Text(
-                                text  = "Esto puede tardar hasta 1-2 min · intento ${state.attempt}",
+                                text  = "Esto puede tardar hasta 1-2 min",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = TextSecondary
                             )
@@ -121,7 +121,7 @@ fun SkeletonVideoScreen(
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            "El análisis todavía no generó el overlay o la sesión aún está procesando.",
+                            "El análisis todavía no generó el vídeo con esqueleto o la sesión aún está procesando.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )

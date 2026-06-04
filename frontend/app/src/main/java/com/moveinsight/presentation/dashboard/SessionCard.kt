@@ -74,7 +74,7 @@ fun SessionCard(
                         color = techniqueColor(session.overallScore)
                     )
                     MetricItem(
-                        label = "Reps",
+                        label = "Repes",
                         value = session.repCount?.toString() ?: "-",
                         icon  = null,
                         color = CyanPrimary

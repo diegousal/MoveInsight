@@ -1,0 +1,6653 @@
+{
+  "2.npy": [
+    {
+      "start": 0,
+      "end": 51,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "3.npy": [
+    {
+      "start": 0,
+      "end": 136,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "4.npy": [
+    {
+      "start": 0,
+      "end": 138,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 138,
+      "end": 304,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 304,
+      "end": 454,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 454,
+      "end": 603,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "5.npy": [
+    {
+      "start": 0,
+      "end": 58,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 58,
+      "end": 131,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 131,
+      "end": 210,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 210,
+      "end": 286,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 286,
+      "end": 362,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 362,
+      "end": 435,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 435,
+      "end": 515,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 515,
+      "end": 590,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "7.npy": [
+    {
+      "start": 0,
+      "end": 109,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 109,
+      "end": 240,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 240,
+      "end": 373,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 373,
+      "end": 529,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 529,
+      "end": 687,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "8.npy": [
+    {
+      "start": 0,
+      "end": 111,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 111,
+      "end": 236,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 236,
+      "end": 357,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 357,
+      "end": 468,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 468,
+      "end": 591,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 591,
+      "end": 714,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "9.npy": [
+    {
+      "start": 0,
+      "end": 47,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 47,
+      "end": 108,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 108,
+      "end": 164,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 164,
+      "end": 232,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 232,
+      "end": 294,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "10.npy": [
+    {
+      "start": 7,
+      "end": 57,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 57,
+      "end": 106,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 106,
+      "end": 156,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 156,
+      "end": 217,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "11.npy": [
+    {
+      "start": 9,
+      "end": 39,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 39,
+      "end": 78,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 78,
+      "end": 104,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 104,
+      "end": 136,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 136,
+      "end": 171,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 171,
+      "end": 205,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 205,
+      "end": 239,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 239,
+      "end": 272,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 272,
+      "end": 308,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "12.npy": [
+    {
+      "start": 0,
+      "end": 134,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 134,
+      "end": 311,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "13.npy": [
+    {
+      "start": 0,
+      "end": 51,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 51,
+      "end": 114,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 114,
+      "end": 176,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 176,
+      "end": 240,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "14.npy": [
+    {
+      "start": 0,
+      "end": 48,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 48,
+      "end": 101,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 101,
+      "end": 157,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 157,
+      "end": 210,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 210,
+      "end": 269,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "15.npy": [
+    {
+      "start": 2,
+      "end": 84,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 84,
+      "end": 203,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "16.npy": [
+    {
+      "start": 0,
+      "end": 47,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 47,
+      "end": 108,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 108,
+      "end": 166,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 166,
+      "end": 226,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 226,
+      "end": 279,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 279,
+      "end": 345,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "17.npy": [
+    {
+      "start": 3,
+      "end": 39,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 39,
+      "end": 86,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 86,
+      "end": 138,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 138,
+      "end": 190,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 190,
+      "end": 244,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 244,
+      "end": 302,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "18.npy": [
+    {
+      "start": 0,
+      "end": 97,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "19.npy": [
+    {
+      "start": 31,
+      "end": 158,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "20.npy": [
+    {
+      "start": 0,
+      "end": 63,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 63,
+      "end": 146,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 146,
+      "end": 232,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 232,
+      "end": 326,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 326,
+      "end": 425,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "21.npy": [
+    {
+      "start": 0,
+      "end": 40,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 40,
+      "end": 100,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 100,
+      "end": 159,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 159,
+      "end": 221,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 221,
+      "end": 278,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 278,
+      "end": 334,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "22.npy": [
+    {
+      "start": 0,
+      "end": 84,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 84,
+      "end": 213,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "23.npy": [
+    {
+      "start": 7,
+      "end": 95,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 95,
+      "end": 174,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "24.npy": [
+    {
+      "start": 24,
+      "end": 94,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 94,
+      "end": 181,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 181,
+      "end": 294,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "25.npy": [
+    {
+      "start": 0,
+      "end": 95,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 95,
+      "end": 209,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 209,
+      "end": 328,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "26.npy": [
+    {
+      "start": 0,
+      "end": 101,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 101,
+      "end": 208,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 208,
+      "end": 299,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "29.npy": [
+    {
+      "start": 0,
+      "end": 100,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 100,
+      "end": 221,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 221,
+      "end": 349,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 349,
+      "end": 489,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 489,
+      "end": 630,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "30.npy": [
+    {
+      "start": 0,
+      "end": 51,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 51,
+      "end": 102,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 102,
+      "end": 150,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 150,
+      "end": 197,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "31.npy": [
+    {
+      "start": 9,
+      "end": 43,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 43,
+      "end": 102,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 102,
+      "end": 157,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "32.npy": [
+    {
+      "start": 0,
+      "end": 72,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 72,
+      "end": 157,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 157,
+      "end": 248,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "33.npy": [
+    {
+      "start": 0,
+      "end": 53,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 53,
+      "end": 108,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "36.npy": [
+    {
+      "start": 9,
+      "end": 80,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "37.npy": [
+    {
+      "start": 0,
+      "end": 93,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "38.npy": [
+    {
+      "start": 60,
+      "end": 146,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 146,
+      "end": 236,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 236,
+      "end": 351,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 351,
+      "end": 455,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 455,
+      "end": 562,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 562,
+      "end": 657,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "40.npy": [
+    {
+      "start": 17,
+      "end": 73,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 73,
+      "end": 125,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 125,
+      "end": 173,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 173,
+      "end": 225,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "42.npy": [
+    {
+      "start": 0,
+      "end": 46,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 46,
+      "end": 131,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "43.npy": [
+    {
+      "start": 7,
+      "end": 64,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 64,
+      "end": 132,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 132,
+      "end": 202,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 202,
+      "end": 274,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "45.npy": [
+    {
+      "start": 0,
+      "end": 109,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "47.npy": [
+    {
+      "start": 0,
+      "end": 58,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 58,
+      "end": 129,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "49.npy": [
+    {
+      "start": 0,
+      "end": 91,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "52.npy": [
+    {
+      "start": 0,
+      "end": 63,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 63,
+      "end": 134,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "53.npy": [
+    {
+      "start": 0,
+      "end": 62,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 62,
+      "end": 136,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 136,
+      "end": 237,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "55.npy": [
+    {
+      "start": 0,
+      "end": 180,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 180,
+      "end": 309,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 309,
+      "end": 439,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 439,
+      "end": 567,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 567,
+      "end": 695,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 695,
+      "end": 822,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 822,
+      "end": 954,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "59.npy": [
+    {
+      "start": 0,
+      "end": 51,
+      "depth": "3",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 51,
+      "end": 114,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 114,
+      "end": 181,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 181,
+      "end": 247,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 247,
+      "end": 315,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 315,
+      "end": 381,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 381,
+      "end": 445,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 445,
+      "end": 511,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 511,
+      "end": 573,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 573,
+      "end": 639,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "62.npy": [
+    {
+      "start": 19,
+      "end": 89,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 89,
+      "end": 164,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "66.npy": [
+    {
+      "start": 0,
+      "end": 133,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 133,
+      "end": 257,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 257,
+      "end": 378,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 378,
+      "end": 505,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 505,
+      "end": 623,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 623,
+      "end": 748,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "76.npy": [
+    {
+      "start": 0,
+      "end": 45,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "78.npy": [
+    {
+      "start": 34,
+      "end": 113,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "80.npy": [
+    {
+      "start": 37,
+      "end": 175,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 175,
+      "end": 295,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "82.npy": [
+    {
+      "start": 3,
+      "end": 101,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 101,
+      "end": 234,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 234,
+      "end": 361,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "84.npy": [
+    {
+      "start": 15,
+      "end": 109,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "88.npy": [
+    {
+      "start": 44,
+      "end": 198,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "89.npy": [
+    {
+      "start": 0,
+      "end": 132,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 132,
+      "end": 392,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 392,
+      "end": 563,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 563,
+      "end": 753,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "90.npy": [
+    {
+      "start": 0,
+      "end": 133,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 133,
+      "end": 233,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 233,
+      "end": 302,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 302,
+      "end": 392,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 392,
+      "end": 499,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 499,
+      "end": 622,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 622,
+      "end": 721,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 721,
+      "end": 835,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 835,
+      "end": 932,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 932,
+      "end": 1043,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1043,
+      "end": 1163,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1163,
+      "end": 1305,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1305,
+      "end": 1458,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "91.npy": [
+    {
+      "start": 9,
+      "end": 98,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 98,
+      "end": 199,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 199,
+      "end": 316,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 316,
+      "end": 436,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 436,
+      "end": 565,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "93.npy": [
+    {
+      "start": 8,
+      "end": 211,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 211,
+      "end": 428,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "95.npy": [
+    {
+      "start": 0,
+      "end": 109,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 109,
+      "end": 193,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 193,
+      "end": 284,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 284,
+      "end": 362,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 362,
+      "end": 456,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 456,
+      "end": 552,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 552,
+      "end": 645,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 645,
+      "end": 743,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "96.npy": [
+    {
+      "start": 0,
+      "end": 189,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 189,
+      "end": 286,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 286,
+      "end": 372,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 372,
+      "end": 454,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 454,
+      "end": 542,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "101.npy": [
+    {
+      "start": 0,
+      "end": 104,
+      "depth": "3",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 104,
+      "end": 295,
+      "depth": "3",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 295,
+      "end": 486,
+      "depth": "3",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 486,
+      "end": 680,
+      "depth": "3",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 680,
+      "end": 949,
+      "depth": "3",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "104.npy": [
+    {
+      "start": 0,
+      "end": 335,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 335,
+      "end": 473,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 473,
+      "end": 614,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "105.npy": [
+    {
+      "start": 0,
+      "end": 187,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 187,
+      "end": 338,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 338,
+      "end": 493,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 493,
+      "end": 718,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 718,
+      "end": 856,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 856,
+      "end": 967,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 967,
+      "end": 1073,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1073,
+      "end": 1311,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "106.npy": [
+    {
+      "start": 0,
+      "end": 227,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 227,
+      "end": 317,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 317,
+      "end": 419,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 419,
+      "end": 531,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 531,
+      "end": 644,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "107.npy": [
+    {
+      "start": 0,
+      "end": 127,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 127,
+      "end": 226,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 226,
+      "end": 335,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 335,
+      "end": 453,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 453,
+      "end": 564,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 564,
+      "end": 682,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 682,
+      "end": 789,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 789,
+      "end": 898,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 898,
+      "end": 1008,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "108.npy": [
+    {
+      "start": 0,
+      "end": 209,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 209,
+      "end": 340,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "109.npy": [
+    {
+      "start": 0,
+      "end": 315,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 315,
+      "end": 419,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 419,
+      "end": 513,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 513,
+      "end": 624,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "110.npy": [
+    {
+      "start": 0,
+      "end": 102,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 102,
+      "end": 221,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 221,
+      "end": 327,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 327,
+      "end": 420,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 420,
+      "end": 500,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "111.npy": [
+    {
+      "start": 0,
+      "end": 293,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 293,
+      "end": 555,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 555,
+      "end": 699,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 699,
+      "end": 805,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "112.npy": [
+    {
+      "start": 0,
+      "end": 179,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 179,
+      "end": 312,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 312,
+      "end": 439,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 439,
+      "end": 550,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 550,
+      "end": 656,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 656,
+      "end": 760,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 760,
+      "end": 965,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 965,
+      "end": 1082,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1082,
+      "end": 1204,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1204,
+      "end": 1311,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1311,
+      "end": 1404,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "2",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "113.npy": [
+    {
+      "start": 0,
+      "end": 140,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 140,
+      "end": 248,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 248,
+      "end": 371,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 371,
+      "end": 506,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "114.npy": [
+    {
+      "start": 0,
+      "end": 167,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 167,
+      "end": 291,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 291,
+      "end": 413,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 413,
+      "end": 741,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 741,
+      "end": 889,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 889,
+      "end": 1020,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1020,
+      "end": 1144,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "115.npy": [
+    {
+      "start": 0,
+      "end": 208,
+      "depth": "1",
+      "torso": "1",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 208,
+      "end": 376,
+      "depth": "2",
+      "torso": "2",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 376,
+      "end": 510,
+      "depth": "2",
+      "torso": "2",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 510,
+      "end": 707,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 707,
+      "end": 836,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 836,
+      "end": 1146,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1146,
+      "end": 1276,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1276,
+      "end": 1425,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+  "116.npy": [
+    {
+      "start": 0,
+      "end": 148,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 148,
+      "end": 303,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 303,
+      "end": 441,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 441,
+      "end": 581,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 581,
+      "end": 719,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 719,
+      "end": 862,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 862,
+      "end": 1010,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1010,
+      "end": 1142,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "117.npy": [
+    {
+      "start": 9,
+      "end": 183,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 183,
+      "end": 336,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 336,
+      "end": 475,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 475,
+      "end": 621,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "118.npy": [
+    {
+      "start": 0,
+      "end": 115,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 115,
+      "end": 205,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 205,
+      "end": 297,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 297,
+      "end": 392,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 392,
+      "end": 496,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 496,
+      "end": 712,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 712,
+      "end": 841,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 841,
+      "end": 967,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "119.npy": [
+    {
+      "start": 4,
+      "end": 84,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 84,
+      "end": 193,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "121.npy": [
+    {
+      "start": 0,
+      "end": 111,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "122.npy": [
+    {
+      "start": 0,
+      "end": 224,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "123.npy": [
+    {
+      "start": 0,
+      "end": 231,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "126.npy": [
+    {
+      "start": 0,
+      "end": 78,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 78,
+      "end": 206,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "127.npy": [
+    {
+      "start": 0,
+      "end": 119,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 119,
+      "end": 271,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "mio.npy": [
+    {
+      "start": 46,
+      "end": 103,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 151,
+      "end": 195,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 289,
+      "end": 361,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 561,
+      "end": 618,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 683,
+      "end": 728,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 767,
+      "end": 846,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 897,
+      "end": 966,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1085,
+      "end": 1142,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1201,
+      "end": 1277,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1329,
+      "end": 1389,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1445,
+      "end": 1505,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "mio2.npy": [
+    {
+      "start": 24,
+      "end": 50,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 110,
+      "end": 134,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 158,
+      "end": 182,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 208,
+      "end": 230,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 265,
+      "end": 294,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 323,
+      "end": 350,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 398,
+      "end": 428,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 449,
+      "end": 476,
+      "depth": "1",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+   "mio3.npy": [
+    {
+      "start": 105,
+      "end": 183,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 283,
+      "end": 351,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 502,
+      "end": 608,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 714,
+      "end": 796,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "mio4.npy": [
+    {
+      "start": 82,
+      "end": 128,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 191,
+      "end": 237,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 299,
+      "end": 371,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 532,
+      "end": 602,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 909,
+      "end": 1021,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1094,
+      "end": 1197,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1300,
+      "end": 1336,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1341,
+      "end": 1383,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1535,
+      "end": 1581,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1659,
+      "end": 1708,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1766,
+      "end": 1815,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1870,
+      "end": 1919,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "mio5.npy": [
+    {
+      "start": 49,
+      "end": 122,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 174,
+      "end": 249,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 299,
+      "end": 372,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 450,
+      "end": 527,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 595,
+      "end": 667,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1129,
+      "end": 1174,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1234,
+      "end": 1281,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1329,
+      "end": 1376,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1427,
+      "end": 1471,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1539,
+      "end": 1589,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "mio6.npy": [
+    {
+      "start": 144,
+      "end": 185,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 248,
+      "end": 309,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 390,
+      "end": 452,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 858,
+      "end": 909,
+      "depth": "1",
+      "torso": "2",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 987,
+      "end": 1043,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1205,
+      "end": 1260,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1270,
+      "end": 1300,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "mio7.npy": [
+    {
+      "start": 242,
+      "end": 434,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 468,
+      "end": 591,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1026,
+      "end": 1221,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1235,
+      "end": 1399,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1397,
+      "end": 1539,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1559,
+      "end": 1666,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1713,
+      "end": 1825,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  "ejemplo1.npy": [
+    {
+      "start": 0,
+      "end": 115,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 169,
+      "end": 299,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+  "ejemplo2.npy": [
+    {
+      "start": 0,
+      "end": 107,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 131,
+      "end": 268,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+    "ejemplo8.npy": [
+    {
+      "start": 0,
+      "end": 62,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 78,
+      "end": 160,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],  
+    "ejemplo11.npy": [
+    {
+      "start": 5,
+      "end": 462,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+    "ejemplo13.npy": [
+    {
+      "start": 0,
+      "end": 76,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 93,
+      "end": 177,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 196,
+      "end": 277,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 290,
+      "end": 370,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 384,
+      "end": 465,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+    "ejemplo14.npy": [
+    {
+      "start": 0,
+      "end": 64,
+      "depth": "3",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 75,
+      "end": 135,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 146,
+      "end": 208,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 218,
+      "end": 275,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 285,
+      "end": 340,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 351,
+      "end": 410,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 420,
+      "end": 480,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 492,
+      "end": 557,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+    "ejemplo15.npy": [
+    {
+      "start": 0,
+      "end": 39,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 40,
+      "end": 90,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+  
+  "profunda3.npy": [
+    {
+      "start": 6,
+      "end": 53,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 64,
+      "end": 106,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 117,
+      "end": 158,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+    "profunda2.npy": [
+    {
+      "start": 37,
+      "end": 211,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+    "profunda1.npy": [
+    {
+      "start": 10,
+      "end": 135,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 168,
+      "end": 247,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 263,
+      "end": 324,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 339,
+      "end": 401,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  
+  "mio8.npy": [
+    {
+      "start": 70,
+      "end": 161,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 180,
+      "end": 250,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 267,
+      "end": 345,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 361,
+      "end": 457,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "profunda4.npy": [
+    {
+      "start": 0,
+      "end": 54,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 68,
+      "end": 113,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 124,
+      "end": 170,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "profunda5.npy": [
+    {
+      "start": 9,
+      "end": 74,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 91,
+      "end": 143,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 156,
+      "end": 206,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "profunda6.npy": [
+    {
+      "start": 1,
+      "end": 63,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "2",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "ritmo1.npy": [
+    {
+      "start": 69,
+      "end": 136,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 155,
+      "end": 223,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 242,
+      "end": 317,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 336,
+      "end": 425,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 472,
+      "end": 566,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 600,
+      "end": 697,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+    "ritmo2.npy": [
+    {
+      "start": 8,
+      "end": 81,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 117,
+      "end": 199,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "2",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 223,
+      "end": 306,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+    "ritmo3.npy": [
+    {
+      "start": 402,
+      "end": 485,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 502,
+      "end": 592,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 608,
+      "end": 697,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 712,
+      "end": 806,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 878,
+      "end": 991,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+  "torso1.npy": [
+    {
+      "start": 145,
+      "end": 305,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 324,
+      "end": 442,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 459,
+      "end": 574,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 590,
+      "end": 737,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 754,
+      "end": 885,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 906,
+      "end": 1050,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1105,
+      "end": 1241,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+    "torso2.npy": [
+    {
+      "start": 125,
+      "end": 270,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 309,
+      "end": 558,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 648,
+      "end": 777,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 807,
+      "end": 914,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 950,
+      "end": 1067,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1138,
+      "end": 1300,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+    "simetria3.npy": [
+    {
+      "start": 410,
+      "end": 534,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 565,
+      "end": 666,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 707,
+      "end": 799,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 843,
+      "end": 951,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1107,
+      "end": 1207,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1255,
+      "end": 1341,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1378,
+      "end": 1465,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1503,
+      "end": 1592,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "simetria4.npy": [
+    {
+      "start": 67,
+      "end": 196,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 262,
+      "end": 364,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 473,
+      "end": 580,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 620,
+      "end": 725,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 810,
+      "end": 919,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1023,
+      "end": 1140,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1181,
+      "end": 1305,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1434,
+      "end": 1549,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "torso3.npy": [
+    {
+      "start": 132,
+      "end": 240,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 276,
+      "end": 394,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 419,
+      "end": 516,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 536,
+      "end": 676,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 706,
+      "end": 839,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 866,
+      "end": 1007,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1031,
+      "end": 1126,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1165,
+      "end": 1348,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+   "torso4.npy": [
+    {
+      "start": 93,
+      "end": 231,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 247,
+      "end": 367,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 388,
+      "end": 505,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 524,
+      "end": 649,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 668,
+      "end": 785,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 803,
+      "end": 914,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 939,
+      "end": 1067,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1102,
+      "end": 1253,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1287,
+      "end": 1457,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1481,
+      "end": 1587,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1607,
+      "end": 1727,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "torso5.npy": [
+    {
+      "start": 48,
+      "end": 229,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 278,
+      "end": 414,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 455,
+      "end": 608,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 641,
+      "end": 768,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+    "valgo1.npy": [
+    {
+      "start": 25,
+      "end": 121,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 167,
+      "end": 264,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 294,
+      "end": 386,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 418,
+      "end": 521,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 620,
+      "end": 731,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 774,
+      "end": 827,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "valgo2.npy": [
+    {
+      "start": 71,
+      "end": 138,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 171,
+      "end": 272,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 306,
+      "end": 390,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 416,
+      "end": 473,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 502,
+      "end": 560,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 625,
+      "end": 724,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 800,
+      "end": 914,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "2",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "leve1.npy": [
+    {
+      "start": 68,
+      "end": 185,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 293,
+      "end": 391,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "2",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 444,
+      "end": 564,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 597,
+      "end": 694,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 718,
+      "end": 821,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "valgo3.npy": [
+    {
+      "start": 277,
+      "end": 348,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 388,
+      "end": 470,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 503,
+      "end": 620,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 643,
+      "end": 767,
+      "depth": "1",
+      "torso": "1",
+      "knees": "1",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 801,
+      "end": 921,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 963,
+      "end": 1085,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "2",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "leve2.npy": [
+    {
+      "start": 37,
+      "end": 215,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 277,
+      "end": 403,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 454,
+      "end": 572,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 649,
+      "end": 750,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 783,
+      "end": 856,
+      "depth": "1",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 888,
+      "end": 972,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 1001,
+      "end": 1098,
+      "depth": "1",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  
+  "leve3.npy": [
+    {
+      "start": 46,
+      "end": 153,
+      "depth": "1",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 189,
+      "end": 317,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 516,
+      "end": 623,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 662,
+      "end": 790,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 837,
+      "end": 943,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 978,
+      "end": 1076,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+    "leve4.npy": [
+    {
+      "start": 64,
+      "end": 193,
+      "depth": "1",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 252,
+      "end": 378,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 429,
+      "end": 550,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 605,
+      "end": 730,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 801,
+      "end": 915,
+      "depth": "2",
+      "torso": "3",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 960,
+      "end": 1074,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "lateraltorso1.npy": [
+    {
+      "start": 92,
+      "end": 237,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 258,
+      "end": 414,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 434,
+      "end": 590,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 612,
+      "end": 807,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+    "lateraltorso2.npy": [
+    {
+      "start": 138,
+      "end": 282,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 299,
+      "end": 422,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 438,
+      "end": 558,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 573,
+      "end": 677,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 690,
+      "end": 801,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 811,
+      "end": 921,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 935,
+      "end": 1048,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    }
+  ],
+    "lateraltorso3.npy": [
+    {
+      "start": 54,
+      "end": 170,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 185,
+      "end": 283,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 299,
+      "end": 407,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 584,
+      "end": 682,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 700,
+      "end": 798,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 814,
+      "end": 913,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 928,
+      "end": 1027,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1046,
+      "end": 1153,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1179,
+      "end": 1306,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1324,
+      "end": 1449,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 1468,
+      "end": 1595,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+    "sara1.npy": [
+    {
+      "start": 12,
+      "end": 79,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 105,
+      "end": 155,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 186,
+      "end": 246,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 268,
+      "end": 328,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 359,
+      "end": 424,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "sara2.npy": [
+    {
+      "start": 0,
+      "end": 49,
+      "depth": "1",
+      "torso": "1",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 75,
+      "end": 142,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 174,
+      "end": 235,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 269,
+      "end": 324,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 357,
+      "end": 423,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 463,
+      "end": 518,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 554,
+      "end": 630,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "sara3.npy": [
+    {
+      "start": 3,
+      "end": 66,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 95,
+      "end": 182,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 210,
+      "end": 266,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 278,
+      "end": 328,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 340,
+      "end": 394,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 414,
+      "end": 498,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 522,
+      "end": 572,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+    "sara4.npy": [
+    {
+      "start": 38,
+      "end": 97,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 118,
+      "end": 180,
+      "depth": "2",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 200,
+      "end": 260,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 284,
+      "end": 349,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 378,
+      "end": 447,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+    "sara5.npy": [
+    {
+      "start": 16,
+      "end": 60,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 80,
+      "end": 122,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 165,
+      "end": 219,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 265,
+      "end": 323,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 346,
+      "end": 386,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 398,
+      "end": 430,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 444,
+      "end": 482,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    }
+  ],
+    "sara6.npy": [
+    {
+      "start": 27,
+      "end": 77,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 117,
+      "end": 169,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 210,
+      "end": 262,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 299,
+      "end": 353,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 396,
+      "end": 451,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 497,
+      "end": 552,
+      "depth": "1",
+      "torso": "2",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    }
+  ],
+    "sara7.npy": [
+    {
+      "start": 10,
+      "end": 50,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 82,
+      "end": 127,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 168,
+      "end": 214,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 265,
+      "end": 301,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 361,
+      "end": 394,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+    "sara8.npy": [
+    {
+      "start": 4,
+      "end": 55,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 78,
+      "end": 137,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 163,
+      "end": 222,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 252,
+      "end": 310,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 344,
+      "end": 401,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 424,
+      "end": 472,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 501,
+      "end": 552,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+    "sara9.npy": [
+    {
+      "start": 0,
+      "end": 38,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 71,
+      "end": 138,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 162,
+      "end": 209,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 247,
+      "end": 303,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 326,
+      "end": 391,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    },
+    {
+      "start": 418,
+      "end": 475,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "3",
+      "perfil": "frontal"
+    }
+  ],
+    "sara10.npy": [
+    {
+      "start": 24,
+      "end": 90,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 111,
+      "end": 168,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "1",
+      "perfil": "lateral"
+    },
+    {
+      "start": 187,
+      "end": 250,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 279,
+      "end": 342,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 373,
+      "end": 440,
+      "depth": "1",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 476,
+      "end": 543,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 578,
+      "end": 632,
+      "depth": "2",
+      "torso": "1",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "sara11.npy": [
+    {
+      "start": 12,
+      "end": 87,
+      "depth": "1",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 106,
+      "end": 182,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 204,
+      "end": 274,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 300,
+      "end": 365,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "2",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 390,
+      "end": 461,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 488,
+      "end": 565,
+      "depth": "2",
+      "torso": "1",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "sara12.npy": [
+    {
+      "start": 130,
+      "end": 189,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 218,
+      "end": 276,
+      "depth": "2",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 301,
+      "end": 363,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 395,
+      "end": 452,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "3",
+      "perfil": "lateral"
+    },
+    {
+      "start": 483,
+      "end": 542,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 567,
+      "end": 630,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    },
+    {
+      "start": 658,
+      "end": 712,
+      "depth": "3",
+      "torso": "3",
+      "knees": "-",
+      "symmetry": "-",
+      "rhythm": "2",
+      "perfil": "lateral"
+    }
+  ],
+  "sara13.npy": [
+    {
+      "start": 31,
+      "end": 90,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 113,
+      "end": 166,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 194,
+      "end": 243,
+      "depth": "2",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 278,
+      "end": 325,
+      "depth": "1",
+      "torso": "2",
+      "knees": "2",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 351,
+      "end": 413,
+      "depth": "1",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 437,
+      "end": 469,
+      "depth": "2",
+      "torso": "2",
+      "knees": "3",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+  "sara14.npy": [
+    {
+      "start": 16,
+      "end": 70,
+      "depth": "3",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 91,
+      "end": 135,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 160,
+      "end": 216,
+      "depth": "1",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 234,
+      "end": 277,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 301,
+      "end": 352,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 378,
+      "end": 424,
+      "depth": "2",
+      "torso": "3",
+      "knees": "3",
+      "symmetry": "1",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ],
+    "sara15.npy": [
+    {
+      "start": 15,
+      "end": 70,
+      "depth": "3",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 101,
+      "end": 158,
+      "depth": "3",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "1",
+      "perfil": "frontal"
+    },
+    {
+      "start": 183,
+      "end": 238,
+      "depth": "3",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 266,
+      "end": 319,
+      "depth": "1",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 348,
+      "end": 402,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    },
+    {
+      "start": 430,
+      "end": 476,
+      "depth": "2",
+      "torso": "3",
+      "knees": "1",
+      "symmetry": "3",
+      "rhythm": "2",
+      "perfil": "frontal"
+    }
+  ]
+
+
+
+
+
+  
+
+
+
+
+}

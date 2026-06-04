@@ -86,7 +86,7 @@ fun RegisterIncidentDialog(
         DatePickerDialog(
             onDismissRequest = { showStartPicker = false },
             confirmButton = {
-                TextButton(onClick = { showStartPicker = false }) { Text("OK") }
+                TextButton(onClick = { showStartPicker = false }) { Text("Aceptar") }
             },
             dismissButton = {
                 TextButton(onClick = { showStartPicker = false }) { Text("Cancelar") }
@@ -113,7 +113,7 @@ fun RegisterIncidentDialog(
         DatePickerDialog(
             onDismissRequest = { showEndPicker = false },
             confirmButton = {
-                TextButton(onClick = { showEndPicker = false }) { Text("OK") }
+                TextButton(onClick = { showEndPicker = false }) { Text("Aceptar") }
             },
             dismissButton = {
                 TextButton(onClick = { showEndPicker = false }) { Text("Cancelar") }

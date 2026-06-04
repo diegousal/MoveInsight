@@ -72,13 +72,14 @@ class SessionResult(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
     rep_number = Column(Integer, nullable=False)
-    phase_data = Column(Text)
-    depth_score = Column(Float)
-    torso_score = Column(Float)
-    stability_score = Column(Float)
-    knees_score = Column(Float)
-    rhythm_score = Column(Float)
-    overall_score = Column(Float)
+    # KPIs en escala 0-10 (mapeados desde clases 1/2/3 del modelo XGBoost).
+    # Nullable: valgo (knees) y simetría NO son medibles en vista lateral → NULL.
+    depth_score    = Column(Float, nullable=True)   # profundidad
+    torso_score    = Column(Float, nullable=True)   # inclinación de torso
+    knees_score    = Column(Float, nullable=True)   # valgo de rodilla (solo frontal)
+    symmetry_score = Column(Float, nullable=True)   # simetría L/R (solo frontal)
+    rhythm_score   = Column(Float, nullable=True)   # ritmo / tempo
+    overall_score  = Column(Float, nullable=True)   # media de los KPIs medibles
     report_image_path = Column(String(500))
 
     session = relationship("Session", back_populates="results")

@@ -35,13 +35,13 @@ class AnalyticsRepositoryImpl @Inject constructor(
                     repCount     = dto.repCount,
                     results      = dto.results.map { r ->
                         com.moveinsight.domain.model.RepResult(
-                            repNumber      = r.repNumber,
-                            depthScore     = r.depthScore,
-                            torsoScore     = r.torsoScore,
-                            stabilityScore = r.stabilityScore,
-                            kneesScore     = r.kneesScore,
-                            rhythmScore    = r.rhythmScore,
-                            overallScore   = r.overallScore
+                            repNumber     = r.repNumber,
+                            depthScore    = r.depthScore,
+                            torsoScore    = r.torsoScore,
+                            kneesScore    = r.kneesScore,
+                            symmetryScore = r.symmetryScore,
+                            rhythmScore   = r.rhythmScore,
+                            overallScore  = r.overallScore
                         )
                     }
                 )
@@ -58,13 +58,13 @@ class AnalyticsRepositoryImpl @Inject constructor(
                 val dto = result.data
                 val reps = dto.results.map { r ->
                     com.moveinsight.domain.model.RepResult(
-                        repNumber      = r.repNumber,
-                        depthScore     = r.depthScore,
-                        torsoScore     = r.torsoScore,
-                        stabilityScore = r.stabilityScore,
-                        kneesScore     = r.kneesScore,
-                        rhythmScore    = r.rhythmScore,
-                        overallScore   = r.overallScore
+                        repNumber     = r.repNumber,
+                        depthScore    = r.depthScore,
+                        torsoScore    = r.torsoScore,
+                        kneesScore    = r.kneesScore,
+                        symmetryScore = r.symmetryScore,
+                        rhythmScore   = r.rhythmScore,
+                        overallScore  = r.overallScore
                     )
                 }
                 Resource.Success(
@@ -77,7 +77,8 @@ class AnalyticsRepositoryImpl @Inject constructor(
                         borgScore    = dto.borgScore  ?: 0,
                         userNotes    = dto.userNotes,
                         results      = reps,
-                        overallScore = if (reps.isNotEmpty()) reps.map { it.overallScore }.average().toFloat() else null,
+                        overallScore = reps.mapNotNull { it.overallScore }
+                            .takeIf { it.isNotEmpty() }?.average()?.toFloat(),
                         repCount     = if (reps.isNotEmpty()) reps.size else null
                     )
                 )

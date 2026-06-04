@@ -87,7 +87,7 @@ fun ForgotPasswordScreen(
             NeuroSquatTextField(
                 value         = email,
                 onValueChange = viewModel::onEmailChange,
-                label         = "Email",
+                label         = "Correo electrónico",
                 leadingIcon   = Icons.Filled.Email,
                 isError       = uiState is ForgotPasswordUiState.Error,
                 errorMessage  = (uiState as? ForgotPasswordUiState.Error)?.message,

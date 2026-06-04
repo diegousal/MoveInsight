@@ -90,7 +90,7 @@ fun LoginScreen(
             NeuroSquatTextField(
                 value         = form.email,
                 onValueChange = viewModel::onEmailChange,
-                label         = "Email",
+                label         = "Correo electrónico",
                 leadingIcon   = Icons.Filled.Email,
                 isError       = isError,
                 keyboardOptions = KeyboardOptions(

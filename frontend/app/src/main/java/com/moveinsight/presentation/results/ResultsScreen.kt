@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,16 @@ fun ResultsScreen(
     viewModel       : ResultsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Mantener la pantalla encendida MIENTRAS se analiza: evita que el móvil
+    // entre en reposo (Doze) y corte la conexión durante la larga espera del
+    // análisis. Se libera en cuanto hay resultados/error o se sale de la pantalla.
+    val view = LocalView.current
+    val keepScreenOn = uiState is ResultsUiState.Loading
+    DisposableEffect(keepScreenOn) {
+        view.keepScreenOn = keepScreenOn
+        onDispose { view.keepScreenOn = false }
+    }
 
     when (val state = uiState) {
         is ResultsUiState.Loading -> {
@@ -114,7 +125,7 @@ private fun ResultsContent(
             // ── Resumen de KPIs globales ─────────────────────────────────
             item {
                 Text(
-                    text  = "Media por KPI",
+                    text  = "Media por métrica",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = TextPrimary
                 )
@@ -184,7 +195,7 @@ private fun ResultsContent(
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "Ver overlay de esqueleto",
+                        "Ver vídeo con esqueleto",
                         style = MaterialTheme.typography.labelLarge,
                         color = CyanPrimary
                     )
@@ -214,10 +225,11 @@ private fun ResultsContent(
 private fun lowestKpiTip(data: ResultsData): Recommendation? {
     data class KpiEntry(val score: Float, val recId: String)
 
-    val kpis = listOf(
-        KpiEntry(data.avgDepth,   "tech_depth"),
-        KpiEntry(data.avgKnees,   "tech_knees"),
-        KpiEntry(data.avgTorso,   "tech_torso"),
+    // Solo KPIs medibles (no N/D). En lateral el valgo no está disponible.
+    val kpis = listOfNotNull(
+        data.avgDepth?.let { KpiEntry(it, "tech_depth") },
+        data.avgKnees?.let { KpiEntry(it, "tech_knees") },
+        data.avgTorso?.let { KpiEntry(it, "tech_torso") },
     )
 
     // Solo mostramos consejo si el KPI más bajo < 5 (escala 0-10)
@@ -401,8 +413,8 @@ private fun GlobalKpisGrid(data: ResultsData) {
     val kpis = listOf(
         KpiInfo("Profundidad", Icons.Filled.SwapVert,      data.avgDepth),
         KpiInfo("Torso",       Icons.Filled.Accessibility, data.avgTorso),
-        KpiInfo("Estabilidad", Icons.Filled.Balance,       data.avgStability),
-        KpiInfo("Rodillas",    Icons.Filled.AirlineSeatLegroomNormal, data.avgKnees),
+        KpiInfo("Valgo",       Icons.Filled.AirlineSeatLegroomNormal, data.avgKnees),
+        KpiInfo("Simetría",    Icons.Filled.Balance,       data.avgSymmetry),
         KpiInfo("Ritmo",       Icons.Filled.Timer,         data.avgRhythm)
     )
 
@@ -432,12 +444,12 @@ private fun GlobalKpisGrid(data: ResultsData) {
 private data class KpiInfo(
     val name  : String,
     val icon  : ImageVector,
-    val score : Float
+    val score : Float?
 )
 
 @Composable
 private fun KpiCard(kpi: KpiInfo, modifier: Modifier = Modifier) {
-    val color = scoreToColor(kpi.score)
+    val color = kpi.score?.let { scoreToColor(it) } ?: TextSecondary
     Card(
         modifier = modifier,
         colors   = CardDefaults.cardColors(containerColor = NavyLight.copy(alpha = 0.7f)),
@@ -450,7 +462,7 @@ private fun KpiCard(kpi: KpiInfo, modifier: Modifier = Modifier) {
             Icon(kpi.icon, null, tint = color.copy(alpha = 0.8f), modifier = Modifier.size(20.dp))
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = "%.1f".format(kpi.score),
+                text  = kpi.score?.let { "%.1f".format(it) } ?: "N/D",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = color
             )
@@ -468,9 +480,28 @@ private fun KpiCard(kpi: KpiInfo, modifier: Modifier = Modifier) {
 // Tarjeta por repetición
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Etiqueta cualitativa de un KPI (Opción B): el modelo predice clases 1/2/3 que
+ * se guardan como 0-10 (3.0 / 7.0 / 10.0). Aquí revertimos a clase para mostrar
+ * el texto descriptivo. null → "N/D" (no medible en este perfil de cámara).
+ */
+private fun kpiLabel(key: String, score: Float?): String {
+    if (score == null) return "N/D"
+    val cls = when { score <= 4f -> 1; score <= 8f -> 2; else -> 3 }
+    val table = when (key) {
+        "depth"    -> mapOf(1 to "Insuficiente", 2 to "Paralela",     3 to "Completa")
+        "torso"    -> mapOf(1 to "Excesiva",     2 to "Leve inclin.", 3 to "Normal")
+        "knees"    -> mapOf(1 to "Valgo",        2 to "Ligero valgo", 3 to "Sin valgo")
+        "symmetry" -> mapOf(1 to "Asimetría",    2 to "Leve asim.",   3 to "Simétrico")
+        "rhythm"   -> mapOf(1 to "Descontrol.",  2 to "Aceptable",    3 to "Buen ritmo")
+        else       -> emptyMap()
+    }
+    return table[cls] ?: ""
+}
+
 @Composable
 private fun RepCard(rep: RepResult, index: Int) {
-    val overallColor = scoreToColor(rep.overallScore)
+    val overallColor = rep.overallScore?.let { scoreToColor(it) } ?: TextSecondary
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -513,7 +544,7 @@ private fun RepCard(rep: RepResult, index: Int) {
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text  = "%.1f".format(rep.overallScore),
+                        text  = rep.overallScore?.let { "%.1f".format(it) } ?: "N/D",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                         color = overallColor
                     )
@@ -522,20 +553,21 @@ private fun RepCard(rep: RepResult, index: Int) {
 
             Spacer(Modifier.height(12.dp))
 
-            // KPI bars
-            KpiBar("Profundidad", rep.depthScore)
-            KpiBar("Torso",       rep.torsoScore)
-            KpiBar("Estabilidad", rep.stabilityScore)
-            KpiBar("Rodillas",    rep.kneesScore)
-            KpiBar("Ritmo",       rep.rhythmScore)
+            // KPI bars (con etiqueta cualitativa; "N/D" si no medible en este perfil)
+            KpiBar("Profundidad", "depth",    rep.depthScore)
+            KpiBar("Torso",       "torso",    rep.torsoScore)
+            KpiBar("Valgo",       "knees",    rep.kneesScore)
+            KpiBar("Simetría",    "symmetry", rep.symmetryScore)
+            KpiBar("Ritmo",       "rhythm",   rep.rhythmScore)
         }
     }
 }
 
 @Composable
-private fun KpiBar(name: String, score: Float) {
-    val color      = scoreToColor(score)
-    val fraction   = (score / 10f).coerceIn(0f, 1f)
+private fun KpiBar(name: String, kpiKey: String, score: Float?) {
+    val color    = score?.let { scoreToColor(it) } ?: TextSecondary
+    val fraction = score?.let { (it / 10f).coerceIn(0f, 1f) } ?: 0f
+    val label    = kpiLabel(kpiKey, score)
 
     Row(
         modifier          = Modifier.fillMaxWidth().padding(vertical = 3.dp),
@@ -545,7 +577,7 @@ private fun KpiBar(name: String, score: Float) {
             text     = name,
             style    = MaterialTheme.typography.bodySmall,
             color    = TextSecondary,
-            modifier = Modifier.width(85.dp)
+            modifier = Modifier.width(80.dp)
         )
         Box(
             modifier = Modifier
@@ -564,11 +596,12 @@ private fun KpiBar(name: String, score: Float) {
         }
         Spacer(Modifier.width(8.dp))
         Text(
-            text     = "%.1f".format(score),
-            style    = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-            color    = color,
-            modifier = Modifier.width(32.dp),
-            textAlign = TextAlign.End
+            text      = label,
+            style     = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+            color     = color,
+            modifier  = Modifier.width(82.dp),
+            textAlign = TextAlign.End,
+            maxLines  = 1
         )
     }
 }
@@ -981,7 +1014,7 @@ private fun scoreToColor(score: Float): Color = when {
 
 private fun scoreFeedback(score: Float): String = when {
     score >= 8.0f -> "Excelente técnica"
-    score >= 6.5f -> "Buena técnica"
+    score >= 7.0f -> "Buena técnica"
     score >= 5.0f -> "Técnica aceptable"
     score >= 3.0f -> "Necesita mejoras"
     else          -> "Técnica deficiente"
