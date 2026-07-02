@@ -37,14 +37,12 @@ android {
             isDebuggable = true
         }
         release {
-            // ── Sustituir por la URL de producción cuando esté lista ──────
-            buildConfigField("String", "BASE_URL", "\"https://api.neurosquat.com/\"")
-            isMinifyEnabled    = true
-            isShrinkResources  = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            // ── URL de producción: servidor USAL (HTTPS vía Nginx) ────────
+            buildConfigField("String", "BASE_URL", "\"https://prodiasv07.fis.usal.es/\"")
+            // Minificación desactivada: evita que R8 ofusque/elimine los DTOs
+            // de Retrofit/Gson y rompa la (de)serialización del JSON.
+            isMinifyEnabled    = false
+            isShrinkResources  = false
         }
     }
 

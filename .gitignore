@@ -143,4 +143,4 @@ rescate.py
 revisar.py
 # Si quieres mantener archivos específicos que caen en las reglas anteriores, 
 # añádelos aquí abajo con un "!" al principio. Ejemplo:
-# !backend/angles_per_frame.csv
+# !backend/angles_per_frame.csv*.npz

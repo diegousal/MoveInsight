@@ -1,0 +1,72 @@
+# ── Orquestación del despliegue (servidor único USAL) ────────────────────────
+#   db     → MariaDB con volumen persistente
+#   api    → FastAPI + pipeline ML (Gunicorn/Uvicorn)
+#   nginx  → proxy inverso + HTTPS, único servicio expuesto a internet
+#   certbot→ obtención/renovación del certificado Let's Encrypt (bajo demanda)
+name: moveinsight
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MYSQL_DATABASE}
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads      # vídeos subidos por el usuario
+      - reportes:/app/reportes     # informes PNG + vídeos de esqueleto
+    networks: [internal]
+    expose: ["8000"]               # solo visible dentro de la red interna
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on: [api]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - certbot_www:/var/www/certbot:ro
+      - letsencrypt:/etc/letsencrypt:ro
+    networks: [internal]
+
+  certbot:
+    image: certbot/certbot
+    profiles: ["tools"]            # no arranca con 'up'; se usa con 'run'
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+
+volumes:
+  db_data:        # datos de MariaDB (no se pierden al reiniciar)
+  uploads:        # vídeos originales
+  reportes:       # salidas generadas (PNG, esqueleto)
+  certbot_www:    # reto ACME de Let's Encrypt
+  letsencrypt:    # certificados TLS
+
+networks:
+  internal:
