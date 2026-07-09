@@ -144,3 +144,9 @@ revisar.py
 # Si quieres mantener archivos específicos que caen en las reglas anteriores, 
 # añádelos aquí abajo con un "!" al principio. Ejemplo:
 # !backend/angles_per_frame.csv*.npz
+
+# Scripts de preparación de la demo (no publicar)
+backend/redate_demo.py
+backend/seed_demo.py
+# Salida de compilación firmada de Android
+frontend/app/release/

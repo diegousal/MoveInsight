@@ -16,7 +16,11 @@ gratuita: duplica el dataset sin sesgar las etiquetas.
 """
 
 import numpy as np
-from fases_dataset import PHASE_COLS
+
+# Solo estas 8 columnas se usan como entrada a la BiLSTM (fuente única aquí;
+# fases_dataset las importa de este módulo para evitar el import circular)
+PHASE_COLS = ["L_knee", "R_knee", "L_hip", "R_hip",
+              "sust_dy", "vel_knee", "vel_y_hip", "acc_y_hip"]
 
 # Orden de columnas tal y como las produce process_historial -> .npy (T, 18)
 ALL_COLUMNS = [

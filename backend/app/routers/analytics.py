@@ -380,6 +380,25 @@ def _compute_session_injury_indices(
 
         if first_idx is not None and last_idx is not None:
             out.append((first_idx, last_idx, inc.end_date is None))
+            continue
+
+        # Reposo completo (sin sesiones dentro del periodo): la banda se dibuja
+        # en el hueco entre la sesión anterior y la posterior a la lesión.
+        before = None
+        after = None
+        for i, d in enumerate(session_dates):
+            if d is None:
+                continue
+            if d < inc.start_date:
+                before = i
+            if d > end and after is None:
+                after = i
+        if before is not None and after is not None:
+            out.append((before + 0.35, after - 0.35, inc.end_date is None))
+        elif before is not None:
+            out.append((before + 0.35, before + 0.9, inc.end_date is None))
+        elif after is not None:
+            out.append((after - 0.9, after - 0.35, inc.end_date is None))
 
     return out
 

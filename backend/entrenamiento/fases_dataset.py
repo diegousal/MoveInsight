@@ -22,11 +22,7 @@ DEFAULT_OUT   = Path("entrenamiento/phases_dataset.npz")
 
 # Columnas del .npy — importadas desde mirror_utils para mantener una unica
 # fuente de verdad. El .npy ahora tiene 18 columnas (antes 13).
-from mirror_utils import ALL_COLUMNS
-
-# Solo estas 8 columnas se usan como entrada a la BiLSTM
-PHASE_COLS = ["L_knee", "R_knee", "L_hip", "R_hip",
-              "sust_dy", "vel_knee", "vel_y_hip", "acc_y_hip"]
+from mirror_utils import ALL_COLUMNS, PHASE_COLS
 
 # Indices dentro del array completo (posiciones no cambian: siguen en 0-12)
 COL_IDX = [ALL_COLUMNS.index(c) for c in PHASE_COLS]

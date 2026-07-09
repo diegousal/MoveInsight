@@ -61,8 +61,10 @@ private val CHART_RIGHT_PAD   = 8.dp
 // ─────────────────────────────────────────────────────────────────────────────
 
 private data class SessionInjuryRange(
-    val firstIdx : Int,
-    val lastIdx  : Int,
+    // Posiciones en "unidades de sesión"; admiten fracción para poder dibujar la
+    // banda en el hueco entre dos sesiones cuando la lesión fue con reposo total.
+    val firstIdx : Float,
+    val lastIdx  : Float,
     val isActive : Boolean,
 )
 
@@ -82,11 +84,22 @@ private fun computeInjurySessionRanges(
         val firstIdx = sessionDates.indexOfFirst { d ->
             d != null && !d.isBefore(start) && !d.isAfter(end)
         }
-        if (firstIdx < 0) return@mapNotNull null
-        val lastIdx = sessionDates.indexOfLast { d ->
-            d != null && !d.isBefore(start) && !d.isAfter(end)
+        if (firstIdx >= 0) {
+            val lastIdx = sessionDates.indexOfLast { d ->
+                d != null && !d.isBefore(start) && !d.isAfter(end)
+            }
+            return@mapNotNull SessionInjuryRange(firstIdx.toFloat(), lastIdx.toFloat(), inc.isActive)
         }
-        SessionInjuryRange(firstIdx, lastIdx, inc.isActive)
+        // Sin sesiones dentro del periodo (reposo completo): la banda se dibuja
+        // en el hueco entre la última sesión anterior y la primera posterior.
+        val before = sessionDates.indexOfLast  { d -> d != null && d.isBefore(start) }
+        val after  = sessionDates.indexOfFirst { d -> d != null && d.isAfter(end) }
+        when {
+            before >= 0 && after >= 0 -> SessionInjuryRange(before + 0.35f, after - 0.35f, inc.isActive)
+            before >= 0               -> SessionInjuryRange(before + 0.35f, before + 0.9f, inc.isActive)
+            after  >= 0               -> SessionInjuryRange(after - 0.9f, after - 0.35f, inc.isActive)
+            else                      -> null
+        }
     }
 }
 
@@ -317,10 +330,10 @@ private fun DrawScope.drawInjuryBands(
     val isScrollable = scrollMax > 0.5f && totalPoints > 1
     val totalContent = if (isScrollable) plotWidth + scrollMax else plotWidth
 
-    fun xAbsolute(idx: Int): Float = when {
+    fun xAbsolute(pos: Float): Float = when {
         totalPoints == 1 -> totalContent / 2f
-        isScrollable     -> (idx + 0.5f) * (totalContent / totalPoints)
-        else             -> (idx.toFloat() / (totalPoints - 1)) * plotWidth
+        isScrollable     -> (pos + 0.5f) * (totalContent / totalPoints)
+        else             -> (pos / (totalPoints - 1)) * plotWidth
     }
 
     val expand   = 10f
