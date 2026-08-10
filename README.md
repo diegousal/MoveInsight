@@ -97,7 +97,7 @@ Open the `frontend/` folder with Android Studio, sync the project with Gradle, c
 * **Author:** Diego Gómez Terradillos
 * **Advisor:** Dña. Carolina Zato Domínguez
 * **Institution:** University of Salamanca (Faculty of Science)
-* **Documentation:** You can check the complete thesis (in Spanish) in the attached [`Memoria.pdf`](https://www.google.com/search?q=./Memoria.pdf) file in this repository for a comprehensive breakdown of the mathematical models and architecture.
+*   **Documentation:** You can check the complete thesis (in Spanish) in the attached [`Memoria.pdf`](./docs/Memoria.pdf) file in this repository for a comprehensive breakdown of the mathematical models and architecture.
 
 ---
 
