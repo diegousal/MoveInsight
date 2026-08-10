@@ -247,7 +247,7 @@ private val RESULTS_TIPS: Map<String, Recommendation> = mapOf(
         title    = "Trabaja la profundidad de la sentadilla",
         body     = "Tu profundidad esta sesión fue inferior a 5/10. Practica sentadillas con pausa en el punto más bajo y trabaja la movilidad de cadera y tobillo.",
         priority = 1,
-        videoUrl = "https://www.youtube.com/watch?v=ultWZbUMPL8",
+        videoUrl = "https://youtu.be/5gXcnypj_TM?si=BOpoav9Yy07XaO_R",
         trigger  = "Profundidad < 5/10 en esta sesión",
     ),
     "tech_knees" to Recommendation(
@@ -256,7 +256,7 @@ private val RESULTS_TIPS: Map<String, Recommendation> = mapOf(
         title    = "Alineación de rodillas en la sentadilla",
         body     = "Tus rodillas tendieron a caer hacia dentro esta sesión. Activa glúteos con ejercicios de abducción antes de cada entrenamiento.",
         priority = 2,
-        videoUrl = "https://www.youtube.com/watch?v=MeIiIdhvXT4",
+        videoUrl = "https://youtu.be/laawkqRn0M4?si=3g6viWy-Bx_7GN_X",
         trigger  = "Rodillas < 5/10 en esta sesión",
     ),
     "tech_torso" to Recommendation(
@@ -265,7 +265,7 @@ private val RESULTS_TIPS: Map<String, Recommendation> = mapOf(
         title    = "Mantén el torso erguido",
         body     = "La inclinación de torso fue elevada esta sesión. Trabaja los erectores de columna y practica la sentadilla con palo en overhead.",
         priority = 3,
-        videoUrl = "https://www.youtube.com/watch?v=HKbOECHcgFs",
+        videoUrl = "https://youtu.be/m9pMtbfYFQU?si=8qAiB4j3bhMC-tSE",
         trigger  = "Torso < 5/10 en esta sesión",
     ),
 )
