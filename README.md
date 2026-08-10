@@ -102,5 +102,3 @@ Open the `frontend/` folder with Android Studio, sync the project with Gradle, c
 ---
 
 *If you found this project interesting or useful, feel free to drop a ⭐ on the repository!*
-
-```<img width="988" height="2048" alt="WhatsApp Image 2026-08-10 at 21 01 55" src="https://github.com/user-attachments/assets/d8bc020a-b0a6-4e0b-922b-22173928a281" />
